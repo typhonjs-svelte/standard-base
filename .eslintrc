@@ -1,0 +1,36 @@
+/**
+ * Loads https://github.com/typhonjs-config/eslint-config/blob/main/esm/2022/browser.js
+ * Loads https://github.com/typhonjs-fvtt-lib/eslint-config-foundry.js/blob/main/0.8.0.js
+ *
+ * NPM: https://www.npmjs.com/package/@typhonjs-config/eslint-config
+ */
+{
+  // ESLint configs are prone to particular choices, so if the first config below doesn't work for you then replace
+  // with one that you do prefer. The second config defines globals defined in `foundry.js` for use w/ `no-shadow`.
+  "extends": [
+    "@typhonjs-config/eslint-config/esm/2022/browser",
+    "@typhonjs-config/eslint-config/esm/2022/no-undefined-types"
+  ],
+
+  // Prevents overwriting any built in globals , but also
+  // node & browser environments. `event / window.event` shadowing is allowed due to being a common variable name and
+  // an uncommonly used browser feature.
+  //
+  // Note: if you are using Typescript you must use `@typescript-eslint/no-shadow`
+  "rules": {
+    "no-shadow": ["error", {
+      "builtinGlobals": true,
+      "hoist": "all",
+      "allow": [
+        "debounce",
+        "document",
+        "event",
+        "name",
+        "parent",
+        "status",
+        "toolbar",
+        "top"
+      ]
+    }]
+  }
+}

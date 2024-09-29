@@ -42,7 +42,7 @@
    /**
     * User settable options / customization properties.
     *
-    * @type {import('../../').TJSColordPickerOptions}
+    * @type {import('./').TJSColordPickerOptions}
     */
    export let options = void 0;
 

@@ -68,7 +68,7 @@
 
    import {
       TJSSlotLabel,
-      TJSSlotLabelUtil }   from '../../label';
+      TJSSlotLabelUtil }   from '#standard/component/label';
 
    export let input = void 0;
 

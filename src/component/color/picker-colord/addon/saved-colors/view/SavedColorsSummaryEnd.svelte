@@ -3,7 +3,7 @@
 
    import { ripple }        from '#runtime/svelte/action/animate';
 
-   import { TJSIconButton } from '../../../../../button/index.js';
+   import { TJSIconButton } from '#standard/component/button';
 
    const internalState = getContext('#tjs-color-picker-state');
 

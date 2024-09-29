@@ -18,15 +18,16 @@
     * @componentDocumentation
     */
 
-   import { isObject }           from '#runtime/util/object';
+   import { isObject }     from '#runtime/util/object';
 
-   import TJSInputCheckbox       from './TJSInputCheckbox.svelte';
-   import TJSInputNumber         from './TJSInputNumber.svelte';
-   import TJSInputRange          from './TJSInputRange.svelte';
-   import TJSInputText           from './TJSInputText.svelte';
+   import TJSButton        from '../button/TJSButton.svelte';
 
-   import TJSButton              from '../button/TJSButton.svelte';
-   import TJSSelect              from '../select/TJSSelect.svelte';
+   import TJSInputCheckbox from './TJSInputCheckbox.svelte';
+   import TJSInputNumber   from './TJSInputNumber.svelte';
+   import TJSInputRange    from './TJSInputRange.svelte';
+   import TJSInputText     from './TJSInputText.svelte';
+
+   import TJSSelect        from '../select/TJSSelect.svelte';
 
    export let input = void 0;
 

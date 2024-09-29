@@ -1,7 +1,7 @@
 <script>
    import { getContext }    from 'svelte';
 
-   import TJSSvgFolder      from '../../../folder/TJSSvgFolder.svelte';
+   import { TJSSvgFolder }  from '#standard/component/folder';
 
    const internalState = getContext('#tjs-color-picker-state');
 

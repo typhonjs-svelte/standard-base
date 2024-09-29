@@ -14,7 +14,7 @@ export class TJSColordPickerSavedColors
 {
    static #id = 'saved-colors';
 
-   /** @type {import('../../../../../folder').TJSFolderData} */
+   /** @type {import('#standard/component/folder').TJSFolderData} */
    #folderData;
 
    /** @type {SavedColorsState} */
@@ -40,7 +40,7 @@ export class TJSColordPickerSavedColors
       /**
        * Defines the Svelte components to add to TJSSvgFolder.
        *
-       * @type {import('../../../../../folder').TJSFolderData}
+       * @type {import('#standard/component/folder').TJSFolderData}
        */
       this.#folderData = {
          id: TJSColordPickerSavedColors.#id,
@@ -65,8 +65,8 @@ export class TJSColordPickerSavedColors
    }
 
    /**
-    * @returns {import('../../../../../folder').TJSFolderData} The TJSFolderData object to configure the TJSSvgFolder
-    * component the addon is installed into.
+    * @returns {import('#standard/component/folder').TJSFolderData} The TJSFolderData object to configure the
+    * TJSSvgFolder component the addon is installed into.
     */
    get folderData()
    {

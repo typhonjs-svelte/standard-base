@@ -1,8 +1,11 @@
+import { URLParser } from '#runtime/util/browser';
+
 /**
  * Provides a utility to validate media file types and determine the appropriate HTML element type for rendering.
  *
  * TODO: This is the initial implementation and is only used locally in {@link TJSMediaContent}.
- * I'd like to take a second pass and strengthen the support to accept URLs as well as file path strings.
+ *
+ * A few refinements are needed to make this a general utility in `#runtime/util/browser`.
  */
 export class AssetValidator
 {
@@ -24,7 +27,7 @@ export class AssetValidator
     *
     * @param {object}      options - Options.
     *
-    * @param {string}      options.filepath - The file path of the media asset to validate.
+    * @param {string | URL}   options.url - The URL of the media asset to validate.
     *
     * @param {Set<string>} [options.exclude] - A set of file extensions to exclude from validation.
     *
@@ -37,32 +40,46 @@ export class AssetValidator
     *          the parsing is valid for the file extension is supported and not excluded.
     *          TODO: create type information when made public.
     *
-    * @throws {TypeError} If the provided `filepath` is not a string, `exclude` is not a Set, or `mediaTypes` is not a
-    *         Set.
+    * @throws {TypeError} If the provided `url` is not a string or URL, `routePrefix` is not a string,
+    *         `exclude` is not a Set, or `mediaTypes` is not a Set.
     */
-   static parseMedia({ filepath, exclude, mediaTypes = this.#allMediaTypes, raiseException = false })
+   static parseMedia({ url, routePrefix, exclude, mediaTypes = this.#allMediaTypes, raiseException = false })
    {
       const throws = typeof raiseException === 'boolean' ? raiseException : true;
 
-      if (typeof filepath !== 'string')
+      if (typeof url !== 'string' && !(url instanceof URL))
       {
-         if (throws) { throw new TypeError(`'filepath' is not a string.`); }
-         else { return { filepath, valid: false }; }
+         if (throws) { throw new TypeError(`'url' is not a string or URL instance.`); }
+         else { return { url, valid: false }; }
+      }
+
+      if (routePrefix !== void 0 && typeof routePrefix !== 'string')
+      {
+         if (throws) { throw new TypeError(`'routePrefix' is not a string.`); }
+         else { return { url, valid: false }; }
       }
 
       if (exclude !== void 0 && !(exclude instanceof Set))
       {
          if (throws) { throw new TypeError(`'exclude' is not a Set.`); }
-         else { return { filepath, valid: false }; }
+         else { return { url, valid: false }; }
       }
 
       if (!(mediaTypes instanceof Set))
       {
          if (throws) { throw new TypeError(`'mediaTypes' is not a Set.`); }
-         else { return { filepath, valid: false }; }
+         else { return { url, valid: false }; }
       }
 
-      const extensionMatch = filepath.match(/\.([a-zA-Z0-9]+)$/);
+      const targetURL = typeof url === 'string' ? URLParser.parse({ url, routePrefix }) : url;
+
+      if (!targetURL)
+      {
+         if (throws) { throw new TypeError(`'url' is invalid.`); }
+         else { return { url, valid: false }; }
+      }
+
+      const extensionMatch = targetURL.pathname.match(/\.([a-zA-Z0-9]+)$/);
       const extension = extensionMatch ? extensionMatch[1].toLowerCase() : null;
 
       const isExcluded = exclude instanceof Set ? exclude.has(extension) : false;
@@ -90,7 +107,8 @@ export class AssetValidator
       }
 
       return {
-         filepath,
+         src: url,
+         url: targetURL,
          extension,
          elementType,
          valid

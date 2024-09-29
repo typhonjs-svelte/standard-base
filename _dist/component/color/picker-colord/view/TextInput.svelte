@@ -1,7 +1,7 @@
 <script>
    import { getContext } from 'svelte';
 
-   import { TJSInput }   from '../../../form/input/index.js'
+   import { TJSInput }   from '#standard/component/form';
 
    const internalState = getContext('#tjs-color-picker-state');
    const colorState = internalState.colorState;

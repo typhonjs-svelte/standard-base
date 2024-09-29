@@ -2,8 +2,8 @@
    /**
     * Provides an initial implementation to display image or video content from a given file path.
     *
-    * You can either set the `filepath` prop or use {@link TJSFileSlotButton} and embed TJSMediaContent as a child.
-    * A `filepath` context / store will be examined if it exists to obtain a file path to load.
+    * You can either set the `url` prop or use {@link TJSFileSlotButton} and embed TJSMediaContent as a child.
+    * A `url` context / store will be examined if it exists to obtain a file path to load.
     *
     * The following CSS variables control the associated styles with the default values:
     * ```
@@ -22,17 +22,24 @@
 
    import { clamp }           from '#runtime/math/util';
    import { localize }        from '#runtime/svelte/helper';
-   import { isWritableStore } from '#runtime/util/store';
+   import { isReadableStore } from '#runtime/util/store';
    import { isObject }        from '#runtime/util/object';
 
    import { AssetValidator }  from './AssetValidator.js';
 
    /**
-    * The `filepath` store potentially set from a parent component like `TJSFileSlotButton`.
+    * The `url` store potentially set from a parent component like `TJSFileSlotButton`.
+    *
+    * @type {import('svelte/store').Writable<URL>}
+    */
+   const storeURL = getContext('url');
+
+   /**
+    * The `url` store potentially set from a parent component like `TJSFileSlotButton`.
     *
     * @type {import('svelte/store').Writable<string>}
     */
-   const storeFilepath = getContext('filepath');
+   const storeURLString = getContext('urlString');
 
    /**
     * Only process image / video assets from AssetValidator / skip audio.
@@ -41,14 +48,17 @@
     */
    const mediaTypes = new Set(['img', 'video']);
 
+   /**
+    * @type {object}
+    */
    export let media = void 0;
 
    /**
-    * Prop for filepath media content.
+    * URL path / URL for media content.
     *
-    * @type {string}
+    * @type {string | URL}
     */
-   export let filepath = void 0;
+   export let url = void 0;
 
    /**
     * Alternate image text.
@@ -104,7 +114,7 @@
     */
    export let defaultMedia = {
       elementType: 'img',
-      filepath: 'icons/svg/mystery-man.svg',
+      src: 'icons/svg/mystery-man.svg',
       valid: true
    };
 
@@ -114,8 +124,8 @@
 
    // ----------------------------------------------------------------------------------------------------------------
 
-   $: filepath = isObject(media) && typeof media.filepath === 'string' ? media.filepath :
-    typeof filepath === 'string' ? filepath : void 0;
+   $: url = isObject(media) && (typeof media.url === 'string' || media.url instanceof URL) ? media.url :
+    typeof url === 'string' || url instanceof URL ? url : void 0;
 
    $: imgAlt = isObject(media) && typeof media.imgAlt === 'string' ? media.imgAlt :
     typeof imgAlt === 'string' ? imgAlt : void 0;
@@ -154,13 +164,14 @@
    $: if (videoEl) { videoEl.playbackRate = videoPlaybackRate; }
 
    /**
-    * First attempt to use the filepath prop or fallback to the store from context then parse the
-    * media type.
+    * First attempt to use the url prop or fallback to the store from context then parse the media type.
     */
    $: {
-      const mediaTarget = filepath ?? (isWritableStore(storeFilepath) ? $storeFilepath : void 0);
+      const mediaTarget = url ??
+       (isReadableStore(storeURL) ? $storeURL : void 0) ??
+        (isReadableStore(storeURLString) ? $storeURLString : void 0);
 
-      const result = AssetValidator.parseMedia({ filepath: mediaTarget, mediaTypes });
+      const result = AssetValidator.parseMedia({ url: mediaTarget, routePrefix: 'test', mediaTypes });
 
       // Validate that the result is a valid format / type otherwise fallback to `defaultMedia`.
       parsed = result?.valid ? result : defaultMedia;
@@ -188,7 +199,7 @@
 <div class=tjs-media-content>
     {#key parsed}
        {#if parsed?.elementType === 'img'}
-          <img src={parsed.filepath} alt={imgAlt} title={title} />
+          <img src={parsed.src} alt={imgAlt} title={title} />
        {:else if parsed?.elementType === 'video'}
           <video bind:this={videoEl}
                  on:pointerenter={onPointerenter}
@@ -198,12 +209,12 @@
                  muted={videoMuted}
                  title={localize(title)}
                  tabindex=-1>  <!-- tabindex is necessary to prevent focus on Firefox -->
-             <source src={parsed.filepath} type={`video/${parsed.extension}`}>
+             <source src={parsed.src} type={`video/${parsed.extension}`}>
 
              <!-- Potentially use the default asset if an image as a fallback. -->
              <slot name=video-fallback>
                 {#if defaultMedia?.elementType === 'img'}
-                   <img src={defaultMedia?.filepath} alt="Video not loaded" />
+                   <img src={defaultMedia?.src} alt="Video not loaded" />
                 {/if}
              </slot>
           </video>

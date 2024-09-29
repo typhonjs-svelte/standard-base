@@ -9,7 +9,7 @@ const sourcemap = true; // Defines whether source maps are generated.
 const rollupConfigs = [
    {
       input: {
-         input: 'src/application/index.js',
+         input: 'src/application/menu/index.js',
          external: [/^#runtime/, /^#standard/],
          plugins: [
             resolve(),
@@ -17,7 +17,7 @@ const rollupConfigs = [
          ]
       },
       output: {
-         file: '_dist/application/index.js',
+         file: '_dist/application/menu/index.js',
          format: 'es',
          generatedCode: { constBindings: true },
          sourcemap
@@ -49,4 +49,12 @@ for (const compFile of compFiles)
    fs.writeFileSync(compFile, fileData);
 }
 
-await generateDTS({ input: '_dist/component/index.js' })
+await generateDTS({ input: '_dist/component/button/index.js' })
+await generateDTS({ input: '_dist/component/color/picker-colord/index.js' })
+await generateDTS({ input: '_dist/component/container/index.js' })
+await generateDTS({ input: '_dist/component/folder/index.js' })
+await generateDTS({ input: '_dist/component/form/index.js' })
+await generateDTS({ input: '_dist/component/label/index.js' })
+await generateDTS({ input: '_dist/component/layer/index.js' })
+await generateDTS({ input: '_dist/component/media/index.js' })
+await generateDTS({ input: '_dist/component/menu/index.js' })

@@ -9,22 +9,50 @@
   ],
   "imports": {
     "#runtime/*": "@typhonjs-svelte/runtime-base/*",
-    "#standard/component": {
-      "types": "./_dist/component/index.d.ts",
-      "default": "@typhonjs-svelte/standard/component"
-    },
     "#standard/*": "@typhonjs-svelte/standard/*",
     "#svelte/*": "svelte/*",
     "#svelte": "svelte"
   },
   "exports": {
-    "./application": {
-      "types": "./_dist/application/index.d.ts",
-      "import": "./_dist/application/index.js"
+    "./application/menu": {
+      "types": "./_dist/application/menu/index.d.ts",
+      "import": "./_dist/application/menu/index.js"
     },
-    "./component": {
-      "types": "./_dist/component/index.d.ts",
-      "import": "./_dist/component/index.js"
+    "./component/button": {
+      "types": "./_dist/component/button/index.d.ts",
+      "import": "./_dist/component/button/index.js"
+    },
+    "./component/color/picker": {
+      "types": "./_dist/component/color/picker-colord/index.d.ts",
+      "import": "./_dist/component/color/picker-colord/index.js"
+    },
+    "./component/container": {
+      "types": "./_dist/component/container/index.d.ts",
+      "import": "./_dist/component/container/index.js"
+    },
+    "./component/folder": {
+      "types": "./_dist/component/folder/index.d.ts",
+      "import": "./_dist/component/folder/index.js"
+    },
+    "./component/form": {
+      "types": "./_dist/component/form/index.d.ts",
+      "import": "./_dist/component/form/index.js"
+    },
+    "./component/label": {
+      "types": "./_dist/component/label/index.d.ts",
+      "import": "./_dist/component/label/index.js"
+    },
+    "./component/layer": {
+      "types": "./_dist/component/layer/index.d.ts",
+      "import": "./_dist/component/layer/index.js"
+    },
+    "./component/media": {
+      "types": "./_dist/component/media/index.d.ts",
+      "import": "./_dist/component/media/index.js"
+    },
+    "./component/menu": {
+      "types": "./_dist/component/menu/index.d.ts",
+      "import": "./_dist/component/menu/index.js"
     },
     "./package.json": "./package.json"
   },

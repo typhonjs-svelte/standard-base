@@ -14,7 +14,7 @@
       onDestroy,
       setContext }              from 'svelte';
 
-   import { colord }            from '#runtime/color/colord';
+   import { colord }            from '#runtime/data/color/colord';
 
    import { applyStyles }       from '#runtime/svelte/action/dom';
 

@@ -1,6 +1,6 @@
 import { writable }     from '#svelte/store';
 
-import { colord }       from '#runtime/color/colord';
+import { colord }       from '#runtime/data/color/colord';
 
 // TODO REFACTOR TO TOP LEVEL OPTION
 import { rippleFocus }  from '#runtime/svelte/action/animate';

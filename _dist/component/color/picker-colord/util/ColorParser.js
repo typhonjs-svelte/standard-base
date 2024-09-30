@@ -1,4 +1,4 @@
-import { getFormat } from '#runtime/color/colord';
+import { getFormat } from '#runtime/data/color/colord';
 
 /**
  * Provides generic color model utilities.

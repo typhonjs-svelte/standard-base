@@ -68,7 +68,7 @@
    import { writable }     from '#svelte/store';
 
    import { applyStyles }  from '#runtime/svelte/action/dom';
-   import { localize }     from '#runtime/svelte/helper';
+   import { localize }     from '#runtime/util/i18n';
    import { isObject }     from '#runtime/util/object';
 
    import {

@@ -108,10 +108,11 @@
       onMount }               from 'svelte';
 
    import { applyStyles }     from '#runtime/svelte/action/dom';
-   import { localize }        from '#runtime/svelte/helper';
    import { slideFade }       from '#runtime/svelte/transition';
 
    import { TJSSvelteUtil }   from '#runtime/svelte/util';
+
+   import { localize }        from '#runtime/util/i18n';
 
    import {
       getStackingContext,

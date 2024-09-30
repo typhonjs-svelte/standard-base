@@ -8,8 +8,8 @@
    import { createEventDispatcher } from 'svelte';
 
    import { applyStyles }           from '#runtime/svelte/action/dom';
-   import { localize }              from '#runtime/svelte/helper';
    import { TJSSvelteConfigUtil }   from '#runtime/svelte/util';
+   import { localize }              from '#runtime/util/i18n';
    import { isObject }              from '#runtime/util/object';
 
    export let button = void 0;

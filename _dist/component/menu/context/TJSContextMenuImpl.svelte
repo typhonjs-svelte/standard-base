@@ -100,16 +100,13 @@
    import { current_component }  from 'svelte/internal';
 
    import { applyStyles }        from '#runtime/svelte/action/dom';
-   import { localize }           from '#runtime/svelte/helper';
+   import { TJSFocusWrap }       from '#runtime/svelte/component/core';
    import { slideFade }          from '#runtime/svelte/transition';
-
    import { TJSSvelteUtil }      from '#runtime/svelte/util';
 
    import { A11yHelper }         from '#runtime/util/browser';
-
+   import { localize }           from '#runtime/util/i18n';
    import { isObject }           from '#runtime/util/object';
-
-   import { TJSFocusWrap }       from '#runtime/svelte/component/core';
 
    export let menu = void 0;
 

@@ -1,8 +1,8 @@
 <script>
    import { getContext }            from 'svelte';
 
-   import { localize }              from '#runtime/svelte/helper';
    import { TJSSvelteConfigUtil }   from '#runtime/svelte/util';
+   import { localize }              from '#runtime/util/i18n';
    import { A11yHelper }            from '#runtime/util/browser';
    import { isObject }              from '#runtime/util/object';
 

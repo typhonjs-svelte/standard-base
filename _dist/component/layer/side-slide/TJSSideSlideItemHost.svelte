@@ -4,7 +4,7 @@
       onDestroy }          from 'svelte';
 
    import { slideFade }    from '#runtime/svelte/transition';
-   import { A11yHelper }   from '#runtime/util/browser';
+   import { A11yHelper }   from '#runtime/util/a11y';
    import { isObject }     from '#runtime/util/object';
 
    /** @type {HTMLDivElement} */

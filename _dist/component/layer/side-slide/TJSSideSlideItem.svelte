@@ -3,7 +3,7 @@
 
    import { TJSSvelteConfigUtil }   from '#runtime/svelte/util';
    import { localize }              from '#runtime/util/i18n';
-   import { A11yHelper }            from '#runtime/util/browser';
+   import { A11yHelper }            from '#runtime/util/a11y';
    import { isObject }              from '#runtime/util/object';
 
    import TJSSideSlideItemHost      from './TJSSideSlideItemHost.svelte';

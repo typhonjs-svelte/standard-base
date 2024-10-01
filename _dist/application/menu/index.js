@@ -1,6 +1,6 @@
 import { getEasingFunc } from '#runtime/svelte/easing';
 import { TJSSvelteUtil } from '#runtime/svelte/util';
-import { A11yHelper } from '#runtime/util/browser';
+import { A11yHelper } from '#runtime/util/a11y';
 import { isIterable, isObject } from '#runtime/util/object';
 import { TJSContextMenuImpl } from '#standard/component/menu';
 

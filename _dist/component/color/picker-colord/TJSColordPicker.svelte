@@ -18,9 +18,9 @@
 
    import { applyStyles }       from '#runtime/svelte/action/dom';
 
-   import {
-      A11yHelper,
-      ClipboardAccess }         from '#runtime/util/browser';
+   import { A11yHelper }        from '#runtime/util/a11y';
+
+   import { ClipboardAccess }   from '#runtime/util/browser';
 
    import { isObject }          from '#runtime/util/object';
 

@@ -1,4 +1,4 @@
-import * as _runtime_util_browser from '#runtime/util/browser';
+import * as _runtime_util_a11y from '#runtime/util/a11y';
 import * as _runtime_svelte_easing from '#runtime/svelte/easing';
 import { SvelteComponent } from 'svelte';
 
@@ -250,8 +250,8 @@ declare namespace TjsContextMenuImpl {
     transitionOptions?: { duration: number; easing: _runtime_svelte_easing.EasingFunction };
     offsetX?: number;
     offsetY?: number;
-    /** @type {import('#runtime/util/browser').A11yFocusSource} */
-    focusSource?: _runtime_util_browser.A11yFocusSource;
+    /** @type {import('#runtime/util/a11y').A11yFocusSource} */
+    focusSource?: _runtime_util_a11y.A11yFocusSource;
     /**
      * @type {Window} The active window the context menu is displaying inside.
      */
@@ -330,7 +330,7 @@ type TJSMenuItemData = {
   onPress?: (data?: {
     event?: KeyboardEvent | PointerEvent;
     item?: TJSMenuItemData;
-    focusSource?: _runtime_util_browser.A11yFocusSource;
+    focusSource?: _runtime_util_a11y.A11yFocusSource;
   }) => any;
   /**
    * If a boolean and false or a function that invoked returns a falsy value

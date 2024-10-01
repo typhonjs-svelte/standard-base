@@ -112,11 +112,11 @@
 
    import { TJSSvelteUtil }      from '#runtime/svelte/util';
 
-   import { localize }           from '#runtime/util/i18n';
-
-   import { A11yHelper }         from '#runtime/util/browser';
+   import { A11yHelper }         from '#runtime/util/a11y';
 
    import { getStackingContext } from '#runtime/util/dom/layout';
+
+   import { localize }           from '#runtime/util/i18n';
 
    import {
       isIterable,
@@ -231,7 +231,7 @@
    let closed = false;
 
    // Stores any associated `focusSource` options to pass to menu callbacks when menu was activated by keys.
-   /** @type {import('#runtime/util/browser').A11yFocusSource} */
+   /** @type {import('#runtime/util/a11y').A11yFocusSource} */
    let focusSource = void 0;
 
    // Stores if menu has keyboard focus; detected on mount, when tab navigation occurs, and used to set `keyboardFocus`

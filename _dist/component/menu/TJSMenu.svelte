@@ -105,24 +105,24 @@
    import {
       getContext,
       onDestroy,
-      onMount }               from 'svelte';
+      onMount }                  from 'svelte';
 
-   import { applyStyles }     from '#runtime/svelte/action/dom';
-   import { slideFade }       from '#runtime/svelte/transition';
+   import { applyStyles }        from '#runtime/svelte/action/dom';
+   import { slideFade }          from '#runtime/svelte/transition';
 
-   import { TJSSvelteUtil }   from '#runtime/svelte/util';
+   import { TJSSvelteUtil }      from '#runtime/svelte/util';
 
-   import { localize }        from '#runtime/util/i18n';
+   import { localize }           from '#runtime/util/i18n';
 
-   import {
-      getStackingContext,
-      A11yHelper }            from '#runtime/util/browser';
+   import { A11yHelper }         from '#runtime/util/browser';
+
+   import { getStackingContext } from '#runtime/util/dom/layout';
 
    import {
       isIterable,
-      isObject }              from '#runtime/util/object';
+      isObject }                 from '#runtime/util/object';
 
-   import { TJSFocusWrap }    from '#runtime/svelte/component/core';
+   import { TJSFocusWrap }       from '#runtime/svelte/component/core';
 
    /** @type {import('.').TJSMenuData} */
    export let menu = void 0;

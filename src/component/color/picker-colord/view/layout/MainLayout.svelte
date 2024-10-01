@@ -6,7 +6,7 @@
 
    import { writable }           from '#svelte/store';
 
-   import { getStackingContext } from '#runtime/util/browser';
+   import { getStackingContext } from '#runtime/util/dom/layout';
 
    export let containerEl = void 0;
    export let inputEl = void 0;

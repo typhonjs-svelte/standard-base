@@ -122,7 +122,7 @@
       isIterable,
       isObject }                 from '#runtime/util/object';
 
-   import { TJSFocusWrap }       from '#runtime/svelte/component/core';
+   import { TJSFocusWrap }       from '#standard/component/dom';
 
    /** @type {import('.').TJSMenuData} */
    export let menu = void 0;

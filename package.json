@@ -30,6 +30,10 @@
       "types": "./_dist/component/container/index.d.ts",
       "import": "./_dist/component/container/index.js"
     },
+    "./component/dom": {
+      "types": "./_dist/component/dom/index.d.ts",
+      "import": "./_dist/component/dom/index.js"
+    },
     "./component/folder": {
       "types": "./_dist/component/folder/index.d.ts",
       "import": "./_dist/component/folder/index.js"

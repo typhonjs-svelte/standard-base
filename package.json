@@ -9,7 +9,7 @@
   ],
   "imports": {
     "#runtime/*": "@typhonjs-svelte/runtime-base/*",
-    "#standard/*": "@typhonjs-svelte/standard/*",
+    "#standard/*": "@typhonjs-svelte/standard-base/*",
     "#svelte/*": "svelte/*",
     "#svelte": "svelte"
   },
@@ -78,7 +78,7 @@
   "engines": {
     "node": ">=18"
   },
-  "homepage": "https://github.com/typhonjs-svelte/standard#readme",
+  "homepage": "https://github.com/typhonjs-svelte/standard-base#readme",
   "keywords": [
     "typhonjs",
     "trl",
@@ -94,6 +94,6 @@
   ],
   "directories": {},
   "license": "MPL-2.0",
-  "repository": "github:typhonjs-svelte/standard",
-  "bugs": "https://github.com/typhonjs-svelte/standard/issues"
+  "repository": "github:typhonjs-svelte/standard-base",
+  "bugs": "https://github.com/typhonjs-svelte/standard-base/issues"
 }

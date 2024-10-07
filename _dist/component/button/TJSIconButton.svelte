@@ -51,7 +51,7 @@
     */
    import { createEventDispatcher } from 'svelte';
 
-   import { applyStyles }           from '#runtime/svelte/action/dom';
+   import { applyStyles }           from '#runtime/svelte/action/dom/style';
    import { localize }              from '#runtime/util/i18n';
    import { isObject }              from '#runtime/util/object';
 

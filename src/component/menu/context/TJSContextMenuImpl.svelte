@@ -99,7 +99,7 @@
 
    import { current_component }  from '#svelte/internal';
 
-   import { applyStyles }        from '#runtime/svelte/action/dom';
+   import { applyStyles }        from '#runtime/svelte/action/dom/style';
    import { slideFade }          from '#runtime/svelte/transition';
    import { TJSSvelteUtil }      from '#runtime/svelte/util';
 

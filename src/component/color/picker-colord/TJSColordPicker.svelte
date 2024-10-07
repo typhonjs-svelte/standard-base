@@ -16,7 +16,7 @@
 
    import { colord }            from '#runtime/data/color/colord';
 
-   import { applyStyles }       from '#runtime/svelte/action/dom';
+   import { applyStyles }       from '#runtime/svelte/action/dom/style';
 
    import { A11yHelper }        from '#runtime/util/a11y';
 

@@ -13,9 +13,8 @@
 
    import { writable }        from '#svelte/store';
 
-   import {
-      applyScrolltop,
-      applyStyles }           from '#runtime/svelte/action/dom';
+   import { applyScrolltop }  from '#runtime/svelte/action/dom/properties';
+   import { applyStyles }     from '#runtime/svelte/action/dom/style';
 
    import { TJSSvelteUtil }   from '#runtime/svelte/util';
 

@@ -107,7 +107,7 @@
       onDestroy,
       onMount }                  from 'svelte';
 
-   import { applyStyles }        from '#runtime/svelte/action/dom';
+   import { applyStyles }        from '#runtime/svelte/action/dom/style';
    import { slideFade }          from '#runtime/svelte/transition';
 
    import { TJSSvelteUtil }      from '#runtime/svelte/util';

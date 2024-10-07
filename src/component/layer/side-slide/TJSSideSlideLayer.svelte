@@ -9,7 +9,7 @@
    import { setContext }            from '#svelte';
    import { writable }              from '#svelte/store';
 
-   import { applyStyles }           from '#runtime/svelte/action/dom';
+   import { applyStyles }           from '#runtime/svelte/action/dom/style';
    import { getEasingFunc }         from '#runtime/svelte/easing';
    import { TJSSvelteConfigUtil }   from '#runtime/svelte/util';
    import {

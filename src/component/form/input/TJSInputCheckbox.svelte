@@ -42,7 +42,7 @@
 
    import { writable }        from '#svelte/store';
 
-   import { applyStyles }     from '#runtime/svelte/action/dom';
+   import { applyStyles }     from '#runtime/svelte/action/dom/style';
    import { isObject }        from '#runtime/util/object';
 
    import { isWritableStore } from '#runtime/util/store';

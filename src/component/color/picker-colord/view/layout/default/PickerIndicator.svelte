@@ -1,5 +1,5 @@
 <script>
-   import { applyStyles } from '#runtime/svelte/action/dom';
+   import { applyStyles } from '#runtime/svelte/action/dom/style';
 
    export let focused = false;
    export let styles = void 0;

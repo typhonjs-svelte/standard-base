@@ -3,7 +3,7 @@
    import { writable }      from 'svelte/store';
 
    import { clamp }         from '#runtime/math/util';
-   import { isFocused }     from '#runtime/svelte/action/dom';
+   import { isFocused }     from '#runtime/svelte/action/dom/focus';
 
    import {
       keyforward,

@@ -1,7 +1,7 @@
 <script>
    import { getContext }   from '#svelte';
 
-   import { applyStyles }  from '#runtime/svelte/action/dom'
+   import { applyStyles }  from '#runtime/svelte/action/dom/style'
 
    import { resize }          from './resize.js';
    import { applyResizeData } from './applyResizeData.js';

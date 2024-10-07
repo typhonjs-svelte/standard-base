@@ -69,7 +69,7 @@
    import { onMount }         from '#svelte';
    import { writable }        from '#svelte/store';
 
-   import { applyStyles }     from '#runtime/svelte/action/dom';
+   import { applyStyles }     from '#runtime/svelte/action/dom/style';
    import { isWritableStore } from '#runtime/util/store';
    import { isObject }        from '#runtime/util/object';
 

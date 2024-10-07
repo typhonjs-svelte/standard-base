@@ -24,7 +24,7 @@
     */
    import { createEventDispatcher } from 'svelte';
 
-   import { applyStyles }           from '#runtime/svelte/action/dom';
+   import { applyStyles }           from '#runtime/svelte/action/dom/style';
    import { isObject }              from '#runtime/util/object';
 
    export let button = void 0;

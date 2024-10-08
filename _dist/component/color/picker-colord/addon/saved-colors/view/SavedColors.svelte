@@ -1,7 +1,7 @@
 <script>
    import { getContext }    from 'svelte';
 
-   import { ripple }        from '#runtime/svelte/action/animate';
+   import { ripple }        from '#standard/action/animate/ripple';
 
    import TJSColordButton   from '../../../TJSColordButton.svelte';
 

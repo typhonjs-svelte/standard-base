@@ -3,7 +3,7 @@ import { writable }  from 'svelte/store';
 import { colord }    from '#runtime/data/color/colord';
 
 // TODO REFACTOR TO TOP LEVEL OPTION
-import { rippleFocus } from '#runtime/svelte/action/animate';
+import { rippleFocus } from '#standard/action/animate/ripple';
 
 /**
  * Provides a buffered set of stores converting the current color from {@link ColorState} into a hex values for display

@@ -1,8 +1,7 @@
 <script>
    import { getContext }    from 'svelte';
 
-   import { ripple }        from '#runtime/svelte/action/animate';
-
+   import { ripple }        from '#standard/action/animate/ripple';
    import { TJSIconButton } from '#standard/component/button';
 
    const internalState = getContext('#tjs-color-picker-state');

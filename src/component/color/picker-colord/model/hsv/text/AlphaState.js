@@ -1,7 +1,7 @@
 import { writable } from '#svelte/store';
 
 // TODO REFACTOR TO TOP LEVEL OPTION
-import { rippleFocus } from '#runtime/svelte/action/animate';
+import { rippleFocus } from '#standard/action/animate/ripple';
 
 /**
  * Provides a buffered set of stores converting the current color from color state into a rounded alpha

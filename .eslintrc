@@ -23,6 +23,7 @@
       "hoist": "all",
       "allow": [
         "debounce",
+        "external",
         "document",
         "event",
         "name",

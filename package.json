@@ -14,6 +14,10 @@
     "#svelte": "svelte"
   },
   "exports": {
+    "./action/animate/ripple": {
+      "types": "./_dist/action/animate/ripple/index.d.ts",
+      "import": "./_dist/action/animate/ripple/index.js"
+    },
     "./application/menu": {
       "types": "./_dist/application/menu/index.d.ts",
       "import": "./_dist/application/menu/index.js"

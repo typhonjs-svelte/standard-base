@@ -66,16 +66,16 @@
     * @see https://dev.to/isaachagoel/svelte-reactivity-gotchas-solutions-if-you-re-using-svelte-in-production-you-should-read-this-3oj3
     */
 
-   import { onMount }         from '#svelte';
-   import { writable }        from '#svelte/store';
+   import { onMount }                  from '#svelte';
+   import { writable }                 from '#svelte/store';
 
-   import { applyStyles }     from '#runtime/svelte/action/dom/style';
-   import { isWritableStore } from '#runtime/util/store';
-   import { isObject }        from '#runtime/util/object';
+   import { applyStyles }              from '#runtime/svelte/action/dom/style';
+   import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
+   import { isObject }                 from '#runtime/util/object';
 
    import {
       TJSSlotLabel,
-      TJSSlotLabelUtil }      from '#standard/component/label';
+      TJSSlotLabelUtil }               from '#standard/component/label';
 
    export let select = void 0;
 
@@ -100,8 +100,8 @@
     typeof selected === 'string' ? selected : void 0;
    $: options = isObject(select) && Array.isArray(select.options) ? select.options :
     Array.isArray(options) ? options : [];
-   $: store = isObject(select) && isWritableStore(select.store) ? select.store :
-    isWritableStore(store) ? store : writable(void 0);
+   $: store = isObject(select) && isMinimalWritableStore(select.store) ? select.store :
+    isMinimalWritableStore(store) ? store : writable(void 0);
    $: styles = isObject(select) && isObject(select.styles) ? select.styles :
     isObject(styles) ? styles : void 0;
    $: efx = isObject(select) && typeof select.efx === 'function' ? select.efx :

@@ -23,13 +23,13 @@
     * ```
     * @componentDocumentation
     */
-   import { createEventDispatcher } from '#svelte';
+   import { createEventDispatcher }    from '#svelte';
 
-   import { applyStyles }           from '#runtime/svelte/action/dom/style';
-   import { TJSSvelteUtil }         from '#runtime/svelte/util';
-   import { localize }              from '#runtime/util/i18n';
-   import { isObject }              from '#runtime/util/object';
-   import { isWritableStore }       from '#runtime/util/store';
+   import { applyStyles }              from '#runtime/svelte/action/dom/style';
+   import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
+   import { TJSSvelteUtil }            from '#runtime/svelte/util';
+   import { localize }                 from '#runtime/util/i18n';
+   import { isObject }                 from '#runtime/util/object';
 
    export let label = void 0;
 
@@ -63,7 +63,7 @@
     typeof title === 'string' ? title : '';
    $: titleSelected = isObject(label) && typeof label.titleSelected === 'string' ? label.titleSelected :
     typeof titleSelected === 'string' ? titleSelected : '';
-   $: store = isObject(label) && isWritableStore(label.store) ? label.store : isWritableStore(store) ?
+   $: store = isObject(label) && isMinimalWritableStore(label.store) ? label.store : isMinimalWritableStore(store) ?
     store : void 0;
    $: styles = isObject(label) && isObject(label.styles) ? label.styles :
     isObject(styles) ? styles : void 0;

@@ -50,12 +50,12 @@
     * ```
     * @componentDocumentation
     */
-   import { createEventDispatcher } from '#svelte';
+   import { createEventDispatcher }    from '#svelte';
 
-   import { applyStyles }           from '#runtime/svelte/action/dom/style';
-   import { localize }              from '#runtime/util/i18n';
-   import { isObject }              from '#runtime/util/object';
-   import { isWritableStore }       from '#runtime/util/store';
+   import { applyStyles }              from '#runtime/svelte/action/dom/style';
+   import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
+   import { localize }                 from '#runtime/util/i18n';
+   import { isObject }                 from '#runtime/util/object';
 
    export let button = void 0;
 
@@ -86,7 +86,7 @@
     typeof title === 'string' ? title : '';
    $: titleSelected = isObject(button) && typeof button.titleSelected === 'string' ? button.titleSelected :
     typeof titleSelected === 'string' ? titleSelected : '';
-   $: store = isObject(button) && isWritableStore(button.store) ? button.store : isWritableStore(store) ?
+   $: store = isObject(button) && isMinimalWritableStore(button.store) ? button.store : isMinimalWritableStore(store) ?
     store : void 0;
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
     isObject(styles) ? styles : void 0;

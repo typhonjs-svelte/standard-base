@@ -12,25 +12,20 @@
       createEventDispatcher,
       getContext,
       onDestroy,
-      setContext }              from '#svelte';
+      setContext }                     from '#svelte';
 
-   import { colord }            from '#runtime/data/color/colord';
+   import { colord }                   from '#runtime/data/color/colord';
+   import { applyStyles }              from '#runtime/svelte/action/dom/style';
+   import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
+   import { A11yHelper }               from '#runtime/util/a11y';
+   import { ClipboardAccess }          from '#runtime/util/browser';
+   import { isObject }                 from '#runtime/util/object';
 
-   import { applyStyles }       from '#runtime/svelte/action/dom/style';
-
-   import { A11yHelper }        from '#runtime/util/a11y';
-
-   import { ClipboardAccess }   from '#runtime/util/browser';
-
-   import { isObject }          from '#runtime/util/object';
-
-   import { isWritableStore }   from '#runtime/util/store';
-
-   import { InternalState }     from './model/index.js';
+   import { InternalState }            from './model/index.js';
 
    import {
       Input,
-      MainLayout }              from './view/index.js'
+      MainLayout }                     from './view/index.js'
 
    /**
     * color properties
@@ -81,7 +76,7 @@
    /** @type {object} */
    $: styles = isObject(options) && isObject(options.styles) ? options.styles : void 0;
 
-   $: externalStore = isObject(options) && isWritableStore(options.store) ? options.store : void 0;
+   $: externalStore = isObject(options) && isMinimalWritableStore(options.store) ? options.store : void 0;
 
    // When options changes update internal state.
    $: internalState.updateOptions(options);

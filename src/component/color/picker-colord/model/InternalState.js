@@ -1,19 +1,18 @@
-import { writable }        from '#svelte/store';
+import { writable }                 from '#svelte/store';
 
-import { propertyStore }   from '#runtime/svelte/store/writable-derived';
+import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
+import { propertyStore }            from '#runtime/svelte/store/writable-derived';
 
 import {
    isIterable,
-   isObject }              from '#runtime/util/object';
+   isObject }                       from '#runtime/util/object';
 
-import { isWritableStore } from '#runtime/util/store';
+import { AddOnState }               from './AddOnState.js';
+import { ButtonState }              from './ButtonState.js';
+import { ColorState }               from './hsv/ColorState.js';
+import { EyeDropper }               from './EyeDropper.js';
 
-import { AddOnState }      from './AddOnState.js';
-import { ButtonState }     from './ButtonState.js';
-import { ColorState }      from './hsv/ColorState.js';
-import { EyeDropper }      from './EyeDropper.js';
-
-import { layout }          from '../view/layout/index.js';
+import { layout }                   from '../view/layout/index.js';
 
 export class InternalState
 {
@@ -378,9 +377,9 @@ export class InternalState
          throw new TypeError(`'options.precision' must be an integer >= 0.`);
       }
 
-      if (opts.store !== void 0 && !isWritableStore(opts.store))
+      if (opts.store !== void 0 && !isMinimalWritableStore(opts.store))
       {
-         throw new TypeError(`'options.store' must be a writable store.`);
+         throw new TypeError(`'options.store' must be a minimal writable store.`);
       }
 
       if (opts.width !== void 0)

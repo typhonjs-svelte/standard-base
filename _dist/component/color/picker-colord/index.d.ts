@@ -1,5 +1,6 @@
 import * as svelte from 'svelte';
 import { SvelteComponent } from 'svelte';
+import * as _runtime_svelte_store_util from '#runtime/svelte/store/util';
 import * as svelte_store from 'svelte/store';
 import * as _runtime_svelte_store_web_storage from '#runtime/svelte/store/web-storage';
 
@@ -990,9 +991,10 @@ type TJSColordPickerOptions = {
    */
   precision?: number;
   /**
-   * An external store to update current color.
+   * An external minimal
+   * writable store to update current color.
    */
-  store?: svelte_store.Writable<TJSColordPickerColor>;
+  store?: _runtime_svelte_store_util.MinimalWritable<TJSColordPickerColor>;
   /**
    * Inline styles to apply to TJSColordPicker span; useful to set CSS variables.
    */

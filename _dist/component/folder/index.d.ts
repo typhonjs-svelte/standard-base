@@ -1,4 +1,5 @@
 import * as svelte_store from 'svelte/store';
+import * as _runtime_svelte_store_util from '#runtime/svelte/store/util';
 import { SvelteComponent } from 'svelte';
 
 /**
@@ -153,8 +154,8 @@ declare namespace TjsSvgFolder {
     animate?: boolean;
     /** @type {import('.').TJSFolderOptions} */
     options?: TJSFolderOptions;
-    /** @type {import('svelte/store').Writable<boolean>} */
-    store?: svelte_store.Writable<boolean>;
+    /** @type {import('#runtime/svelte/store/util').MinimalWritable<boolean>} */
+    store?: _runtime_svelte_store_util.MinimalWritable<boolean>;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
     onClose?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
@@ -384,8 +385,8 @@ declare namespace TjsIconFolder {
     animate?: boolean;
     /** @type {import('.').TJSFolderOptions} */
     options?: TJSFolderOptions;
-    /** @type {import('svelte/store').Writable<boolean>} */
-    store?: svelte_store.Writable<boolean>;
+    /** @type {import('#runtime/svelte/store/util').MinimalWritable<boolean>} */
+    store?: _runtime_svelte_store_util.MinimalWritable<boolean>;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
     onClose?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */

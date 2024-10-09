@@ -1,8 +1,8 @@
 import { get, writable }         from 'svelte/store';
 
 import { colord }                from '#runtime/data/color/colord';
+import { subscribeIgnoreFirst }  from '#runtime/svelte/store/util';
 import { Timing }                from '#runtime/util';
-import { subscribeIgnoreFirst }  from '#runtime/util/store';
 
 import { TextState }             from './text/TextState.js';
 

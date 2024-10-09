@@ -140,13 +140,14 @@
 
    import { toggleDetails }   from '#runtime/svelte/action/dom/properties';
    import { applyStyles }     from '#runtime/svelte/action/dom/style';
+
+   import {
+      isMinimalWritableStore,
+      subscribeIgnoreFirst }  from '#runtime/svelte/store/util';
+
    import { TJSSvelteUtil }   from '#runtime/svelte/util';
    import { localize }        from '#runtime/util/i18n';
    import { isObject }        from '#runtime/util/object';
-
-   import {
-      isWritableStore,
-      subscribeIgnoreFirst }  from '#runtime/util/store';
 
    /** @type {import('.').TJSIconFolderData} */
    export let folder = void 0;
@@ -172,7 +173,7 @@
    /** @type {import('.').TJSFolderOptions} */
    export let options = void 0;
 
-   /** @type {import('svelte/store').Writable<boolean>} */
+   /** @type {import('#runtime/svelte/store/util').MinimalWritable<boolean>} */
    export let store = void 0;
 
    /** @type {object} */
@@ -228,8 +229,8 @@
    }
 
    $: {
-      store = isObject(folder) && isWritableStore(folder.store) ? folder.store :
-       isWritableStore(store) ? store : writable(false);
+      store = isObject(folder) && isMinimalWritableStore(folder.store) ? folder.store :
+       isMinimalWritableStore(store) ? store : writable(false);
 
       if (typeof storeUnsubscribe === 'function') { storeUnsubscribe(); }
 

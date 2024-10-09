@@ -38,7 +38,8 @@ export *                              from './addon/index.js';
  *
  * @property {number} [precision=0] A positive integer defining rounding precision.
  *
- * @property {import('svelte/store').Writable<TJSColordPickerColor>} [store] An external store to update current color.
+ * @property {import('#runtime/svelte/store/util').MinimalWritable<TJSColordPickerColor>} [store] An external minimal
+ *           writable store to update current color.
  *
  * @property {object} [styles] Inline styles to apply to TJSColordPicker span; useful to set CSS variables.
  *

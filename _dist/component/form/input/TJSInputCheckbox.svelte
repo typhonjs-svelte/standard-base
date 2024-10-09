@@ -40,16 +40,15 @@
     * @componentDocumentation
     */
 
-   import { writable }        from 'svelte/store';
+   import { writable }                 from 'svelte/store';
 
-   import { applyStyles }     from '#runtime/svelte/action/dom/style';
-   import { isObject }        from '#runtime/util/object';
-
-   import { isWritableStore } from '#runtime/util/store';
+   import { applyStyles }              from '#runtime/svelte/action/dom/style';
+   import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
+   import { isObject }                 from '#runtime/util/object';
 
    import {
       TJSSlotLabel,
-      TJSSlotLabelUtil }      from '#standard/component/label';
+      TJSSlotLabelUtil }               from '#standard/component/label';
 
    export let input = void 0;
 
@@ -72,8 +71,8 @@
    $: readonly = isObject(input) && typeof input.readonly === 'boolean' ? input.readonly :
     typeof readonly === 'boolean' ? readonly : false;
 
-   $: store = isObject(input) && isWritableStore(input.store) ? input.store :
-    isWritableStore(store) ? store : writable(void 0);
+   $: store = isObject(input) && isMinimalWritableStore(input.store) ? input.store :
+    isMinimalWritableStore(store) ? store : writable(void 0);
 
    $: styles = isObject(input) && isObject(input.styles) ? input.styles :
     isObject(styles) ? styles : void 0;

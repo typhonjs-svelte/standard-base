@@ -44,6 +44,12 @@ declare namespace TjsMediaContent {
      */
     title?: string;
     /**
+     * Default URL path / URL for media content when no URL is configured.
+     *
+     * @type {string | URL}
+     */
+    urlDefault?: string | URL;
+    /**
      * Alternate image text.
      *
      * @type {string}
@@ -79,10 +85,6 @@ declare namespace TjsMediaContent {
      * @type {number}
      */
     videoPlaybackRate?: number;
-    /**
-     * TODO: provide type and make this generic. Also figure out a non-Foundry default embedded SVG.
-     */
-    defaultMedia?: { elementType: string; src: string; valid: boolean };
   };
   /** Events type alias for {@link TjsMediaContent | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };

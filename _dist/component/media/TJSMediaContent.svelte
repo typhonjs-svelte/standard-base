@@ -61,6 +61,13 @@
    export let url = void 0;
 
    /**
+    * Default URL path / URL for media content when no URL is configured.
+    *
+    * @type {string | URL}
+    */
+   export let urlDefault = void 0;
+
+   /**
     * Alternate image text.
     *
     * @type {string}
@@ -109,15 +116,6 @@
     */
    export let videoPlaybackRate = void 0;
 
-   /**
-    * TODO: provide type and make this generic. Also figure out a non-Foundry default embedded SVG.
-    */
-   export let defaultMedia = {
-      elementType: 'img',
-      src: 'icons/svg/mystery-man.svg',
-      valid: true
-   };
-
    let parsed = void 0;
 
    let videoEl;
@@ -126,6 +124,10 @@
 
    $: url = isObject(media) && (typeof media.url === 'string' || media.url instanceof URL) ? media.url :
     typeof url === 'string' || url instanceof URL ? url : void 0;
+
+   $: urlDefault = isObject(media) && (typeof media.urlDefault === 'string' || media.urlDefault instanceof URL) ?
+     media.urlDefault :
+    typeof urlDefault === 'string' || urlDefault instanceof URL ? urlDefault : void 0;
 
    $: imgAlt = isObject(media) && typeof media.imgAlt === 'string' ? media.imgAlt :
     typeof imgAlt === 'string' ? imgAlt : void 0;
@@ -171,10 +173,21 @@
        (isReadableStore(storeURL) ? $storeURL : void 0) ??
         (isReadableStore(storeURLString) ? $storeURLString : void 0);
 
-      const result = AssetValidator.parseMedia({ url: mediaTarget, routePrefix: 'test', mediaTypes });
+      const result = AssetValidator.parseMedia({ url: mediaTarget, mediaTypes });
 
-      // Validate that the result is a valid format / type otherwise fallback to `defaultMedia`.
-      parsed = result?.valid ? result : defaultMedia;
+      // Validate that the result is a valid format / type otherwise fallback to `urlDefault` if provided.
+      if (result?.valid)
+      {
+         parsed = result;
+      }
+      else if (urlDefault)
+      {
+         const resultDefault = AssetValidator.parseMedia({ url: urlDefault, mediaTypes });
+         if (resultDefault?.valid)
+         {
+            parsed = resultDefault;
+         }
+      }
    }
 
    // ----------------------------------------------------------------------------------------------------------------
@@ -212,11 +225,7 @@
              <source src={parsed.src} type={`video/${parsed.extension}`}>
 
              <!-- Potentially use the default asset if an image as a fallback. -->
-             <slot name=video-fallback>
-                {#if defaultMedia?.elementType === 'img'}
-                   <img src={defaultMedia?.src} alt="Video not loaded" />
-                {/if}
-             </slot>
+             <slot name=video-fallback />
           </video>
        {/if}
     {/key}

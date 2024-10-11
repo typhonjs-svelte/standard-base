@@ -3,7 +3,7 @@
 
    import { ClipboardAccess }   from '#runtime/util/browser';
 
-   import { ripple }            from '#standard/action/animate/ripple';
+   import { ripple }            from '#standard/action/animate/composable/ripple';
 
    import {
       TJSIconButton,

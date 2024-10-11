@@ -11,7 +11,7 @@ const external = [/^#runtime/, /^#standard/];
 const rollupConfigs = [
    {
       input: {
-         input: 'src/action/animate/ripple/index.js',
+         input: 'src/action/animate/composable/index.js',
          external,
          plugins: [
             resolve(),
@@ -19,7 +19,23 @@ const rollupConfigs = [
          ]
       },
       output: {
-         file: '_dist/action/animate/ripple/index.js',
+         file: '_dist/action/animate/composable/index.js',
+         format: 'es',
+         generatedCode: { constBindings: true },
+         sourcemap
+      }
+   },
+   {
+      input: {
+         input: 'src/action/animate/composable/ripple/index.js',
+         external,
+         plugins: [
+            resolve(),
+            generateDTS.plugin()
+         ]
+      },
+      output: {
+         file: '_dist/action/animate/composable/ripple/index.js',
          format: 'es',
          generatedCode: { constBindings: true },
          sourcemap

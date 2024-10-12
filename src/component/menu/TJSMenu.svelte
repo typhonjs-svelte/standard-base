@@ -122,7 +122,7 @@
       isIterable,
       isObject }                 from '#runtime/util/object';
 
-   import { TJSFocusWrap }       from '#standard/component/dom';
+   import { TJSFocusWrap }       from '#standard/component/dom/focus';
 
    /** @type {import('.').TJSMenuData} */
    export let menu = void 0;

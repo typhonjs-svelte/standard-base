@@ -107,7 +107,7 @@
    import { localize }           from '#runtime/util/i18n';
    import { isObject }           from '#runtime/util/object';
 
-   import { TJSFocusWrap }       from '#standard/component/dom';
+   import { TJSFocusWrap }       from '#standard/component/dom/focus';
 
    export let menu = void 0;
 

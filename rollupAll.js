@@ -86,10 +86,11 @@ for (const compFile of compFiles)
 await generateDTS({ input: '_dist/component/button/index.js' });
 await generateDTS({ input: '_dist/component/color/picker-colord/index.js' });
 await generateDTS({ input: '_dist/component/container/index.js' });
-await generateDTS({ input: '_dist/component/dom/index.js' });
+await generateDTS({ input: '_dist/component/dom/focus/index.js' });
 await generateDTS({ input: '_dist/component/folder/index.js' });
 await generateDTS({ input: '_dist/component/form/index.js' });
 await generateDTS({ input: '_dist/component/label/index.js' });
-await generateDTS({ input: '_dist/component/layer/index.js' });
+await generateDTS({ input: '_dist/component/layer/position/index.js' });
+await generateDTS({ input: '_dist/component/layer/side-slide/index.js' });
 await generateDTS({ input: '_dist/component/media/index.js' });
 await generateDTS({ input: '_dist/component/menu/index.js' });

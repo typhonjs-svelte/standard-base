@@ -4,10 +4,8 @@
 
    import { clamp }         from '#runtime/math/util';
    import { isFocused }     from '#runtime/svelte/action/dom/focus';
-
-   import {
-      keyforward,
-      KeyStore }            from '#runtime/svelte/store/dom';
+   import { keyforward }    from '#runtime/svelte/action/dom/input';
+   import { KeyStore }      from '#runtime/svelte/store/dom/input';
 
    import { easeInOutSin }  from '../util/transition.js';
 

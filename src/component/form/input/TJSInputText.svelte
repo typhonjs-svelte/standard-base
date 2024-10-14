@@ -205,7 +205,7 @@
 </script>
 
 <TJSSlotLabel {label} {disabled}>
-   <div class=tjs-input-container use:efx use:applyStyles={styles} on:pointerdown|stopPropagation>
+   <div class=tjs-input-container use:efx use:applyStyles={styles} on:pointerdown>
       <input class=tjs-input
              {...{ type }}
              bind:this={inputEl}

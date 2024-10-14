@@ -51,7 +51,11 @@
     * --tjs-input-range-overflow
     * --tjs-input-range-padding
     * --tjs-input-range-placeholder-color
+    * --tjs-input-range-slider-track-box-shadow
+    * --tjs-input-range-slider-track-box-shadow-focus
     * --tjs-input-range-text-align
+    * --tjs-input-range-slider-thumb-box-shadow
+    * --tjs-input-range-slider-thumb-box-shadow-focus
     * --tjs-input-range-transition-focus-visible
     * --tjs-input-range-value-invalid-color
     * --tjs-input-range-width
@@ -222,7 +226,7 @@
         outline-offset: var(--tjs-input-range-outline-offset, var(--tjs-input-outline-offset));
         text-align: var(--tjs-input-range-text-align, var(--tjs-input-range-align));
 
-        cursor: var(--tjs-input-range-cursor, var(--tjs-input-cursor, text));
+        cursor: var(--tjs-input-range-cursor, var(--tjs-input-cursor, default));
 
         transform: translateZ(1px);
     }
@@ -235,8 +239,24 @@
        pointer-events: none;
     }
 
+    input::-webkit-slider-runnable-track {
+       box-shadow: var(--tjs-input-range-slider-track-box-shadow, revert);
+    }
+
+    input::-webkit-slider-thumb {
+       box-shadow: var(--tjs-input-range-slider-thumb-box-shadow, revert);
+    }
+
     input:focus {
-        box-shadow: var(--tjs-input-range-box-shadow-focus, var(--tjs-input-box-shadow-focus, unset));
+       box-shadow: var(--tjs-input-range-box-shadow-focus, var(--tjs-input-box-shadow-focus, unset));
+    }
+
+    input:focus::-webkit-slider-runnable-track {
+       box-shadow: var(--tjs-input-range-slider-track-box-shadow-focus, revert);
+    }
+
+    input:focus::-webkit-slider-thumb {
+       box-shadow: var(--tjs-input-range-slider-thumb-box-shadow-focus, revert);
     }
 
     input:focus-visible {

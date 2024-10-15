@@ -88,7 +88,7 @@
    <input class=tjs-input
           type=checkbox
           bind:checked={$store}
-          on:pointerdown|stopPropagation
+          on:pointerdown
           {disabled}
           {readonly}
           use:applyStyles={styles}

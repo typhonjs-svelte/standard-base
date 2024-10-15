@@ -175,7 +175,7 @@
         * warning messages constantly if set by a CSS variable in TJSInputNumber.
         */
        .input-container :global(input[type="number"]::-webkit-inner-spin-button) {
-          -webkit-appearance: inner-spin-button;
+          appearance: auto;
        }
     }
 </style>

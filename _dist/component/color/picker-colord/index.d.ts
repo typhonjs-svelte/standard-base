@@ -41,6 +41,7 @@ import * as _runtime_svelte_store_web_storage from '#runtime/svelte/store/web-st
  * --tjs-icon-button-clip-path-hover
  * --tjs-icon-button-cursor
  * --tjs-icon-button-diameter
+ * --tjs-icon-button-filter-disabled
  * --tjs-icon-button-outline-focus-visible
  * --tjs-icon-button-text-shadow-focus: undefined
  * --tjs-icon-button-text-shadow-hover: undefined
@@ -62,6 +63,7 @@ declare namespace TjsColordButton {
     button?: any;
     color?: any;
     title?: any;
+    disabled?: any;
     onPress?: any;
     styles?: any;
     efx?: any;
@@ -118,6 +120,10 @@ type PickerStores = {
    * layout components.
    */
   components: svelte_store.Writable<TJSColordPickerComponents>;
+  /**
+   * See {@link TJSColordPickerOptions.disabled}
+   */
+  disabled: svelte_store.Writable<boolean>;
   /**
    * See {@link TJSColordPickerOptions.hasAlpha}
    */
@@ -942,6 +948,10 @@ type TJSColordPickerOptions = {
    * User defined picker component overrides.
    */
   components?: TJSColordPickerComponents;
+  /**
+   * Disables the color picker input.
+   */
+  disabled?: boolean;
   /**
    * The user defined color format.
    */

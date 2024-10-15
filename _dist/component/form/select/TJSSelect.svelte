@@ -118,7 +118,7 @@
 </script>
 
 <TJSSlotLabel {label} {disabled}>
-   <div on:change class=tjs-select-container use:efx use:applyStyles={styles} on:pointerdown|stopPropagation>
+   <div on:change class=tjs-select-container use:efx use:applyStyles={styles} on:pointerdown>
       <!-- Please see note at top / above on why on:change is used over `bind:value={$store}`. -->
       <select on:change
               class=tjs-select

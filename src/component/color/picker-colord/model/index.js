@@ -16,6 +16,8 @@ export * from './InternalState.js';
  * @property {import('svelte/store').Writable<import('../').TJSColordPickerComponents>} components This selected
  * layout components.
  *
+ * @property {import('svelte/store').Writable<boolean>} disabled See {@link TJSColordPickerOptions.disabled}
+ *
  * @property {import('svelte/store').Writable<boolean>} hasAlpha See {@link TJSColordPickerOptions.hasAlpha}
  *
  * @property {import('svelte/store').Writable<boolean>} hasButtonBar See {@link TJSColordPickerOptions.hasButtonBar}

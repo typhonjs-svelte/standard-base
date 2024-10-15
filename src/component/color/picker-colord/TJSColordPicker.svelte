@@ -50,7 +50,7 @@
    setContext('#tjs-color-picker-state', internalState);
 
    const {
-      components,
+      disabled,
       firstFocusEl,
       inputName,
       isPopup,
@@ -157,6 +157,8 @@
     */
    function onKeydown(event)
    {
+      if ($disabled) { return; }
+
       // Handle cut / copy / paste directly to circumvent external key listeners.
       switch(event.code)
       {
@@ -260,6 +262,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <span bind:this={spanEl}
       class=tjs-color-picker
+      class:disabled-main={$disabled}
       on:keydown={onKeydown}
       style:--_tjs-color-picker-current-color-hsl={$hslString}
       style:--_tjs-color-picker-current-color-hsl-hue={$hslHueString}
@@ -273,10 +276,31 @@
         <Input bind:inputEl />
     {/if}
     <MainLayout bind:containerEl {inputEl} />
+   {#if $disabled}
+      <span class=disabled></span>
+   {/if}
 </span>
 
 <style>
     span {
         position: relative;
+    }
+
+    span.disabled-main {
+        filter: var(--tjs-color-picker-filter-disabled, grayscale(95%));
+        pointer-events: none;
+    }
+
+    span.disabled {
+       position: absolute;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       z-index: 10;
+
+       /* Note: this may not be widely supported for HTML elements */
+       /* Works in latest Chrome and Firefox 10/13/24 */
+       pointer-events: all;
     }
 </style>

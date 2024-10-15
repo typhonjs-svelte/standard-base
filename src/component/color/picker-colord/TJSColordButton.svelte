@@ -36,6 +36,7 @@
     * --tjs-icon-button-clip-path-hover
     * --tjs-icon-button-cursor
     * --tjs-icon-button-diameter
+    * --tjs-icon-button-filter-disabled
     * --tjs-icon-button-outline-focus-visible
     * --tjs-icon-button-text-shadow-focus: undefined
     * --tjs-icon-button-text-shadow-hover: undefined
@@ -52,7 +53,9 @@
    import { isObject }              from '#runtime/util/object';
 
    export let button = void 0;
+
    export let color = void 0;
+   export let disabled = void 0;
    export let title = void 0;
    export let styles = void 0;
    export let efx = void 0;
@@ -63,6 +66,8 @@
 
    const dispatch = createEventDispatcher();
 
+   $: disabled = isObject(button) && typeof button.disabled === 'boolean' ? button.disabled :
+    typeof disabled === 'boolean' ? disabled : false;
    $: title = isObject(button) && typeof button.title === 'string' ? button.title :
     typeof title === 'string' ? title : '';
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
@@ -94,6 +99,8 @@
     */
    function onClick(event)
    {
+      if (disabled) { return; }
+
       if (typeof onPress === 'function') { onPress({ event, color: hslColor }); }
 
       dispatch('press', { event, color: hslColor });
@@ -110,6 +117,8 @@
     */
    function onContextMenuPress(event)
    {
+      if (disabled) { return; }
+
       if (typeof onContextMenu === 'function') { onContextMenu({ event, color: hslColor }); }
 
       if (!clickPropagate)
@@ -126,6 +135,8 @@
     */
    function onKeydown(event)
    {
+      if (disabled) { return; }
+
       if (event.code === keyCode)
       {
          event.preventDefault();
@@ -140,6 +151,8 @@
     */
    function onKeyup(event)
    {
+      if (disabled) { return; }
+
       if (event.code === keyCode)
       {
          if (typeof onPress === 'function') { onPress({ event, color: hslColor }); }
@@ -153,6 +166,7 @@
 </script>
 
 <div class=tjs-color-button
+     class:disabled={disabled}
      use:applyStyles={styles}
      title={localize(title)}
      style:--tjs-icon-button-background={hslColor}>
@@ -207,6 +221,11 @@
         border-width: var(--tjs-icon-button-border-width, var(--tjs-button-border-width));
 
         z-index: 0;
+    }
+
+    .tjs-color-button.disabled {
+       filter: var(--tjs-icon-button-filter-disabled, grayscale(95%));
+       pointer-events: none;
     }
 
     .tjs-color-button:focus {

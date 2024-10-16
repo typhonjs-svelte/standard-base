@@ -123,6 +123,10 @@
 
 <style>
    .tjs-scroll-container {
+      display: var(--tjs-scroll-container-display);
+      flex-direction: var(--tjs-scroll-container-flex-direction);
+      gap: var(--tjs-scroll-container-gap);
+
       overflow: var(--tjs-scroll-container-overflow, auto);
 
       /* For Firefox */

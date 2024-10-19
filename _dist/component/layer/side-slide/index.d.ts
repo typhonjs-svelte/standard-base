@@ -105,9 +105,9 @@ declare namespace TjsSideSlideLayer {
     /**
      * Additional inline styles to apply to the side slide layer. Useful for setting CSS variables.
      *
-     * @type {Record<string, string>}
+     * @type {{ [key: string]: string | null }}
      */
-    styles?: Record<string, string>;
+    styles?: { [key: string]: string | null };
   };
   /** Events type alias for {@link TjsSideSlideLayer | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };

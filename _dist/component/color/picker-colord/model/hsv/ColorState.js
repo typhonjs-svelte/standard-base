@@ -47,7 +47,7 @@ export class ColorState
    /**
     * Provides access to the externally "readable" stores set methods.
     *
-    * @type {Record<string, Function>}
+    * @type {{ [key: string]: Function }}
     */
    #storeSet;
 

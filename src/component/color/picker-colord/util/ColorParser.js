@@ -9,7 +9,7 @@ export class ColorParser
     * Valid CSS <angle> units.
     * https://developer.mozilla.org/en-US/docs/Web/CSS/angle
     *
-    * @type {Record<string, number>}
+    * @type {{ [key: string]: number }}
     */
    static #ANGLE_UNITS = {
       grad: 360 / 400,

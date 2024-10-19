@@ -115,12 +115,12 @@ declare namespace TjsMenu {
     keyCode?: string;
     /** @type {import('.').TJSMenuData} */
     menu?: TJSMenuData;
-    /** @type {HTMLElement|string} */
+    /** @type {HTMLElement | string} */
     focusEl?: HTMLElement | string;
     /** @type {Iterable<import('.').TJSMenuItemData>} */
     items?: Iterable<TJSMenuItemData>;
-    /** @type {Record<string, string>} */
-    styles?: Record<string, string>;
+    /** @type {{ [key: string]: string | null }} */
+    styles?: { [key: string]: string | null };
     /** @type {Function} */
     efx?: Function;
     /** @type {{ duration: number, easing: Function }} */
@@ -244,8 +244,8 @@ declare namespace TjsContextMenuImpl {
     zIndex?: number;
     menu?: any;
     items?: any[];
-    /** @type {Record<string, string>} */
-    styles?: Record<string, string>;
+    /** @type {{ [key: string]: string | null }} */
+    styles?: { [key: string]: string | null };
     /** @type {{ duration: number, easing: import('#runtime/svelte/easing').EasingFunction }} */
     transitionOptions?: { duration: number; easing: _runtime_svelte_easing.EasingFunction };
     offsetX?: number;
@@ -304,7 +304,9 @@ type TJSMenuData = {
   /**
    * Styles to be applied inline.
    */
-  styles?: Record<string, string>;
+  styles?: {
+    [key: string]: string | null;
+  };
   /**
    * Currently unused; for any future action effects.
    */

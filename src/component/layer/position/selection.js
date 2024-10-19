@@ -15,7 +15,7 @@
  *
  * @param {number}            [params.width=2] - Width of selection box in pixels.
  *
- * @returns {import('svelte/action').ActionReturn<Record<string, any>>} Lifecycle functions.
+ * @returns {import('svelte/action').ActionReturn<{ [key: string]: any }>} Lifecycle functions.
  */
 export function selection(node, { active = true, constrain = true, capture = false,
  background = 'rgba(255, 255, 255, 0.5)', width = 2 } = {})

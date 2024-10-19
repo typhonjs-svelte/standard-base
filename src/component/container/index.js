@@ -12,5 +12,5 @@ export { default as TJSScrollContainer } from './TJSScrollContainer.svelte';
  * @property {import('svelte/store').Writable<number>} [scrollTop] A Svelte store that serializes the scroll top
  * position of the scrollable container.
  *
- * @property {Record<string, string>}  [styles] Inline styles to assign to the container.
+ * @property {{ [key: string]: string | null }}  [styles] Inline styles to assign to the container.
  */

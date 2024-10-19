@@ -26,7 +26,7 @@
    /** @type {import('svelte/store').Writable<number>} */
    export let scrollTop = void 0;
 
-   /** @type {Record<string, string>} */
+   /** @type {{ [key: string]: string | null }} */
    export let styles = void 0;
 
    $: scrollTop = isObject(container) && isObject(container.scrollTop) ? container.scrollTop :

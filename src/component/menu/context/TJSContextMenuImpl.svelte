@@ -125,7 +125,7 @@
 
    export let zIndex = Number.MAX_SAFE_INTEGER - 100;
 
-   /** @type {Record<string, string>} */
+   /** @type {{ [key: string]: string | null }} */
    export let styles = void 0;
 
    /** @type {string} */

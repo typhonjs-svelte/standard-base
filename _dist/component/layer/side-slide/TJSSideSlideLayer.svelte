@@ -105,7 +105,7 @@
    /**
     * Additional inline styles to apply to the side slide layer. Useful for setting CSS variables.
     *
-    * @type {Record<string, string>}
+    * @type {{ [key: string]: string | null }}
     */
    export let styles = void 0;
 
@@ -135,7 +135,7 @@
     */
    let actualEasingIn, actualEasingOut;
 
-   /** @type {Record<string, string>} */
+   /** @type {{ [key: string]: string | null }} */
    let allStyles;
 
    // Items after conditional filtering and verification.

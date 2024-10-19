@@ -130,13 +130,13 @@
    /** @type {Iterable<import('.').TJSMenuItemData>} */
    export let items = void 0;
 
-   /** @type {HTMLElement|string} */
+   /** @type {HTMLElement | string} */
    export let focusEl = void 0;
 
    /** @type {{ x?: number, y?: number }} */
    export let offset = void 0;
 
-   /** @type {Record<string, string>} */
+   /** @type {{ [key: string]: string | null }} */
    export let styles = void 0;
 
    /** @type {Function} */

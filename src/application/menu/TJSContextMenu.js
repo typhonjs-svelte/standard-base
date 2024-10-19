@@ -65,7 +65,7 @@ export class TJSContextMenu
     *
     * @param {string}      [opts.keyCode='Enter'] - Key to select menu items.
     *
-    * @param {Record<string, string>}  [opts.styles] - Optional inline styles to apply.
+    * @param {{ [key: string]: string | null }}  [opts.styles] - Optional inline styles to apply.
     *
     * @param {number}      [opts.zIndex=Number.MAX_SAFE_INTEGER - 100] - Z-index for context menu.
     *

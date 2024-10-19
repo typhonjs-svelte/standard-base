@@ -26,8 +26,8 @@ declare namespace TjsScrollContainer {
     container?: TJSScrollContainerData;
     /** @type {import('svelte/store').Writable<number>} */
     scrollTop?: svelte_store.Writable<number>;
-    /** @type {Record<string, string>} */
-    styles?: Record<string, string>;
+    /** @type {{ [key: string]: string | null }} */
+    styles?: { [key: string]: string | null };
   };
   /** Events type alias for {@link TjsScrollContainer | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };
@@ -54,7 +54,9 @@ type TJSScrollContainerData = {
   /**
    * Inline styles to assign to the container.
    */
-  styles?: Record<string, string>;
+  styles?: {
+    [key: string]: string | null;
+  };
 };
 
 export { TjsScrollContainer as TJSScrollContainer, type TJSScrollContainerData };

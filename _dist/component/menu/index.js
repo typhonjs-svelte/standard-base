@@ -17,7 +17,7 @@ export { default as TJSContextMenuImpl }  from './context/TJSContextMenuImpl.sve
  * @property {{ class: Function, props?: object }} [slotDefault] A minimal Svelte config defining the default content
  * component replacing the data driven menu items.
  *
- * @property {Record<string, string>}   [styles] Styles to be applied inline.
+ * @property {{ [key: string]: string | null }}   [styles] Styles to be applied inline.
  *
  * @property {Function}  [efx] Currently unused; for any future action effects.
  *

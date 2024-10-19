@@ -48,7 +48,7 @@ export class ControlsStore
    /**
     * Creates a new instance of ControlsStore and the selected drag API.
     *
-    * @returns {[ControlsStore, object]}
+    * @returns {[ControlsStore, object]} New instance of ControlsStore.
     */
    static create()
    {
@@ -127,7 +127,7 @@ export class ControlsStore
     * @param {boolean}  [opts.selected=false] - When true export selected components.
     *
     * @returns {{width: number|void, height: number|void, components: object[]}} Width / height max extents & serialized
-    *                                                                  component data.
+    *          component data.
     */
    export({ compact = false, selected = false } = {})
    {
@@ -380,7 +380,7 @@ class SelectedAPI
    /**
     * @param {ControlsData} data - The main ControlStore data object.
     *
-    * @returns {[SelectedAPI, object]}
+    * @returns {[SelectedAPI, object]} New selected and selected drag API.
     */
    static create(data)
    {

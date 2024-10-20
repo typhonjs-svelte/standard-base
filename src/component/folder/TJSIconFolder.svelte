@@ -471,7 +471,7 @@ changing the open state.  -->
       {#if currentIcon}<i bind:this={iconEl} class={currentIcon} class:focus-chevron={localOptions.focusChevron}></i>{/if}
 
       {#if localOptions.focusIndicator}
-         <div class=tjs-folder-focus-indicator />
+         <div class=tjs-folder-focus-indicator></div>
       {/if}
 
       <slot name=label>

@@ -463,7 +463,7 @@ changing the open state.  -->
       </svg>
 
       {#if localOptions.focusIndicator}
-         <div class=tjs-folder-focus-indicator />
+         <div class=tjs-folder-focus-indicator></div>
       {/if}
 
       <slot name=label>

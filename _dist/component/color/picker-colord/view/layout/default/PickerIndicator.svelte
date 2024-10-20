@@ -5,7 +5,7 @@
    export let styles = void 0;
 </script>
 
-<div class=tjs-picker-indicator use:applyStyles={styles} class:focused />
+<div class=tjs-picker-indicator use:applyStyles={styles} class:focused></div>
 
 <style>
     .tjs-picker-indicator {

@@ -451,7 +451,7 @@
                     on:keyup={(event) => onKeyupItem(event, item)}
                     role=menuitem
                     tabindex=0>
-                    <span class=tjs-context-menu-focus-indicator />
+                    <span class=tjs-context-menu-focus-indicator></span>
                     <svelte:component this={item.class} {...(isObject(item.props) ? item.props : {})} />
                 </li>
             {:else if item['#type'] === 'icon'}
@@ -461,7 +461,7 @@
                     on:keyup={(event) => onKeyupItem(event, item)}
                     role=menuitem
                     tabindex=0>
-                    <span class=tjs-context-menu-focus-indicator />
+                    <span class=tjs-context-menu-focus-indicator></span>
                     <i class={item.icon}></i>
                     <span class=tjs-context-menu-item-label>{localize(item.label)}</span>
                 </li>
@@ -472,7 +472,7 @@
                     on:keyup={(event) => onKeyupItem(event, item)}
                     role=menuitem
                     tabindex=0>
-                    <span class=tjs-context-menu-focus-indicator />
+                    <span class=tjs-context-menu-focus-indicator></span>
                     <img src={item.image} alt={item.imageAlt}>
                     <span class=tjs-context-menu-item-label>{localize(item.label)}</span>
                 </li>
@@ -483,7 +483,7 @@
                     on:keyup={(event) => onKeyupItem(event, item)}
                     role=menuitem
                     tabindex=0>
-                    <span class=tjs-context-menu-focus-indicator />
+                    <span class=tjs-context-menu-focus-indicator></span>
                     <span class=tjs-context-menu-item-label>{localize(item.label)}</span>
                 </li>
             {:else if item['#type'] === 'separator-hr'}

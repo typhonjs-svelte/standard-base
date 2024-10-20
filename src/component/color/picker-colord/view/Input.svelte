@@ -23,7 +23,7 @@
      on:click={onClick}
      role=button
      tabindex=0>
-    <div class=tjs-color-picker-input-inner />
+    <div class=tjs-color-picker-input-inner></div>
 </div>
 
 <style>

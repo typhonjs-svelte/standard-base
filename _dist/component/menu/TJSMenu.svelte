@@ -540,7 +540,7 @@
              on:keyup={(event) => onKeyupItem(event)}
              role=menuitem
              tabindex=0>
-            <span class=tjs-menu-focus-indicator />
+            <span class=tjs-menu-focus-indicator></span>
             <slot name=before>
                {#if TJSSvelteUtil.isComponent(menu?.slotBefore?.class)}
                   <svelte:component this={menu.slotBefore.class} {...(isObject(menu?.slotBefore?.props) ? menu.slotBefore.props : {})} />
@@ -556,7 +556,7 @@
                 on:keyup={(event) => onKeyupItem(event, item)}
                 role=menuitem
                 tabindex=0>
-               <span class=tjs-menu-focus-indicator />
+               <span class=tjs-menu-focus-indicator></span>
                <svelte:component this={item.class} {...(isObject(item.props) ? item.props : {})} />
             </li>
          {:else if item['#type'] === 'icon'}
@@ -566,7 +566,7 @@
                  on:keyup={(event) => onKeyupItem(event, item)}
                  role=menuitem
                  tabindex=0>
-               <span class=tjs-menu-focus-indicator />
+               <span class=tjs-menu-focus-indicator></span>
                <i class={item.icon}></i>
                <span class=tjs-menu-item-label>{localize(item.label)}</span>
             </li>
@@ -577,7 +577,7 @@
                  on:keyup={(event) => onKeyupItem(event, item)}
                  role=menuitem
                  tabindex=0>
-               <span class=tjs-menu-focus-indicator />
+               <span class=tjs-menu-focus-indicator></span>
                <img src={item.image} alt={item.imageAlt}>
                <span class=tjs-menu-item-label>{localize(item.label)}</span>
             </li>
@@ -588,7 +588,7 @@
                 on:keyup={(event) => onKeyupItem(event, item)}
                 role=menuitem
                 tabindex=0>
-               <span class=tjs-menu-focus-indicator />
+               <span class=tjs-menu-focus-indicator></span>
                <span class=tjs-menu-item-label>{localize(item.label)}</span>
             </li>
          {:else if item['#type'] === 'separator-hr'}
@@ -602,7 +602,7 @@
              on:keyup={(event) => onKeyupItem(event)}
              role=menuitem
              tabindex=0>
-            <span class=tjs-menu-focus-indicator />
+            <span class=tjs-menu-focus-indicator></span>
             <slot name=after>
                {#if TJSSvelteUtil.isComponent(menu?.slotAfter?.class)}
                   <svelte:component this={menu.slotAfter.class} {...(isObject(menu?.slotAfter?.props) ? menu.slotAfter.props : {})} />

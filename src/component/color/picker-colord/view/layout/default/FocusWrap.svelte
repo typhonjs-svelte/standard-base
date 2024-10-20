@@ -22,7 +22,8 @@
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div class=tjs-color-picker-last-focus
      tabindex=0
-     use:isFocused={focused} />
+     use:isFocused={focused}>
+</div>
 
 <style>
     div:focus {

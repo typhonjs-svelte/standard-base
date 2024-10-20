@@ -9,7 +9,7 @@
    export let styles = void 0;
 </script>
 
-<div class=tjs-slider-indicator use:applyStyles={styles} class:focused class:horizontal={sliderHorizontal} />
+<div class=tjs-slider-indicator use:applyStyles={styles} class:focused class:horizontal={sliderHorizontal}></div>
 
 <style>
     .tjs-slider-indicator {

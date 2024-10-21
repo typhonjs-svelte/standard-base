@@ -154,14 +154,14 @@ declare namespace TjsSvgFolder {
     animate?: boolean;
     /** @type {import('.').TJSFolderOptions} */
     options?: TJSFolderOptions;
-    /** @type {import('#runtime/svelte/store/util').MinimalWritable<boolean>} */
-    store?: _runtime_svelte_store_util.MinimalWritable<boolean>;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
     onClose?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
     onOpen?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
     /** @type {(data?: { event?: PointerEvent }) => void} */
     onContextMenu?: (data?: { event?: PointerEvent }) => void;
+    /** @type {import('#runtime/svelte/store/util').MinimalWritable<boolean>} */
+    store?: _runtime_svelte_store_util.MinimalWritable<boolean>;
     /** @type {object} */
     styles?: object;
     /** @type {import('.').TJSFolderData} */
@@ -385,14 +385,14 @@ declare namespace TjsIconFolder {
     animate?: boolean;
     /** @type {import('.').TJSFolderOptions} */
     options?: TJSFolderOptions;
-    /** @type {import('#runtime/svelte/store/util').MinimalWritable<boolean>} */
-    store?: _runtime_svelte_store_util.MinimalWritable<boolean>;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
     onClose?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
     onOpen?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
     /** @type {(data?: { event?: PointerEvent }) => void} */
     onContextMenu?: (data?: { event?: PointerEvent }) => void;
+    /** @type {import('#runtime/svelte/store/util').MinimalWritable<boolean>} */
+    store?: _runtime_svelte_store_util.MinimalWritable<boolean>;
     /** @type {object} */
     styles?: object;
     /** @type {import('.').TJSIconFolderData} */

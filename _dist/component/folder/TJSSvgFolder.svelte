@@ -481,14 +481,12 @@ changing the open state.  -->
       </slot>
    </summary>
 
-   <div class=contents>
-      {#if visible}
-         <slot>
-            {#if TJSSvelteUtil.isComponent(folder?.slotDefault?.class)}
-               <svelte:component this={folder.slotDefault.class} {...(isObject(folder?.slotDefault?.props) ? folder.slotDefault.props : {})} />
-            {/if}
-         </slot>
-      {/if}
+   <div class=contents class:hidden={!visible} aria-hidden={!visible}>
+      <slot>
+         {#if TJSSvelteUtil.isComponent(folder?.slotDefault?.class)}
+            <svelte:component this={folder.slotDefault.class} {...(isObject(folder?.slotDefault?.props) ? folder.slotDefault.props : {})} />
+         {/if}
+      </slot>
    </div>
 </details>
 
@@ -610,6 +608,10 @@ changing the open state.  -->
       height: calc(100% + 0.65em);
       left: 0;
       top: -0.65em;
+   }
+
+   .contents.hidden {
+      display: none;
    }
 
    .label {

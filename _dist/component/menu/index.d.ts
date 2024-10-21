@@ -1,5 +1,6 @@
 import * as _runtime_util_a11y from '#runtime/util/a11y';
 import * as _runtime_svelte_easing from '#runtime/svelte/easing';
+import * as svelte from 'svelte';
 import { SvelteComponent } from 'svelte';
 
 /**
@@ -256,6 +257,13 @@ declare namespace TjsContextMenuImpl {
      * @type {Window} The active window the context menu is displaying inside.
      */
     activeWindow?: Window;
+    /**
+     * This component. Set externally removing dependence on `current_component`.
+     *
+     * @type {import('svelte').SvelteComponent}
+     * @internal
+     */
+    current_component?: svelte.SvelteComponent;
   };
   /** Events type alias for {@link TjsContextMenuImpl | associated component}. */
   export type Events = { click: MouseEvent; 'close:contextmenu': CustomEvent<any> } & {

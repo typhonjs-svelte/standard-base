@@ -140,6 +140,8 @@ export class TJSContextMenu
          }
       });
 
+      this.#contextMenu.$set({ current_component: this.#contextMenu });
+
       // Register an event listener to remove any active context menu if closed from a menu selection or pointer
       // down event to `document.body`.
       this.#contextMenu.$on('close:contextmenu', () => { this.#contextMenu = void 0; });

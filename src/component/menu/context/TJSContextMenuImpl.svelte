@@ -97,8 +97,6 @@
       onDestroy,
       onMount }                  from '#svelte';
 
-   import { current_component }  from '#svelte/internal';
-
    import { applyStyles }        from '#runtime/svelte/action/dom/style';
    import { slideFade }          from '#runtime/svelte/transition';
    import { TJSSvelteUtil }      from '#runtime/svelte/util';
@@ -142,6 +140,14 @@
     */
    export let activeWindow = globalThis;
 
+   /**
+    * This component. Set externally removing dependence on `current_component`.
+    *
+    * @type {import('svelte').SvelteComponent}
+    * @internal
+    */
+   export let current_component = void 0;
+
    $: styles = isObject(menu) && isObject(menu.styles) ? menu.styles :
     isObject(styles) ? styles : void 0;
 
@@ -150,9 +156,6 @@
 
    // Provides options to `A11yHelper.getFocusableElements` to ignore TJSFocusWrap by CSS class.
    const s_IGNORE_CLASSES = { ignoreClasses: ['tjs-focus-wrap'] };
-
-   // Store this component reference.
-   const local = current_component;
 
    // Dispatches `close` event.
    const dispatch = createEventDispatcher();
@@ -263,7 +266,7 @@
       {
          dispatch('close:contextmenu');
          closed = true;
-         TJSSvelteUtil.outroAndDestroy(local);
+         TJSSvelteUtil.outroAndDestroy(current_component);
       }
    }
 
@@ -287,7 +290,7 @@
       {
          dispatch('close:contextmenu');
          closed = true;
-         TJSSvelteUtil.outroAndDestroy(local);
+         TJSSvelteUtil.outroAndDestroy(current_component);
       }
    }
 
@@ -370,7 +373,7 @@
             {
                closed = true;
                dispatch('close:contextmenu');
-               TJSSvelteUtil.outroAndDestroy(local);
+               TJSSvelteUtil.outroAndDestroy(current_component);
 
                A11yHelper.applyFocusSource(focusSource)
                focusSource = void 0;
@@ -394,7 +397,7 @@
          {
             closed = true;
             dispatch('close:contextmenu');
-            TJSSvelteUtil.outroAndDestroy(local);
+            TJSSvelteUtil.outroAndDestroy(current_component);
 
             event.preventDefault();
             event.stopPropagation();
@@ -421,7 +424,7 @@
       {
          dispatch('close:contextmenu');
          closed = true;
-         TJSSvelteUtil.outroAndDestroy(local);
+         TJSSvelteUtil.outroAndDestroy(current_component);
 
          A11yHelper.applyFocusSource(focusSource)
          focusSource = void 0;

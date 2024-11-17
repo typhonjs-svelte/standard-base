@@ -37,7 +37,7 @@ namespace ComposableActionOptions {
       /**
        * An object containing one or more timing properties. When defined it is used instead of `duration`.
        */
-      options?: KeyframeAnimationOptions;
+      keyframeOptions?: KeyframeAnimationOptions;
 
       /**
        * The scheduling strategy to take. `cancel` to cancel any current animation, `exclusive` to skip scheduling an

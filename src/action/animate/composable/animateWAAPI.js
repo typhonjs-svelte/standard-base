@@ -6,7 +6,7 @@ import { isObject }  from '#runtime/util/object';
  * provided keyframes and options in response to a given event. The default event is the `click` event. You may change
  * that to any
  *
- * @param {import('./types').ComposableActionOptions.AnimateWAAPI} [Options] - Optional parameters.
+ * @param {import('./types').ComposableActionOptions.AnimateWAAPI} [options] - Optional parameters.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/animate
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Keyframe_Formats
@@ -16,8 +16,8 @@ import { isObject }  from '#runtime/util/object';
  *    import('svelte/action').ActionReturn<import('./types').ComposableActionOptions.AnimateWAAPI>
  * >)} Actual `animateWAAPI` Action.
  */
-export function animateWAAPI({ debounce, enabled = true, duration = 600, event = 'click', keyframes = [], options,
- strategy = 'cancel' } = {})
+export function animateWAAPI({ debounce, enabled = true, duration = 600, event = 'click', keyframes = [],
+ keyframeOptions, strategy = 'cancel' } = {})
 {
    return (element, initialOptions) =>
    {
@@ -62,7 +62,7 @@ export function animateWAAPI({ debounce, enabled = true, duration = 600, event =
             }
          }
 
-         animation = element.animate(keyframes, isObject(options) ? options : duration);
+         animation = element.animate(keyframes, isObject(keyframeOptions) ? keyframeOptions : duration);
          animation.onfinish = animationFinished;
       }
 
@@ -101,7 +101,7 @@ export function animateWAAPI({ debounce, enabled = true, duration = 600, event =
             keyframes = newOptions.keyframes;
          }
 
-         if (isObject(newOptions?.options)) { options = newOptions.options; }
+         if (isObject(newOptions?.keyframeOptions)) { keyframeOptions = newOptions.keyframeOptions; }
 
          if (typeof newOptions?.strategy === 'string' && strategy !== newOptions.strategy)
          {

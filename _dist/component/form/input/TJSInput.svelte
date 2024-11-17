@@ -7,6 +7,18 @@
     * element uses `display: contents` which ignores the label element and lays out the children as if the
     * label element does not exist which is perfect for a grid layout.
     *
+    * The available `type` props include:
+    * ```
+    * - `button`: A standard button.
+    * - `checkbox`: A checkbox input.
+    * - `number`: A number input.
+    * - `range`: A range input.
+    * - `range-number`: A range + number input.
+    * - `select`: A select input.
+    *
+    * The following types are forwarded onto a standard text input: `email`, `password`, `search`, `text`, `url`.
+    * ```
+    *
     * ### CSS Variables
     *
     * The following CSS variables control the associated styles with the default values:
@@ -20,14 +32,15 @@
 
    import { isObject }     from '#runtime/util/object';
 
-   import TJSButton        from '../button/TJSButton.svelte';
+   import TJSButton           from '../button/TJSButton.svelte';
 
-   import TJSInputCheckbox from './TJSInputCheckbox.svelte';
-   import TJSInputNumber   from './TJSInputNumber.svelte';
-   import TJSInputRange    from './TJSInputRange.svelte';
-   import TJSInputText     from './TJSInputText.svelte';
+   import TJSInputCheckbox    from './TJSInputCheckbox.svelte';
+   import TJSInputNumber      from './TJSInputNumber.svelte';
+   import TJSInputRange       from './TJSInputRange.svelte';
+   import TJSInputRangeNumber from './TJSInputRangeNumber.svelte';
+   import TJSInputText        from './TJSInputText.svelte';
 
-   import TJSSelect        from '../select/TJSSelect.svelte';
+   import TJSSelect           from '../select/TJSSelect.svelte';
 
    export let input = void 0;
 
@@ -67,6 +80,10 @@
             component = TJSInputRange;
             break;
 
+         case 'range-number':
+            component = TJSInputRangeNumber;
+            break;
+
          case 'email':
          case 'password':
          case 'search':
@@ -86,7 +103,7 @@
 
          default:
             throw new Error(`'TJSInput' currently only supports the following input types: 'button', 'checkbox', ` +
-             `'email', 'number', 'password', 'range, 'search', 'select', 'text', and 'url'.`);
+             `'email', 'number', 'password', 'range', 'range-number', 'search', 'select', 'text', and 'url'.`);
       }
    }
 </script>

@@ -79,29 +79,42 @@
 
    $: efx = isObject(input) && typeof input.efx === 'function' ? input.efx :
     typeof efx === 'function' ? efx : () => {};
-
-   // ----------------------------------------------------------------------------------------------------------------
-
 </script>
 
 <TJSSlotLabel {label} {disabled}>
-   <input class=tjs-input
-          type=checkbox
-          bind:checked={$store}
-          on:pointerdown
-          {disabled}
-          {readonly}
-          use:applyStyles={styles}
-   />
+   <div class=tjs-input-container use:efx use:applyStyles={styles} on:pointerdown>
+      <input class=tjs-input
+             type=checkbox
+             bind:checked={$store}
+             on:pointerdown
+             {disabled}
+             {readonly}
+      />
+   </div>
 </TJSSlotLabel>
 
 <style>
-    input {
-       /* TODO: cssVariable defaults */
-       accent-color: var(--tjs-input-checkbox-accent-color, var(--color-checkbox-checked));
+    /* TODO: cssVariable defaults */
+
+    .tjs-input-container {
+       display: block;
+       pointer-events: none;
+       transform-style: preserve-3d;
+
+       background: var(--tjs-input-checkbox-background, var(--tjs-input-background));
+       border-radius: var(--tjs-input-checkbox-border-radius, var(--tjs-input-border-radius));
        flex: var(--tjs-input-checkbox-flex, 0 0 20px);
+       margin: var(--tjs-input-checkbox-margin, var(--tjs-input-margin));
        width: var(--tjs-input-checkbox-diameter, var(--tjs-input-checkbox-width, 20px));
        height: var(--tjs-input-checkbox-diameter, var(--tjs-input-checkbox-height, 20px));
+    }
+
+    input {
+       pointer-events: initial;
+       display: inline-block;
+       position: relative;
+
+       accent-color: var(--tjs-input-checkbox-accent-color, var(--color-checkbox-checked));
 
        appearance: var(--tjs-input-checkbox-appearance, var(--tjs-input-appearance, auto));
 
@@ -113,6 +126,8 @@
        outline-offset: var(--tjs-input-checkbox-outline-offset, var(--tjs-input-outline-offset));
 
        cursor: var(--tjs-input-checkbox-cursor, var(--tjs-input-cursor, default));
+
+       transform: translateZ(1px);
     }
 
     input:disabled {

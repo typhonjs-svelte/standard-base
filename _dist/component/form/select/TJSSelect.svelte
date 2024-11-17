@@ -71,6 +71,7 @@
 
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
+   import { localize }                 from '#runtime/util/i18n';
    import { isObject }                 from '#runtime/util/object';
 
    import {
@@ -127,7 +128,7 @@
               {disabled}>
          {#each options as option}
             <option class=tjs-select-option value={option.value}>
-               {option.label}
+               {localize(option.label ?? option.value)}
             </option>
          {/each}
       </select>

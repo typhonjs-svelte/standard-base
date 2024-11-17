@@ -38,6 +38,18 @@ declare namespace TjsButton {
  * element uses `display: contents` which ignores the label element and lays out the children as if the
  * label element does not exist which is perfect for a grid layout.
  *
+ * The available `type` props include:
+ * ```
+ * - `button`: A standard button.
+ * - `checkbox`: A checkbox input.
+ * - `number`: A number input.
+ * - `range`: A range input.
+ * - `range-number`: A range + number input.
+ * - `select`: A select input.
+ *
+ * The following types are forwarded onto a standard text input: `email`, `password`, `search`, `text`, `url`.
+ * ```
+ *
  * ### CSS Variables
  *
  * The following CSS variables control the associated styles with the default values:
@@ -217,6 +229,130 @@ declare namespace TjsInputNumber {
 }
 
 /**
+ * ### CSS Variables:
+ * ```
+ * --tjs-input-appearance
+ * --tjs-input-background
+ * --tjs-input-border
+ * --tjs-input-border-radius
+ * --tjs-input-border-disabled
+ * --tjs-input-box-shadow-focus
+ * --tjs-input-box-shadow-focus-visible
+ * --tjs-input-caret-color
+ * --tjs-input-color
+ * --tjs-input-color-disabled
+ * --tjs-input-cursor
+ * --tjs-input-cursor-disabled
+ * --tjs-input-flex
+ * --tjs-input-font-family
+ * --tjs-input-font-size
+ * --tjs-input-height
+ * --tjs-input-line-height
+ * --tjs-input-padding
+ * --tjs-input-placeholder-color
+ * --tjs-input-outline-focus-visible
+ * --tjs-input-outline-offset
+ * --tjs-input-overflow
+ * --tjs-input-range-align
+ * --tjs-input-transition-focus-visible
+ * --tjs-input-value-invalid-color
+ * --tjs-input-width
+ *
+ * --tjs-input-range-appearance
+ * --tjs-input-range-background
+ * --tjs-input-range-border
+ * --tjs-input-range-border-radius
+ * --tjs-input-range-border-disabled
+ * --tjs-input-range-box-shadow-focus
+ * --tjs-input-range-box-shadow-focus-visible
+ * --tjs-input-range-caret-color
+ * --tjs-input-range-color
+ * --tjs-input-range-color-disabled
+ * --tjs-input-range-cursor
+ * --tjs-input-range-cursor-disabled
+ * --tjs-input-range-flex
+ * --tjs-input-range-font-family
+ * --tjs-input-range-font-size
+ * --tjs-input-range-height
+ * --tjs-input-range-line-height
+ * --tjs-input-range-outline-focus-visible
+ * --tjs-input-range-outline-offset
+ * --tjs-input-range-overflow
+ * --tjs-input-range-padding
+ * --tjs-input-range-placeholder-color
+ * --tjs-input-range-slider-track-box-shadow
+ * --tjs-input-range-slider-track-box-shadow-focus
+ * --tjs-input-range-text-align
+ * --tjs-input-range-slider-thumb-box-shadow
+ * --tjs-input-range-slider-thumb-box-shadow-focus
+ * --tjs-input-range-transition-focus-visible
+ * --tjs-input-range-value-invalid-color
+ * --tjs-input-range-width
+ * ```
+ */
+declare class TjsInputRange extends SvelteComponent<TjsInputRange.Props, TjsInputRange.Events, TjsInputRange.Slots> {}
+
+/** Event / Prop / Slot type aliases for {@link TjsInputRange | associated component}. */
+declare namespace TjsInputRange {
+  /** Props type alias for {@link TjsInputRange | associated component}. */
+  export type Props = {
+    input?: any;
+    max?: any;
+    min?: any;
+    label?: any;
+    disabled?: any;
+    options?: any;
+    readonly?: any;
+    styles?: any;
+    efx?: any;
+    step?: any;
+    store?: any;
+  };
+  /** Events type alias for {@link TjsInputRange | associated component}. */
+  export type Events = { pointerdown: PointerEvent } & { [evt: string]: CustomEvent<any> };
+  /** Slots type alias for {@link TjsInputRange | associated component}. */
+  export type Slots = {};
+}
+
+/**
+ * Provides a combined {@link TJSInputRange} / {@link TJSInputNumber} component with a single slotted label wrapper.
+ * This is a convenience component enabling easy hook up of a range + number input from the same data source.
+ *
+ * There is no explicit layout defined. The `input` data is forwarded on to both range / number components with
+ * the exception that `readonly` only applies to the number input.
+ *
+ * Note: The `efx` animation action applies to both the range / number inputs.
+ *
+ */
+declare class TjsInputRangeNumber extends SvelteComponent<
+  TjsInputRangeNumber.Props,
+  TjsInputRangeNumber.Events,
+  TjsInputRangeNumber.Slots
+> {}
+
+/** Event / Prop / Slot type aliases for {@link TjsInputRangeNumber | associated component}. */
+declare namespace TjsInputRangeNumber {
+  /** Props type alias for {@link TjsInputRangeNumber | associated component}. */
+  export type Props = {
+    input?: any;
+    max?: any;
+    min?: any;
+    label?: any;
+    disabled?: any;
+    options?: any;
+    readonly?: any;
+    styles?: any;
+    efx?: any;
+    step?: any;
+    store?: any;
+  };
+  /** Events type alias for {@link TjsInputRangeNumber | associated component}. */
+  export type Events = { [evt: string]: CustomEvent<any> };
+  /** Slots type alias for {@link TjsInputRangeNumber | associated component}. */
+  export type Slots = {};
+}
+
+/**
  * A generic input type has issues w/ 2-way binding w/ Svelte.
  * https://github.com/sveltejs/svelte/issues/3921
  *
@@ -384,6 +520,8 @@ export {
   TjsInput as TJSInput,
   TjsInputCheckbox as TJSInputCheckbox,
   TjsInputNumber as TJSInputNumber,
+  TjsInputRange as TJSInputRange,
+  TjsInputRangeNumber as TJSInputRangeNumber,
   TjsInputText as TJSInputText,
   TjsSelect as TJSSelect,
 };

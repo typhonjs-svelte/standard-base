@@ -1,4 +1,5 @@
-import { Timing } from '#runtime/util';
+import { Timing }    from '#runtime/util';
+import { isObject }  from '#runtime/util/object';
 
 /**
  * Defines the classic Material Design ripple effect as an action. `ripple` is a wrapper around the returned action.
@@ -17,9 +18,11 @@ import { Timing } from '#runtime/util';
  *
  * @param {object}   [opts] - Optional parameters.
  *
+ * @param {string}   [opts.background='rgba(255, 255, 255, 0.7)'] - A valid CSS background attribute.
+ *
  * @param {number}   [opts.duration=600] - Duration in milliseconds.
  *
- * @param {string}   [opts.background='rgba(255, 255, 255, 0.7)'] - A valid CSS background attribute.
+ * @param {boolean}  [opts.enabled=true] - Enabled state.
  *
  * @param {Iterable<string>}  [opts.events=['click', 'keyup']] - DOM event to bind element to respond with the ripple
  *                                                                  effect.
@@ -30,12 +33,15 @@ import { Timing } from '#runtime/util';
  *
  * @param {number}   [opts.debounce=undefined] - Add a debounce to incoming events in milliseconds.
  *
- * @returns {import('svelte/action').Action} Actual action.
+ * @returns {(import('svelte/action').Action<
+ *    HTMLElement,
+ *    import('svelte/action').ActionReturn<import('./types').ComposableActionOptions.Ripple>
+ * >)} Actual `ripple` Action.
  */
-export function ripple({ duration = 600, background = 'rgba(255, 255, 255, 0.7)', events = ['click', 'keyup'],
- keyCode = 'Enter', contextmenu = false, debounce } = {})
+export function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = false, debounce, duration = 600,
+ enabled = true, events = ['click', 'keyup'], keyCode = 'Enter' } = {})
 {
-   return (element, { disabled = false } = {}) =>
+   return (element, initialOptions) =>
    {
       // Ripple requires the efx element to have the overflow hidden due to rendering content outside the boundary.
       element.style.overflow = 'hidden';
@@ -47,7 +53,7 @@ export function ripple({ duration = 600, background = 'rgba(255, 255, 255, 0.7)'
        */
       function createRipple(e)
       {
-         if (disabled) { return; }
+         if (!enabled) { return; }
 
          const elementRect = element.getBoundingClientRect();
 
@@ -113,9 +119,19 @@ export function ripple({ duration = 600, background = 'rgba(255, 255, 255, 0.7)'
        */
       function keyHandler(event)
       {
-         if (disabled) { return; }
+         if (!enabled) { return; }
 
          if (event?.code === keyCode) { createRipple(event); }
+      }
+
+      /**
+       * Updates options.
+       *
+       * @param {import('./types').ComposableActionOptions.Ripple} newOptions - Options to update.
+       */
+      function updateOptions(newOptions)
+      {
+         if (typeof newOptions?.enabled === 'boolean') { enabled = newOptions.enabled; }
       }
 
       const eventFn = Number.isInteger(debounce) && debounce > 0 ? Timing.debounce(createRipple, debounce) :
@@ -143,11 +159,11 @@ export function ripple({ duration = 600, background = 'rgba(255, 255, 255, 0.7)'
 
       if (contextmenu) { element.addEventListener('contextmenu', eventFn); }
 
+      // Update options with any action assigned initial options.
+      if (isObject(initialOptions)) { updateOptions(initialOptions); }
+
       return {
-         update: (options) =>
-         {
-            if (typeof options?.disabled === 'boolean') { disabled = options.disabled; }
-         },
+         update: updateOptions,
          destroy: () =>
          {
             for (const event of events)

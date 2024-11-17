@@ -1,4 +1,5 @@
 import { A11yHelper } from '#runtime/util/a11y';
+import { isObject }  from '#runtime/util/object';
 
 /**
  * Defines the classic Material Design ripple effect as an action that is attached to an elements focus and blur events.
@@ -20,15 +21,20 @@ import { A11yHelper } from '#runtime/util/a11y';
  *
  * @param {number}   [opts.duration=300] - Duration in milliseconds.
  *
+ * @param {boolean}  [opts.enabled=true] - Enabled state.
+ *
  * @param {string}   [opts.background='rgba(255, 255, 255, 0.7)'] - A valid CSS background attribute.
  *
  * @param {string}   [opts.selector] - A valid CSS selector string.
  *
- * @returns {import('svelte/action').Action} Actual action.
+ * @returns {(import('svelte/action').Action<
+ *    HTMLElement,
+ *    import('svelte/action').ActionReturn<import('./types').ComposableActionOptions.RippleFocus>
+ * >)} Actual `rippleFocus` Action.
  */
-export function rippleFocus({ duration = 300, background = 'rgba(255, 255, 255, 0.7)', selector } = {})
+export function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration = 300, enabled = true, selector } = {})
 {
-   return (element, { disabled = false } = {}) =>
+   return (element, initialOptions) =>
    {
       // Ripple requires the efx element to have the overflow hidden due to rendering content outside the boundary.
       element.style.overflow = 'hidden';
@@ -47,7 +53,7 @@ export function rippleFocus({ duration = 300, background = 'rgba(255, 255, 255, 
        */
       function blurRipple()
       {
-         if (disabled) { return; }
+         if (!enabled) { return; }
 
          // When clicking outside the browser window or to another tab `document.activeElement` remains
          // the same despite blur being invoked; IE the target element.
@@ -86,7 +92,7 @@ export function rippleFocus({ duration = 300, background = 'rgba(255, 255, 255, 
        */
       function focusRipple()
       {
-         if (disabled) { return; }
+         if (!enabled) { return; }
 
          // If already focused and the span exists do not create another ripple effect.
          if (activeSpans.length > 0) { return; }
@@ -150,25 +156,35 @@ export function rippleFocus({ duration = 300, background = 'rgba(255, 255, 255, 
        */
       function onPointerDown(e)
       {
-         if (disabled) { return; }
+         if (!enabled) { return; }
 
          clientX = e.clientX;
          clientY = e.clientY;
+      }
+
+      /**
+       * Updates options.
+       *
+       * @param {import('./types').ComposableActionOptions.RippleFocus} newOptions - Options to update.
+       */
+      function updateOptions(newOptions)
+      {
+         if (typeof newOptions?.enabled === 'boolean' && enabled !== newOptions?.enabled)
+         {
+            enabled = newOptions.enabled;
+            if (!enabled) { blurRipple(); }
+         }
       }
 
       targetEl.addEventListener('pointerdown', onPointerDown);
       targetEl.addEventListener('blur', blurRipple);
       targetEl.addEventListener('focus', focusRipple);
 
+      // Update options with any action assigned initial options.
+      if (isObject(initialOptions)) { updateOptions(initialOptions); }
+
       return {
-         update: (options) =>
-         {
-            if (typeof options?.disabled === 'boolean')
-            {
-               disabled = options.disabled;
-               if (disabled) { blurRipple(); }
-            }
-         },
+         update: updateOptions,
          destroy: () =>
          {
             targetEl.removeEventListener('pointerdown', onPointerDown);

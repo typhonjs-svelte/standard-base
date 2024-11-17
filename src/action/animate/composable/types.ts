@@ -3,7 +3,7 @@
  */
 namespace ComposableActionOptions {
    /**
-    * Defines the options for the `animateWAAPI` action.
+    * Defines the options for the {@link animateWAAPI} action.
     *
     * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/animate
     * @see https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Keyframe_Formats
@@ -44,6 +44,26 @@ namespace ComposableActionOptions {
        * animation if one is currently running. Default value: `cancel`.
        */
       strategy?: 'cancel' | 'exclusive';
+   }
+
+   /**
+    * Defines the options for the {@link ripple} action.
+    */
+   export type Ripple = {
+      /**
+       * Is the animation enabled. Default value: `true`.
+       */
+      enabled?: boolean;
+   }
+
+   /**
+    * Defines the options for the {@link rippleFocus} action.
+    */
+   export type RippleFocus = {
+      /**
+       * Is the animation enabled. Default value: `true`.
+       */
+      enabled?: boolean;
    }
 }
 

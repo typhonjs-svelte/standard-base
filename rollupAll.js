@@ -27,22 +27,6 @@ const rollupConfigs = [
    },
    {
       input: {
-         input: 'src/action/animate/composable/ripple/index.js',
-         external,
-         plugins: [
-            resolve(),
-            generateDTS.plugin()
-         ]
-      },
-      output: {
-         file: '_dist/action/animate/composable/ripple/index.js',
-         format: 'es',
-         generatedCode: { constBindings: true },
-         sourcemap
-      }
-   },
-   {
-      input: {
          input: 'src/application/menu/index.js',
          external,
          plugins: [

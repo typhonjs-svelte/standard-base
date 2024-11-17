@@ -18,10 +18,6 @@
       "types": "./_dist/action/animate/composable/index.d.ts",
       "import": "./_dist/action/animate/composable/index.js"
     },
-    "./action/animate/composable/ripple": {
-      "types": "./_dist/action/animate/composable/ripple/index.d.ts",
-      "import": "./_dist/action/animate/composable/ripple/index.js"
-    },
     "./application/menu": {
       "types": "./_dist/application/menu/index.d.ts",
       "import": "./_dist/application/menu/index.js"

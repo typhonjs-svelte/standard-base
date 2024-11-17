@@ -49,7 +49,11 @@ export function animateWAAPI({ debounce, enabled = true, duration = 600, event =
             {
                default:
                case 'cancel':
-                  if (animation?.playState !== 'finished') { animation.cancel(); }
+                  if (animation?.playState !== 'finished')
+                  {
+                     animation.cancel();
+                     animationFinished();
+                  }
                   break;
 
                case 'exclusive':
@@ -60,7 +64,6 @@ export function animateWAAPI({ debounce, enabled = true, duration = 600, event =
 
          animation = element.animate(keyframes, isObject(options) ? options : duration);
          animation.onfinish = animationFinished;
-         animation.oncancel = animationFinished;
       }
 
       /**
@@ -70,7 +73,7 @@ export function animateWAAPI({ debounce, enabled = true, duration = 600, event =
        */
       function updateOptions(newOptions)
       {
-         if (typeof newOptions?.debounce === 'number' && newOptions.debounce !== newOptions.debounce)
+         if (typeof newOptions?.debounce === 'number' && debounce !== newOptions.debounce)
          {
             element.removeEventListener(event, eventFn);
 
@@ -84,7 +87,7 @@ export function animateWAAPI({ debounce, enabled = true, duration = 600, event =
 
          if (typeof newOptions?.duration === 'number') { duration = newOptions.duration; }
 
-         if (typeof newOptions?.event === 'string' && newOptions.event !== newOptions.event)
+         if (typeof newOptions?.event === 'string' && event !== newOptions.event)
          {
             element.removeEventListener(event, eventFn);
 
@@ -100,19 +103,19 @@ export function animateWAAPI({ debounce, enabled = true, duration = 600, event =
 
          if (isObject(newOptions?.options)) { options = newOptions.options; }
 
-         if (typeof newOptions?.strategy === 'string' && newOptions.strategy !== strategy)
+         if (typeof newOptions?.strategy === 'string' && strategy !== newOptions.strategy)
          {
             strategy = newOptions.strategy;
          }
       }
 
-      // Update options with any action assigned initial options.
-      if (isObject(initialOptions)) { updateOptions(initialOptions); }
-
       let eventFn = Number.isInteger(debounce) && debounce > 0 ? Timing.debounce(createAnimation, debounce) :
        createAnimation;
 
       element.addEventListener(event, eventFn);
+
+      // Update options with any action assigned initial options.
+      if (isObject(initialOptions)) { updateOptions(initialOptions); }
 
       return {
          update: updateOptions,

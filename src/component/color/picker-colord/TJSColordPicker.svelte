@@ -50,7 +50,7 @@
    setContext('#tjs-color-picker-state', internalState);
 
    const {
-      disabled,
+      enabled,
       firstFocusEl,
       inputName,
       isPopup,
@@ -157,7 +157,7 @@
     */
    function onKeydown(event)
    {
-      if ($disabled) { return; }
+      if (!$enabled) { return; }
 
       // Handle cut / copy / paste directly to circumvent external key listeners.
       switch(event.code)
@@ -262,7 +262,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <span bind:this={spanEl}
       class=tjs-color-picker
-      class:disabled-main={$disabled}
+      class:disabled-main={!$enabled}
       on:keydown={onKeydown}
       style:--_tjs-color-picker-current-color-hsl={$hslString}
       style:--_tjs-color-picker-current-color-hsl-hue={$hslHueString}
@@ -276,7 +276,7 @@
         <Input bind:inputEl />
     {/if}
     <MainLayout bind:containerEl {inputEl} />
-   {#if $disabled}
+   {#if !$enabled}
       <span class=disabled></span>
    {/if}
 </span>

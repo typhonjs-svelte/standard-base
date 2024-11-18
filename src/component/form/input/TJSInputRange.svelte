@@ -74,7 +74,7 @@
 
    export let input = void 0;
 
-   export let disabled = void 0;
+   export let enabled = void 0;
    export let label = void 0;
    export let options = void 0;
    export let max = void 0;
@@ -95,8 +95,8 @@
 
    // ----------------------------------------------------------------------------------------------------------------
 
-   $: disabled = isObject(input) && typeof input.disabled === 'boolean' ? input.disabled :
-    typeof disabled === 'boolean' ? disabled : false;
+   $: enabled = isObject(input) && typeof input.enabled === 'boolean' ? input.enabled :
+    typeof enabled === 'boolean' ? enabled : true;
 
    $: label = isObject(input) && TJSSlotLabelUtil.isValid(input.label) ? input.label :
     TJSSlotLabelUtil.isValid(label) ? label : void 0;
@@ -170,13 +170,13 @@
    }
 </script>
 
-<TJSSlotLabel {label} {disabled}>
+<TJSSlotLabel {label} {enabled}>
    <div class=tjs-input-container use:efx use:applyStyles={styles} on:pointerdown>
       <input class=tjs-input
              type=range
              bind:this={inputEl}
              bind:value={$store}
-             {disabled}
+             disabled={!enabled}
              {min}
              {max}
              {readonly}

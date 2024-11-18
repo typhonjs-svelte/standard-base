@@ -80,7 +80,7 @@
 
    export let select = void 0;
 
-   export let disabled = void 0;
+   export let enabled = void 0;
    export let label = void 0;
    export let selected = void 0;
    export let options = void 0;
@@ -93,8 +93,8 @@
 
    // ----------------------------------------------------------------------------------------------------------------
 
-   $: disabled = isObject(select) && typeof select.disabled === 'boolean' ? select.disabled :
-    typeof disabled === 'boolean' ? disabled : false;
+   $: enabled = isObject(select) && typeof select.enabled === 'boolean' ? select.enabled :
+    typeof enabled === 'boolean' ? enabled : true;
    $: label = isObject(select) && TJSSlotLabelUtil.isValid(select.label) ? select.label :
     TJSSlotLabelUtil.isValid(label) ? label : void 0;
    $: selected = isObject(select) && typeof select.selected === 'string' ? select.selected :
@@ -118,14 +118,14 @@
    });
 </script>
 
-<TJSSlotLabel {label} {disabled}>
+<TJSSlotLabel {label} {enabled}>
    <div on:change class=tjs-select-container use:efx use:applyStyles={styles} on:pointerdown>
       <!-- Please see note at top / above on why on:change is used over `bind:value={$store}`. -->
       <select on:change
               class=tjs-select
               class:has-efx={efx !== s_DEFAULT_EFX}
               bind:value={$store}
-              {disabled}>
+              disabled={!enabled}>
          {#each options as option}
             <option class=tjs-select-option value={option.value}>
                {localize(option.label ?? option.value)}

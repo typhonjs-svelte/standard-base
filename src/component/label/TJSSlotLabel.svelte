@@ -39,12 +39,12 @@
    export let label = void 0;
 
    /** @type {boolean} */
-   export let disabled = void 0;
+   export let enabled = void 0;
 
    $: label = TJSSlotLabelUtil.isValid(label) ? label : void 0;
 
-   $: disabled = isObject(label) && typeof label.disabled === 'boolean' ? label.disabled :
-    typeof disabled === 'boolean' ? disabled : false;
+   $: enabled = isObject(label) && typeof label.enabled === 'boolean' ? label.enabled :
+    typeof enabled === 'boolean' ? enabled : true;
 </script>
 
 {#if label}
@@ -52,11 +52,11 @@
    <label class=tjs-slot-label>
       {#if typeof label === 'string'}
          <span class=tjs-slot-label-span
-               class:disabled={disabled}>
+               class:disabled={!enabled}>
             {localize(label)}
          </span>
       {:else if TJSSvelteConfigUtil.isConfig(label)}
-         <svelte:component this={label.class} {...(isObject(label.props) ? label.props : {})} {disabled} />
+         <svelte:component this={label.class} {...(isObject(label.props) ? label.props : {})} {enabled} />
       {/if}
 
       <slot />

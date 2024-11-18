@@ -14,7 +14,7 @@ export *                              from './addon/index.js';
  *
  * @property {TJSColordPickerComponents} [components] User defined picker component overrides.
  *
- * @property {boolean} [disabled=false] Disables the color picker input.
+ * @property {boolean} [enabled=true] Enable state of the color picker input.
  *
  * @property {'hex'|'hsl'|'hsv'|'rgb'} [format] The user defined color format.
  *

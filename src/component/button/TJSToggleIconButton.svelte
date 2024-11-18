@@ -59,7 +59,7 @@
 
    export let button = void 0;
 
-   export let disabled = void 0;
+   export let enabled = void 0;
    export let icon = void 0;
    export let title = void 0;
    export let titleSelected = void 0;
@@ -78,8 +78,8 @@
 
    // ----------------------------------------------------------------------------------------------------------------
 
-   $: disabled = isObject(button) && typeof button.disabled === 'boolean' ? button.disabled :
-    typeof disabled === 'boolean' ? disabled : false;
+   $: enabled = isObject(button) && typeof button.enabled === 'boolean' ? button.enabled :
+    typeof enabled === 'boolean' ? enabled : true;
    $: icon = isObject(button) && typeof button.icon === 'string' ? button.icon :
     typeof icon === 'string' ? icon : '';
    $: title = isObject(button) && typeof button.title === 'string' ? button.title :
@@ -110,7 +110,7 @@
 
    $: if (store) { selected = $store; }
 
-   $: if (store && disabled) { $store = false; }
+   $: if (store && !enabled) { $store = false; }
 
    // Chose the current title when `selected` changes; if there is no `titleSelected` fallback to `title`.
    $: titleCurrent = selected && titleSelected !== '' ? titleSelected : title
@@ -124,7 +124,7 @@
     */
    function onClick(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       selected = !selected;
       if (store) { store.set(selected); }
@@ -145,7 +145,7 @@
     */
    function onContextMenuPress(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (typeof onContextMenu === 'function') { onContextMenu({ event }); }
 
@@ -164,7 +164,7 @@
     */
    function onClickDiv(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (!clickPropagate)
       {
@@ -200,7 +200,7 @@
     */
    function onKeydown(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (event.code === keyCode)
       {
@@ -216,7 +216,7 @@
     */
    function onKeyup(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (event.code === keyCode)
       {
@@ -235,7 +235,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-interactive-supports-focus -->
 <div class=tjs-toggle-icon-button
-     class:disabled={disabled}
+     class:disabled={!enabled}
      on:click={onClickDiv}
      on:close:popup={onClosePopup}
      use:applyStyles={styles}
@@ -250,9 +250,9 @@
       on:click
       on:contextmenu
       role=button
-      tabindex={disabled ? null : 0}
+      tabindex={!enabled ? null : 0}
       title={localize(titleCurrent)}
-      use:efx={{ disabled }}>
+      use:efx={{ enabled }}>
       <i class={icon} class:selected></i>
    </a>
    {#if selected}

@@ -115,7 +115,7 @@ export class InternalState
       this.#stores = {
          components: writable(this.#prepareComponents(opts)), // Sets this.#externalData.layout
 
-         disabled: propertyStore(externalData, 'disabled'),
+         enabled: propertyStore(externalData, 'enabled'),
          hasEyeDropper: propertyStore(externalData, 'hasEyeDropper'),
          hasAlpha: propertyStore(externalData, 'hasAlpha'),
          hasButtonBar: propertyStore(externalData, 'hasButtonBar'),
@@ -275,7 +275,7 @@ export class InternalState
 
       // External data -----------------------------------------------------------------------------------------------
 
-      this.#stores.disabled.set(typeof opts.disabled === 'boolean' ? opts.disabled : false);
+      this.#stores.enabled.set(typeof opts.enabled === 'boolean' ? opts.enabled : true);
 
       this.#stores.hasAlpha.set(typeof opts.hasAlpha === 'boolean' ? opts.hasAlpha : true);
 
@@ -330,9 +330,9 @@ export class InternalState
          throw new TypeError(`'options.addons' is not an iterable list of addon constructor functions.`);
       }
 
-      if (opts.disabled !== void 0 && typeof opts.disabled !== 'boolean')
+      if (opts.enabled !== void 0 && typeof opts.enabled !== 'boolean')
       {
-         throw new TypeError(`'options.disabled' is not a boolean.`);
+         throw new TypeError(`'options.enabled' is not a boolean.`);
       }
 
       if (opts.hasAddons !== void 0 && typeof opts.hasAddons !== 'boolean')

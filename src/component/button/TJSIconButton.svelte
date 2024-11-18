@@ -57,7 +57,7 @@
 
    export let button = void 0;
 
-   export let disabled = void 0;
+   export let enabled = void 0;
    export let icon = void 0;
    export let title = void 0;
    export let styles = void 0;
@@ -73,8 +73,8 @@
 
    // ----------------------------------------------------------------------------------------------------------------
 
-   $: disabled = isObject(button) && typeof button.disabled === 'boolean' ? button.disabled :
-    typeof disabled === 'boolean' ? disabled : false;
+   $: enabled = isObject(button) && typeof button.enabled === 'boolean' ? button.enabled :
+    typeof enabled === 'boolean' ? enabled : true;
    $: icon = isObject(button) && typeof button.icon === 'string' ? button.icon :
     typeof icon === 'string' ? icon : '';
    $: title = isObject(button) && typeof button.title === 'string' ? button.title :
@@ -103,7 +103,7 @@
     */
    function onClick(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (typeof onPress === 'function') { onPress({ event }); }
 
@@ -121,7 +121,7 @@
     */
    function onContextMenuPress(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (typeof onContextMenu === 'function') { onContextMenu({ event }); }
 
@@ -139,7 +139,7 @@
     */
    function onKeydown(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (event.code === keyCode)
       {
@@ -155,7 +155,7 @@
     */
    function onKeyup(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (event.code === keyCode)
       {
@@ -171,7 +171,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class=tjs-icon-button
-     class:disabled={disabled}
+     class:disabled={!enabled}
      use:applyStyles={styles}>
     <!-- svelte-ignore a11y-missing-attribute -->
     <a on:click={onClick}
@@ -181,9 +181,9 @@
        on:click
        on:contextmenu
        role=button
-       tabindex={disabled ? null : 0}
+       tabindex={!enabled ? null : 0}
        title={localize(title)}
-       use:efx={{ disabled }}>
+       use:efx={{ enabled }}>
         <i class={icon}></i>
     </a>
 </div>

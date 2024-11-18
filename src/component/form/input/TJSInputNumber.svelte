@@ -98,6 +98,7 @@
 
    const localOptions = {
       blurOnEnterKey: true,
+      blurOnEscKey: false,
       cancelOnEscKey: false
    }
 
@@ -116,6 +117,7 @@
        isObject(options) ? options : {};
 
       if (typeof options?.blurOnEnterKey === 'boolean') { localOptions.blurOnEnterKey = options.blurOnEnterKey; }
+      if (typeof options?.blurOnEscKey === 'boolean') { localOptions.blurOnEscKey = options.blurOnEscKey; }
       if (typeof options?.cancelOnEscKey === 'boolean') { localOptions.cancelOnEscKey = options.cancelOnEscKey; }
    }
 
@@ -174,6 +176,8 @@
          event.preventDefault();
          event.stopPropagation();
 
+         initialValue = void 0;
+
          inputEl.blur();
          return;
       }
@@ -182,10 +186,14 @@
       {
          if (localOptions.cancelOnEscKey && (initialValue === null || typeof initialValue === 'number'))
          {
+            store.set(initialValue);
+         }
+
+         if (localOptions.blurOnEscKey)
+         {
             event.preventDefault();
             event.stopPropagation();
 
-            store.set(initialValue);
             initialValue = void 0;
             inputEl.blur();
          }

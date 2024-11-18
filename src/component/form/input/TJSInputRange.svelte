@@ -88,9 +88,11 @@
 
    const localOptions = {
       blurOnEnterKey: true,
+      blurOnEscKey: false,
       cancelOnEscKey: false
    }
 
+   /** @type {HTMLElement} */
    let inputEl;
 
    // ----------------------------------------------------------------------------------------------------------------
@@ -112,6 +114,7 @@
        isObject(options) ? options : {};
 
       if (typeof options?.blurOnEnterKey === 'boolean') { localOptions.blurOnEnterKey = options.blurOnEnterKey; }
+      if (typeof options?.blurOnEscKey === 'boolean') { localOptions.blurOnEscKey = options.blurOnEscKey; }
       if (typeof options?.cancelOnEscKey === 'boolean') { localOptions.cancelOnEscKey = options.cancelOnEscKey; }
    }
 
@@ -132,24 +135,41 @@
 
    // ----------------------------------------------------------------------------------------------------------------
 
+   /** @type {number} */
    let initialValue;
 
-   function onFocusIn()
+   /**
+    * Tracks the captured initial `pointerdown` time when `cancelOnEscKey` is active to prevent the subsequent `focusin`
+    * event from storing the initial new value.
+    */
+   let initialPointerdownTime = 0;
+
+   /**
+    * Handle the case when keyboard navigation focuses the input element. Avoid setting initial value again based on
+    * timing from `onPointerdown`.
+    */
+   function onFocusin()
    {
-      initialValue = localOptions.cancelOnEscKey ? inputEl.value : void 0;
+      const focusTime = performance.now();
+
+      if (focusTime - initialPointerdownTime < 100) { return; }
+
+      initialValue = localOptions.cancelOnEscKey ? globalThis.parseFloat(inputEl.value) : void 0;
    }
 
    /**
-    * Blur input on enter key down.
+    * Handle various key options.
     *
     * @param {KeyboardEvent} event -
     */
-   function onKeyDown(event)
+   function onKeydown(event)
    {
       if (localOptions.blurOnEnterKey && event.code === 'Enter')
       {
          event.preventDefault();
          event.stopPropagation();
+
+         initialValue = void 0;
 
          inputEl.blur();
          return;
@@ -157,15 +177,32 @@
 
       if (event.code === 'Escape')
       {
-         if (localOptions.cancelOnEscKey && typeof initialValue === 'string')
+         if (localOptions.cancelOnEscKey && typeof initialValue === 'number')
+         {
+            store.set(initialValue);
+         }
+
+         if (localOptions.blurOnEscKey)
          {
             event.preventDefault();
             event.stopPropagation();
 
-            store.set(initialValue);
             initialValue = void 0;
             inputEl.blur();
          }
+      }
+   }
+
+   /**
+    * When `cancelOnEscKey` is active capture the initial value before it changes and store current time to
+    * avoid taking the initial value after focus.
+    */
+   function onPointerdown()
+   {
+      if (localOptions.cancelOnEscKey && inputEl !== inputEl?.ownerDocument?.activeElement)
+      {
+         initialValue = globalThis.parseFloat(inputEl.value);
+         initialPointerdownTime = performance.now();
       }
    }
 </script>
@@ -181,8 +218,9 @@
              {max}
              {readonly}
              {step}
-             on:focusin={onFocusIn}
-             on:keydown={onKeyDown}
+             on:focusin={onFocusin}
+             on:keydown={onKeydown}
+             on:pointerdown|capture={onPointerdown}
       />
    </div>
 </TJSSlotLabel>

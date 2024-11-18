@@ -96,6 +96,7 @@
 
    const localOptions = {
       blurOnEnterKey: true,
+      blurOnEscKey: false,
       cancelOnEscKey: false,
       clearOnEscKey: false
    }
@@ -134,6 +135,7 @@
        isObject(options) ? options : {};
 
       if (typeof options?.blurOnEnterKey === 'boolean') { localOptions.blurOnEnterKey = options.blurOnEnterKey; }
+      if (typeof options?.blurOnEscKey === 'boolean') { localOptions.blurOnEscKey = options.blurOnEscKey; }
       if (typeof options?.cancelOnEscKey === 'boolean') { localOptions.cancelOnEscKey = options.cancelOnEscKey; }
       if (typeof options?.clearOnEscKey === 'boolean') { localOptions.clearOnEscKey = options.clearOnEscKey; }
    }
@@ -160,7 +162,10 @@
 
    let initialValue;
 
-   function onFocusIn(event)
+   /**
+    * Store initial value when `cancelOnEscKey` is enabled.
+    */
+   function onFocusin()
    {
       initialValue = localOptions.cancelOnEscKey ? inputEl.value : void 0;
    }
@@ -170,12 +175,14 @@
     *
     * @param {KeyboardEvent} event -
     */
-   function onKeyDown(event)
+   function onKeydown(event)
    {
       if (localOptions.blurOnEnterKey && event.code === 'Enter')
       {
          event.preventDefault();
          event.stopPropagation();
+
+         initialValue = void 0;
 
          inputEl.blur();
          return;
@@ -185,19 +192,21 @@
       {
          if (localOptions.cancelOnEscKey && typeof initialValue === 'string')
          {
-            event.preventDefault();
-            event.stopPropagation();
-
             store.set(initialValue);
-            initialValue = void 0;
-            inputEl.blur();
          }
          else if (localOptions.clearOnEscKey)
+         {
+            store.set('');
+
+            initialValue = '';
+         }
+
+         if (localOptions.blurOnEscKey)
          {
             event.preventDefault();
             event.stopPropagation();
 
-            store.set('');
+            initialValue = void 0;
             inputEl.blur();
          }
       }
@@ -214,8 +223,8 @@
              disabled={!enabled}
              {placeholder}
              {readonly}
-             on:focusin={onFocusIn}
-             on:keydown={onKeyDown}
+             on:focusin={onFocusin}
+             on:keydown={onKeydown}
       />
    </div>
 </TJSSlotLabel>

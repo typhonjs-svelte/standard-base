@@ -158,7 +158,7 @@
      on:click
      on:contextmenu
      role=button
-     tabindex={!enabled ? null : 0}
+     tabindex={enabled ? 0 : null}
      use:applyStyles={styles}>
    <slot />
    {#if efx !== s_EFX_DEFAULT && enabled}

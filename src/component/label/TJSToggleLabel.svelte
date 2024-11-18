@@ -228,7 +228,7 @@
          on:click
          on:contextmenu
          role=button
-         tabindex={!enabled ? null : 0}
+         tabindex={enabled ? 0 : null}
          use:efx={{ enabled }}>
       <slot name=left />
       {#if comp}

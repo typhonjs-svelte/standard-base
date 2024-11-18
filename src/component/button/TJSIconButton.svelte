@@ -181,7 +181,7 @@
        on:click
        on:contextmenu
        role=button
-       tabindex={!enabled ? null : 0}
+       tabindex={enabled ? 0 : null}
        title={localize(title)}
        use:efx={{ enabled }}>
         <i class={icon}></i>

@@ -48,13 +48,15 @@
 
    let component;
 
-   // Some components need to reassign `input` to another prop name. Warnings are only generated w/ the Vite dev server.
-   let passedProps = Object.assign({}, $$props);
-
-   // Remove the `type` prop used locally.
-   delete passedProps.type;
+   let passedProps = {};
 
    $: {
+      // Some components need to reassign `input` to another prop name. Warnings are only generated w/ the Vite dev server.
+      passedProps = Object.assign({}, $$props);
+
+      // Remove the `type` prop used locally.
+      delete passedProps.type;
+
       type = isObject(input) && typeof input.type === 'string' ? input.type :
        typeof type === 'string' ? type : 'text';
 

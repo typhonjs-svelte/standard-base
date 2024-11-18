@@ -178,8 +178,8 @@
          on:click
          on:contextmenu
          role=button
-         tabindex=0
-         use:efx>
+         tabindex={enabled ? 0 : null}
+         use:efx={{ enabled }}>
         <slot />
     </div>
 </div>

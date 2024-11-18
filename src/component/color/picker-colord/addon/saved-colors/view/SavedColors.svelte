@@ -6,7 +6,10 @@
    import TJSColordButton   from '../../../TJSColordButton.svelte';
 
    const internalState = getContext('#tjs-color-picker-state');
+
    const colorState = internalState.colorState;
+
+   const { enabled } = internalState.stores;
 
    const savedColorState = internalState.addOnState.get('saved-colors').savedColorsState;
 </script>
@@ -16,6 +19,7 @@
         <TJSColordButton {color}
                          on:press={() => colorState.setColor(color)}
                          on:contextmenu={() => savedColorState.deleteColor(color)}
+                         enabled={$enabled}
                          efx={ripple({ keyCode: 'Space' })}
                          keyCode={'Space'} />
     {/each}

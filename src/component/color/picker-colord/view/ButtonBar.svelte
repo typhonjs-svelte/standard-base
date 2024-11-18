@@ -16,9 +16,11 @@
    const activeWindow = getContext('#activeWindow');
 
    const internalState = getContext('#tjs-color-picker-state');
+
    const buttonState = internalState.buttonState;
 
    const {
+      enabled,
       hasAddons,
       hasEyeDropper} = internalState.stores;
 
@@ -41,20 +43,29 @@
 <section>
     <TJSColordButton on:press={onPress}
                      color={$currentColorString}
+                     enabled={$enabled}
                      efx={ripple({ keyCode: 'Space' })}
                      keyCode={'Space'}
     />
 
     {#if $hasEyeDropper}
-        <TJSIconButton button={eyeDropperButton} efx={ripple({ keyCode: 'Space' })} />
+        <TJSIconButton button={eyeDropperButton}
+                       enabled={$enabled}
+                       efx={ripple({ keyCode: 'Space' })} />
     {/if}
 
     {#if $hasAddons}
         {#each $buttonState as button}
             {#if button.isToggle}
-                <TJSToggleIconButton {button} efx={ripple({ keyCode: 'Space' })} keyCode={'Space'} />
+                <TJSToggleIconButton {button}
+                                     enabled={$enabled}
+                                     efx={ripple({ keyCode: 'Space' })}
+                                     keyCode={'Space'} />
             {:else}
-                <TJSIconButton {button} efx={ripple({ keyCode: 'Space' })} keyCode={'Space'} />
+                <TJSIconButton {button}
+                               enabled={$enabled}
+                               efx={ripple({ keyCode: 'Space' })}
+                               keyCode={'Space'} />
             {/if}
         {/each}
     {/if}

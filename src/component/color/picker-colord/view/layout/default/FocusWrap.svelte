@@ -6,7 +6,7 @@
 
    const internalState = getContext('#tjs-color-picker-state');
 
-   const { firstFocusEl, isPopup } = internalState.stores;
+   const { enabled, firstFocusEl, isPopup } = internalState.stores;
 
    const focused = writable(false);
 
@@ -21,7 +21,7 @@
 
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div class=tjs-color-picker-last-focus
-     tabindex=0
+     tabindex={$enabled ? 0 : null}
      use:isFocused={focused}>
 </div>
 

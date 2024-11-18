@@ -15,7 +15,9 @@
 
    const hue = internalState.colorState.stores.hue;
 
-   const { components } = internalState.stores;
+   const {
+      components,
+      enabled } = internalState.stores;
 
    const stylesSliderIndicator = {
       background: 'var(--_tjs-color-picker-current-color-hsl-hue)'
@@ -79,6 +81,8 @@
     */
    function onClick(constraint)
    {
+      if (!$enabled) { return; }
+
       const rect = sliderEl.getBoundingClientRect();
 
       const size = sliderHorizontal ? rect.width : rect.height;
@@ -92,6 +96,8 @@
     */
    function move(keys)
    {
+      if (!$enabled) { return; }
+
       if (keys.anyPressed(targetKeys))
       {
          if (!focusMovementIntervalId)
@@ -121,6 +127,8 @@
     */
    function onPointerDown(event)
    {
+      if (!$enabled) { return; }
+
       if (event.button === 0)
       {
          isPointerDown = true;
@@ -134,6 +142,8 @@
     */
    function onPointerUp(event)
    {
+      if (!$enabled) { return; }
+
       isPointerDown = false;
       sliderEl.releasePointerCapture(event.pointerId);
    }
@@ -143,6 +153,8 @@
     */
    function onPointerMove(event)
    {
+      if (!$enabled) { return; }
+
       if (isPointerDown)
       {
          const rect = sliderEl.getBoundingClientRect();
@@ -155,6 +167,8 @@
     */
    function onWheel(event)
    {
+      if (!$enabled) { return; }
+
       if (event.deltaY !== 0)
       {
          $hue = clamp(event.deltaY > 0 ? $hue + 1 : $hue - 1, 0, 360);
@@ -166,7 +180,7 @@
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div class=tjs-color-picker-slider
          bind:this={sliderEl}
-         tabindex=0
+         tabindex={$enabled ? 0 : null}
          class:horizontal={sliderHorizontal}
          on:pointerdown|preventDefault={onPointerDown}
          on:pointermove|preventDefault|stopPropagation={onPointerMove}

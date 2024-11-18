@@ -6,7 +6,8 @@
    const internalState = getContext('#tjs-color-picker-state');
    const colorState = internalState.colorState;
 
-   const { hasAlpha, isOpen, isPopup, lockTextFormat } = internalState.stores;
+   const { enabled, hasAlpha, isOpen, isPopup, lockTextFormat } = internalState.stores;
+
    const { textState } = colorState.stores;
 
    const activeTextState = textState.activeState;
@@ -25,11 +26,15 @@
     */
    function onClick()
    {
+      if (!$enabled) { return; }
+
       if (!$lockTextFormat) { activeTextState.next(); }
    }
 
    function onKeydown(event)
    {
+      if (!$enabled) { return; }
+
       if (event.code === 'Space')
       {
          event.preventDefault();
@@ -44,6 +49,8 @@
     */
    function onKeyup(event)
    {
+      if (!$enabled) { return; }
+
       if (!$lockTextFormat && event.code === 'Space')
       {
          activeTextState.next();
@@ -57,16 +64,16 @@
 <div class=picker-text-input>
    <div class=input-container>
       {#each $activeTextState.inputData as input (input.pickerLabel)}
-         <TJSInput {input} />
+         <TJSInput {input} enabled={$enabled} />
       {/each}
       {#if $hasAlpha && $activeTextState.hasAlpha}
-         <TJSInput input={alpha} />
+         <TJSInput input={alpha} enabled={$enabled} />
       {/if}
    </div>
    <div class=input-attributes
         role=button
         aria-label="next color format"
-        tabindex={!$lockTextFormat ? 0 : -1}
+        tabindex={!$lockTextFormat && $enabled ? 0 : -1}
         class:lock-text-format={$lockTextFormat}
         on:click|preventDefault={onClick}
         on:keydown={onKeydown}

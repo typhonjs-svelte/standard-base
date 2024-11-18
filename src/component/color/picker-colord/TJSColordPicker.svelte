@@ -271,11 +271,11 @@
       style:--_tjs-color-picker-padding-option={$padding}
       use:applyStyles={styles}
       role=region>
-    <input name={$inputName} type=hidden value={$currentColorString}/>
-    {#if $isPopup}
-        <Input bind:inputEl />
-    {/if}
-    <MainLayout bind:containerEl {inputEl} />
+   <input name={$inputName} type=hidden value={$currentColorString}/>
+   {#if $isPopup}
+      <Input bind:inputEl />
+   {/if}
+   <MainLayout bind:containerEl {inputEl} />
    {#if !$enabled}
       <span class=disabled></span>
    {/if}

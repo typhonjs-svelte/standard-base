@@ -21,6 +21,7 @@
    const internalState = getContext('#tjs-color-picker-state');
 
    const {
+      enabled,
       components,
       isOpen,
       isPopup

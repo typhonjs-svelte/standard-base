@@ -34,6 +34,9 @@
 
    const application = getContext('#external')?.application;
 
+   // The PCL needs to listen to key events on the active window and change listeners if the window changes.
+   // This requires reactive active window store access. When embedded in `SvelteApplication` retrieve the active window
+   // store otherwise fallback to `globalThis`.
    const applicationActiveWindow = application?.reactive?.storeUIState?.activeWindow ?? writable(globalThis);
 
    /** @type {Window} */

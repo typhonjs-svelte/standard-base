@@ -136,9 +136,7 @@
     * @componentDocumentation
     */
 
-   import {
-      getContext,
-      onDestroy }             from '#svelte';
+   import { onDestroy }       from '#svelte';
 
    import { writable }        from '#svelte/store';
 
@@ -194,8 +192,6 @@
 
    /** @type {(data?: { event?: PointerEvent }) => void} */
    export let onContextMenu = void 0;
-
-   const application = getContext('#external')?.application;
 
    /** @type {TJSFolderOptions} */
    const localOptions = {
@@ -360,12 +356,11 @@
    {
       if (!enabled) { return; }
 
-      const activeWindow = application?.reactive?.activeWindow ?? globalThis;
-
       // Firefox sends a `click` event / non-standard response so check for mozInputSource equaling 6 (keyboard) or
       // a negative pointerId from Chromium and prevent default. This allows `onKeyUp` to handle any open / close
       // action.
-      if (activeWindow.document.activeElement === summaryEl && (event?.pointerId === -1 || event?.mozInputSource === 6))
+      if (summaryEl === summaryEl?.ownerDocument.activeElement &&
+       (event?.pointerId === -1 || event?.mozInputSource === 6))
       {
          event.preventDefault();
          event.stopPropagation();
@@ -399,9 +394,7 @@
    {
       if (!enabled) { return; }
 
-      const activeWindow = application?.reactive?.activeWindow ?? globalThis;
-
-      if (activeWindow.document.activeElement === summaryEl && event.code === keyCode)
+      if (summaryEl === summaryEl?.ownerDocument.activeElement && event.code === keyCode)
       {
          event.preventDefault();
          event.stopPropagation();
@@ -417,9 +410,7 @@
    {
       if (!enabled) { return; }
 
-      const activeWindow = application?.reactive?.activeWindow ?? globalThis;
-
-      if (activeWindow.document.activeElement === summaryEl && event.code === keyCode)
+      if (summaryEl === summaryEl?.ownerDocument.activeElement && event.code === keyCode)
       {
          handleOpenClose(event, true);
 

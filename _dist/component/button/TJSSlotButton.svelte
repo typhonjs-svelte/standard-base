@@ -29,7 +29,7 @@
 
    export let button = void 0;
 
-   export let disabled = void 0;
+   export let enabled = void 0;
    export let styles = void 0;
    export let efx = void 0;
    export let keyCode = void 0;
@@ -45,8 +45,8 @@
 
    // ----------------------------------------------------------------------------------------------------------------
 
-   $: disabled = isObject(button) && typeof button.disabled === 'boolean' ? button.disabled :
-    typeof disabled === 'boolean' ? disabled : false;
+   $: enabled = isObject(button) && typeof button.enabled === 'boolean' ? button.enabled :
+    typeof enabled === 'boolean' ? enabled : true;
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
     isObject(styles) ? styles : void 0;
    $: efx = isObject(button) && typeof button.efx === 'function' ? button.efx :
@@ -71,7 +71,7 @@
     */
    function onClick(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       // Because the efx div has `pointer-events: none` manually trigger event.
       if (efxEl) { efxEl.dispatchEvent(new CustomEvent('efx-trigger', { detail: { event } })); }
@@ -92,7 +92,7 @@
     */
    function onContextMenuPress(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (typeof onContextMenu === 'function')
       {
@@ -116,7 +116,7 @@
     */
    function onKeydown(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (event.code === keyCode)
       {
@@ -132,7 +132,7 @@
     */
    function onKeyup(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (event.code === keyCode)
       {
@@ -150,7 +150,7 @@
 </script>
 
 <div class=tjs-slot-button
-     class:disabled={disabled}
+     class:disabled={!enabled}
      on:click={onClick}
      on:contextmenu={onContextMenuPress}
      on:keydown={onKeydown}
@@ -158,10 +158,10 @@
      on:click
      on:contextmenu
      role=button
-     tabindex={disabled ? null : 0}
+     tabindex={enabled ? 0 : null}
      use:applyStyles={styles}>
    <slot />
-   {#if efx !== s_EFX_DEFAULT && !disabled}
+   {#if efx !== s_EFX_DEFAULT && enabled}
       <div bind:this={efxEl}
            class=tjs-slot-button-efx
            use:efx />

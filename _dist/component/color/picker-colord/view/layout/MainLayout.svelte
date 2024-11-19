@@ -1,22 +1,15 @@
 <script>
    import {
       getContext,
-      onDestroy,
-      setContext }               from 'svelte';
-
-   import { writable }           from 'svelte/store';
+      onDestroy }                from 'svelte';
 
    import { getStackingContext } from '#runtime/util/dom/layout';
 
+   /** @type {HTMLElement} */
    export let containerEl = void 0;
+
+   /** @type {HTMLInputElement} */
    export let inputEl = void 0;
-
-   const application = getContext('#external')?.application;
-
-   /** @type {import('svelte/store').Writable<Window>} */
-   const activeWindow = application?.reactive?.storeUIState?.activeWindow ?? writable(globalThis);
-
-   setContext('#activeWindow', activeWindow);
 
    const internalState = getContext('#tjs-color-picker-state');
 
@@ -28,24 +21,16 @@
 
    $: if ($isPopup && $isOpen && containerEl)
    {
-      getActiveWindow().document.body.addEventListener('pointerdown', onPointerDown, { capture: true });
+      containerEl?.ownerDocument.body.addEventListener('pointerdown', onPointerDown, { capture: true, once: true });
 
       // Focus containerEl on next tick so that potential tab navigation in popup mode can be traversed in reverse.
       setTimeout(() => containerEl.focus(), 0);
    }
 
    // Sanity case to remove listener when `options.isPopup` state changes externally.
-   $: if (!$isPopup) { getActiveWindow().document.body.removeEventListener('pointerdown', onPointerDown); }
+   $: if (!$isPopup) { containerEl?.ownerDocument.body.removeEventListener('pointerdown', onPointerDown); }
 
-   onDestroy(() => getActiveWindow().document.body.removeEventListener('pointerdown', onPointerDown));
-
-   /**
-    * @returns {Window} Returns the active window.
-    */
-   function getActiveWindow()
-   {
-      return $activeWindow;
-   }
+   onDestroy(() => containerEl?.ownerDocument.body.removeEventListener('pointerdown', onPointerDown));
 
    /**
     * Handles pointerdown events in popup mode that reach `document.body` to detect when the user clicks away from the
@@ -57,9 +42,6 @@
    {
       // Early out if pointer down on container element or child element of wrapper.
       if (containerEl !== null && (event.target === containerEl || containerEl.contains(event.target))) { return; }
-
-      // Remove listener.
-      getActiveWindow().document.body.removeEventListener('pointerdown', onPointerDown);
 
       if ($isPopup)
       {

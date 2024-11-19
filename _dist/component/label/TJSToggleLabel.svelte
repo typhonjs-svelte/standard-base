@@ -33,7 +33,7 @@
 
    export let label = void 0;
 
-   export let disabled = void 0;
+   export let enabled = void 0;
    export let text = void 0;
    export let comp = void 0;
    export let title = void 0;
@@ -53,8 +53,8 @@
 
    // ----------------------------------------------------------------------------------------------------------------
 
-   $: disabled = isObject(label) && typeof label.disabled === 'boolean' ? label.disabled :
-    typeof disabled === 'boolean' ? disabled : false;
+   $: enabled = isObject(label) && typeof label.enabled === 'boolean' ? label.enabled :
+    typeof enabled === 'boolean' ? enabled : true;
    $: text = isObject(label) && typeof label.text === 'string' ? label.text :
     typeof text === 'string' ? text : void 0;
    $: comp = isObject(label) && TJSSvelteUtil.isComponent(label.comp) ? label.comp :
@@ -87,7 +87,7 @@
 
    $: if (store) { selected = $store; }
 
-   $: if (store && disabled) { $store = false; }
+   $: if (store && !enabled) { $store = false; }
 
    // Chose the current title when `selected` changes; if there is no `titleSelected` fallback to `title`.
    $: titleCurrent = selected && titleSelected !== '' ? titleSelected : title
@@ -101,7 +101,7 @@
     */
    function onClick(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       selected = !selected;
       if (store) { store.set(selected); }
@@ -125,7 +125,7 @@
     */
    function onClickDiv(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (!clickPropagate)
       {
@@ -159,7 +159,7 @@
     */
    function onContextMenuPress(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (typeof onContextMenu === 'function') { onContextMenu({ event }); }
 
@@ -177,7 +177,7 @@
     */
    function onKeydown(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (event.code === keyCode)
       {
@@ -193,7 +193,7 @@
     */
    function onKeyup(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (event.code === keyCode)
       {
@@ -212,7 +212,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
 <div class=tjs-toggle-label
-     class:disabled={disabled}
+     class:disabled={!enabled}
      on:click={onClickDiv}
      on:close:popup={onClosePopup}
      title={localize(titleCurrent)}
@@ -228,8 +228,8 @@
          on:click
          on:contextmenu
          role=button
-         tabindex={disabled ? null : 0}
-         use:efx={{ disabled }}>
+         tabindex={enabled ? 0 : null}
+         use:efx={{ enabled }}>
       <slot name=left />
       {#if comp}
          <svelte:component this={comp}/>

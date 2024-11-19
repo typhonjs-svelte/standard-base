@@ -48,7 +48,7 @@ declare namespace TjsSlotLabel {
   export type Props = {
     label?: any;
     /** @type {boolean} */
-    disabled?: boolean;
+    enabled?: boolean;
   };
   /** Events type alias for {@link TjsSlotLabel | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };
@@ -93,7 +93,7 @@ declare namespace TjsToggleLabel {
     label?: any;
     title?: any;
     text?: any;
-    disabled?: any;
+    enabled?: any;
     comp?: any;
     titleSelected?: any;
     store?: any;

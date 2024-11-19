@@ -10,7 +10,6 @@
 
    import {
       createEventDispatcher,
-      getContext,
       onDestroy,
       setContext }                     from 'svelte';
 
@@ -41,16 +40,22 @@
     */
    export let options = void 0;
 
+   /**
+    * External shared WebStorage instance. By assigning an external `WebStorage` instance you can share state like
+    * the saved colors plugin across color picker instances.
+    *
+    * @type {import('#runtime/svelte/store/web-storage').WebStorage}
+    */
+   export let webStorage = void 0;
+
    const dispatch = createEventDispatcher();
 
-   const external = getContext('#external');
-
-   const internalState = new InternalState(color, options, external?.sessionStorage);
+   const internalState = new InternalState(color, options, webStorage);
 
    setContext('#tjs-color-picker-state', internalState);
 
    const {
-      disabled,
+      enabled,
       firstFocusEl,
       inputName,
       isPopup,
@@ -157,7 +162,7 @@
     */
    function onKeydown(event)
    {
-      if ($disabled) { return; }
+      if (!$enabled) { return; }
 
       // Handle cut / copy / paste directly to circumvent external key listeners.
       switch(event.code)
@@ -262,7 +267,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <span bind:this={spanEl}
       class=tjs-color-picker
-      class:disabled-main={$disabled}
+      class:disabled-main={!$enabled}
       on:keydown={onKeydown}
       style:--_tjs-color-picker-current-color-hsl={$hslString}
       style:--_tjs-color-picker-current-color-hsl-hue={$hslHueString}
@@ -271,12 +276,12 @@
       style:--_tjs-color-picker-padding-option={$padding}
       use:applyStyles={styles}
       role=region>
-    <input name={$inputName} type=hidden value={$currentColorString}/>
-    {#if $isPopup}
-        <Input bind:inputEl />
-    {/if}
-    <MainLayout bind:containerEl {inputEl} />
-   {#if $disabled}
+   <input name={$inputName} type=hidden value={$currentColorString}/>
+   {#if $isPopup}
+      <Input bind:inputEl />
+   {/if}
+   <MainLayout bind:containerEl {inputEl} />
+   {#if !$enabled}
       <span class=disabled></span>
    {/if}
 </span>

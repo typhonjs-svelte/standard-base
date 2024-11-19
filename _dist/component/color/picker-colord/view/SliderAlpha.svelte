@@ -13,7 +13,10 @@
    const sliderConstraint = getContext('#tjs-color-picker-slider-constraint');
    const sliderHorizontal = getContext('#tjs-color-picker-slider-horizontal');
 
-   const { components } = internalState.stores;
+   const {
+      components,
+      enabled } = internalState.stores;
+
    const { alpha } = internalState.colorState.stores;
 
    const stylesSliderIndicator = {}
@@ -76,6 +79,8 @@
     */
    function onClick(constraint)
    {
+      if (!$enabled) { return; }
+
       const rect = sliderEl.getBoundingClientRect();
       const size = sliderHorizontal ? rect.width : rect.height;
       const boundedPos = clamp(constraint, 0, size);
@@ -88,6 +93,8 @@
     */
    function move(keys)
    {
+      if (!$enabled) { return; }
+
       if (keys.anyPressed(targetKeys))
       {
          if (!focusMovementIntervalId)
@@ -117,6 +124,8 @@
     */
    function onPointerDown(event)
    {
+      if (!$enabled) { return; }
+
       if (event.button === 0)
       {
          isPointerDown = true;
@@ -130,6 +139,8 @@
     */
    function onPointerUp(event)
    {
+      if (!$enabled) { return; }
+
       isPointerDown = false;
       sliderEl.releasePointerCapture(event.pointerId);
    }
@@ -139,6 +150,8 @@
     */
    function onPointerMove(event)
    {
+      if (!$enabled) { return; }
+
       if (isPointerDown)
       {
          const rect = sliderEl.getBoundingClientRect();
@@ -151,6 +164,8 @@
     */
    function onWheel(event)
    {
+      if (!$enabled) { return; }
+
       if (event.deltaY !== 0)
       {
          $alpha = clamp(event.deltaY > 0 ? $alpha + 0.01 : $alpha - 0.01, 0, 1);
@@ -162,7 +177,7 @@
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div bind:this={sliderEl}
          class=tjs-color-picker-slider
-         tabindex=0
+         tabindex={$enabled ? 0 : null}
          class:horizontal={sliderHorizontal}
          on:pointerdown|preventDefault={onPointerDown}
          on:pointermove|preventDefault|stopPropagation={onPointerMove}

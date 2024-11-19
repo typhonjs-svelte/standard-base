@@ -42,7 +42,7 @@ declare namespace ComposableActionOptions {
     /**
      * An object containing one or more timing properties. When defined it is used instead of `duration`.
      */
-    options?: KeyframeAnimationOptions;
+    keyframeOptions?: KeyframeAnimationOptions;
     /**
      * The scheduling strategy to take. `cancel` to cancel any current animation, `exclusive` to skip scheduling an
      * animation if one is currently running. Default value: `cancel`.
@@ -74,7 +74,7 @@ declare namespace ComposableActionOptions {
  * provided keyframes and options in response to a given event. The default event is the `click` event. You may change
  * that to any
  *
- * @param {import('./types').ComposableActionOptions.AnimateWAAPI} [Options] - Optional parameters.
+ * @param {import('./types').ComposableActionOptions.AnimateWAAPI} [options] - Optional parameters.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/animate
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Keyframe_Formats
@@ -90,7 +90,7 @@ declare function animateWAAPI({
   duration,
   event,
   keyframes,
-  options,
+  keyframeOptions,
   strategy,
 }?: ComposableActionOptions.AnimateWAAPI): svelte_action.Action<
   HTMLElement,

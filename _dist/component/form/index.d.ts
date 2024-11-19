@@ -14,7 +14,7 @@ declare namespace TjsButton {
     button?: any;
     label?: any;
     title?: any;
-    disabled?: any;
+    enabled?: any;
     icon?: any;
     styles?: any;
     efx?: any;
@@ -119,15 +119,7 @@ declare class TjsInputCheckbox extends SvelteComponent<
 /** Event / Prop / Slot type aliases for {@link TjsInputCheckbox | associated component}. */
 declare namespace TjsInputCheckbox {
   /** Props type alias for {@link TjsInputCheckbox | associated component}. */
-  export type Props = {
-    input?: any;
-    label?: any;
-    disabled?: any;
-    readonly?: any;
-    styles?: any;
-    efx?: any;
-    store?: any;
-  };
+  export type Props = { input?: any; label?: any; readonly?: any; enabled?: any; styles?: any; efx?: any; store?: any };
   /** Events type alias for {@link TjsInputCheckbox | associated component}. */
   export type Events = { pointerdown: PointerEvent } & { [evt: string]: CustomEvent<any> };
   /** Slots type alias for {@link TjsInputCheckbox | associated component}. */
@@ -212,9 +204,9 @@ declare namespace TjsInputNumber {
     max?: any;
     min?: any;
     label?: any;
-    disabled?: any;
     options?: any;
     readonly?: any;
+    enabled?: any;
     styles?: any;
     efx?: any;
     placeholder?: any;
@@ -300,9 +292,9 @@ declare namespace TjsInputRange {
     max?: any;
     min?: any;
     label?: any;
-    disabled?: any;
     options?: any;
     readonly?: any;
+    enabled?: any;
     styles?: any;
     efx?: any;
     step?: any;
@@ -338,9 +330,9 @@ declare namespace TjsInputRangeNumber {
     max?: any;
     min?: any;
     label?: any;
-    disabled?: any;
     options?: any;
     readonly?: any;
+    enabled?: any;
     styles?: any;
     efx?: any;
     step?: any;
@@ -426,9 +418,9 @@ declare namespace TjsInputText {
     input?: any;
     type?: any;
     label?: any;
-    disabled?: any;
     options?: any;
     readonly?: any;
+    enabled?: any;
     styles?: any;
     efx?: any;
     placeholder?: any;
@@ -502,8 +494,8 @@ declare namespace TjsSelect {
   export type Props = {
     label?: any;
     select?: any;
-    disabled?: any;
     options?: any;
+    enabled?: any;
     styles?: any;
     efx?: any;
     store?: any;

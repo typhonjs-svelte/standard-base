@@ -16,7 +16,7 @@
 
    // Button props --------------------------------------------------------------------------------------------------
 
-   export let disabled = void 0;
+   export let enabled = void 0;
 
    export let icon = void 0;
 
@@ -42,8 +42,8 @@
 
    // ----------------------------------------------------------------------------------------------------------------
 
-   $: disabled = isObject(button) && typeof button.disabled === 'boolean' ? button.disabled :
-    typeof disabled === 'boolean' ? disabled : false;
+   $: enabled = isObject(button) && typeof button.enabled === 'boolean' ? button.enabled :
+    typeof enabled === 'boolean' ? enabled : true;
 
    $: icon = isObject(button) && typeof button.icon === 'string' ? button.icon :
     typeof icon === 'string' ? icon : void 0;
@@ -158,10 +158,10 @@
         on:click
         on:contextmenu
         on:press
-        {disabled}
+        disabled={!enabled}
         title={localize(title)}
         use:applyStyles={styles}>
-   <span class=tjs-form-button-efx bind:this={efxEl} use:efx={{ disabled }}>
+   <span class=tjs-form-button-efx bind:this={efxEl} use:efx={{ enabled }}>
       <span class=tjs-form-button-span>
          {#if icon}<i class={icon}></i>{/if}
 

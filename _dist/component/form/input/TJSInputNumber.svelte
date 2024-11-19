@@ -82,7 +82,7 @@
 
    export let input = void 0;
 
-   export let disabled = void 0;
+   export let enabled = void 0;
    export let label = void 0;
    export let options = void 0;
    export let max = void 0;
@@ -98,6 +98,7 @@
 
    const localOptions = {
       blurOnEnterKey: true,
+      blurOnEscKey: false,
       cancelOnEscKey: false
    }
 
@@ -105,8 +106,8 @@
 
    // ----------------------------------------------------------------------------------------------------------------
 
-   $: disabled = isObject(input) && typeof input.disabled === 'boolean' ? input.disabled :
-    typeof disabled === 'boolean' ? disabled : false;
+   $: enabled = isObject(input) && typeof input.enabled === 'boolean' ? input.enabled :
+    typeof enabled === 'boolean' ? enabled : true;
 
    $: label = isObject(input) && TJSSlotLabelUtil.isValid(input.label) ? input.label :
     TJSSlotLabelUtil.isValid(label) ? label : void 0;
@@ -116,6 +117,7 @@
        isObject(options) ? options : {};
 
       if (typeof options?.blurOnEnterKey === 'boolean') { localOptions.blurOnEnterKey = options.blurOnEnterKey; }
+      if (typeof options?.blurOnEscKey === 'boolean') { localOptions.blurOnEscKey = options.blurOnEscKey; }
       if (typeof options?.cancelOnEscKey === 'boolean') { localOptions.cancelOnEscKey = options.cancelOnEscKey; }
    }
 
@@ -174,6 +176,8 @@
          event.preventDefault();
          event.stopPropagation();
 
+         initialValue = void 0;
+
          inputEl.blur();
          return;
       }
@@ -182,10 +186,14 @@
       {
          if (localOptions.cancelOnEscKey && (initialValue === null || typeof initialValue === 'number'))
          {
+            store.set(initialValue);
+         }
+
+         if (localOptions.blurOnEscKey)
+         {
             event.preventDefault();
             event.stopPropagation();
 
-            store.set(initialValue);
             initialValue = void 0;
             inputEl.blur();
          }
@@ -193,7 +201,7 @@
    }
 </script>
 
-<TJSSlotLabel {label} {disabled}>
+<TJSSlotLabel {label} {enabled}>
    <div class=tjs-input-container use:efx use:applyStyles={styles} on:pointerdown>
        <input class=tjs-input
               type=number
@@ -203,8 +211,8 @@
               max={max}
               min={min}
               step={step}
+              disabled={!enabled}
               {placeholder}
-              {disabled}
               {readonly}
               on:focusin={onFocusIn}
               on:keydown={onKeyDown}

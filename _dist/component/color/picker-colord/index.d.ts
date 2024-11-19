@@ -1,8 +1,8 @@
 import * as svelte from 'svelte';
 import { SvelteComponent } from 'svelte';
 import * as _runtime_svelte_store_util from '#runtime/svelte/store/util';
-import * as svelte_store from 'svelte/store';
 import * as _runtime_svelte_store_web_storage from '#runtime/svelte/store/web-storage';
+import * as svelte_store from 'svelte/store';
 
 /**
  * ```
@@ -63,10 +63,10 @@ declare namespace TjsColordButton {
     button?: any;
     color?: any;
     title?: any;
-    disabled?: any;
-    onPress?: any;
+    enabled?: any;
     styles?: any;
     efx?: any;
+    onPress?: any;
     onContextMenu?: any;
     clickPropagate?: any;
   };
@@ -107,6 +107,13 @@ declare namespace TjsColordPicker {
      * @type {import('./').TJSColordPickerOptions}
      */
     options?: TJSColordPickerOptions;
+    /**
+     * External shared WebStorage instance. By assigning an external `WebStorage` instance you can share state like
+     * the saved colors plugin across color picker instances.
+     *
+     * @type {import('#runtime/svelte/store/web-storage').WebStorage}
+     */
+    webStorage?: _runtime_svelte_store_web_storage.WebStorage;
   };
   /** Events type alias for {@link TjsColordPicker | associated component}. */
   export type Events = { color: CustomEvent<any> } & { [evt: string]: CustomEvent<any> };
@@ -121,9 +128,9 @@ type PickerStores = {
    */
   components: svelte_store.Writable<TJSColordPickerComponents>;
   /**
-   * See {@link TJSColordPickerOptions.disabled}
+   * See {@link TJSColordPickerOptions.enabled}
    */
-  disabled: svelte_store.Writable<boolean>;
+  enabled: svelte_store.Writable<boolean>;
   /**
    * See {@link TJSColordPickerOptions.hasAlpha}
    */
@@ -820,13 +827,12 @@ declare class InternalState {
    *
    * @param {import('../').TJSColordPickerOptions}  options -
    *
-   * @param {import('#runtime/svelte/store/web-storage').TJSWebStorage}  tjsSessionStorage - External
-   *        TJSWebStorage (session) instance.
+   * @param {import('#runtime/svelte/store/web-storage').WebStorage}  webStorage - External TJS WebStorage instance.
    */
   constructor(
     color: object | string,
     options: TJSColordPickerOptions,
-    tjsSessionStorage: _runtime_svelte_store_web_storage.TJSWebStorage,
+    webStorage: _runtime_svelte_store_web_storage.WebStorage,
   );
   /**
    * @returns {AddOnState} Gets AddOnState data.
@@ -857,10 +863,9 @@ declare class InternalState {
    */
   get precision(): number;
   /**
-   * @returns {import('#runtime/svelte/store/web-storage').TJSWebStorage} Gets associated TJSWebStorage (session)
-   *          instance.
+   * @returns {import('#runtime/svelte/store/web-storage').WebStorage} Gets associated TJS WebStorage instance.
    */
-  get sessionStorage(): _runtime_svelte_store_web_storage.TJSWebStorage;
+  get webStorage(): _runtime_svelte_store_web_storage.WebStorage;
   /**
    * @returns {import('./').PickerStores} Gets the color picker stores.
    */
@@ -949,9 +954,9 @@ type TJSColordPickerOptions = {
    */
   components?: TJSColordPickerComponents;
   /**
-   * Disables the color picker input.
+   * Enable state of the color picker input.
    */
-  disabled?: boolean;
+  enabled?: boolean;
   /**
    * The user defined color format.
    */

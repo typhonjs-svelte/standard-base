@@ -83,6 +83,10 @@ import { SvelteComponent } from 'svelte';
  * --tjs-folder-summary-transition: background 0.1s
  * --tjs-folder-summary-width: fit-content; wraps content initially, set to 100% or other width measurement
  *
+ * Summary element (disabled):
+ * --tjs-folder-summary-disabled-color: inherit
+ * --tjs-folder-summary-disabled-cursor: default
+ *
  * Summary element (focus visible):
  * --tjs-folder-summary-box-shadow-focus-visible - fallback: --tjs-default-box-shadow-focus-visible
  * --tjs-folder-summary-outline-focus-visible - fallback: --tjs-default-outline-focus-visible; default: revert
@@ -156,6 +160,8 @@ declare namespace TjsSvgFolder {
     options?: TJSFolderOptions;
     /** @type {import('#runtime/svelte/store/util').MinimalWritable<boolean>} */
     store?: _runtime_svelte_store_util.MinimalWritable<boolean>;
+    /** @type {boolean} */
+    enabled?: boolean;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
     onClose?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
@@ -319,6 +325,10 @@ declare namespace TjsSvgFolder {
  * --tjs-folder-summary-transition: background 0.1s
  * --tjs-folder-summary-width: fit-content; wraps content initially, set to 100% or other width measurement
  *
+ * Summary element (disabled):
+ * --tjs-folder-summary-disabled-color: inherit
+ * --tjs-folder-summary-disabled-cursor: default
+ *
  * Summary element (focus visible):
  * --tjs-folder-summary-box-shadow-focus-visible - fallback: --tjs-default-box-shadow-focus-visible
  * --tjs-folder-summary-outline-focus-visible - fallback: --tjs-default-outline-focus-visible; default: revert
@@ -387,6 +397,8 @@ declare namespace TjsIconFolder {
     options?: TJSFolderOptions;
     /** @type {import('#runtime/svelte/store/util').MinimalWritable<boolean>} */
     store?: _runtime_svelte_store_util.MinimalWritable<boolean>;
+    /** @type {boolean} */
+    enabled?: boolean;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
     onClose?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
@@ -490,6 +502,10 @@ type TJSFolderOptions = {
   focusIndicator?: boolean;
 };
 type TJSFolderData = {
+  /**
+   * - Enabled state.
+   */
+  enabled?: boolean;
   /**
    * -
    */

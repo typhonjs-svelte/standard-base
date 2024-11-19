@@ -103,7 +103,6 @@
     */
 
    import {
-      getContext,
       onDestroy,
       onMount }                  from 'svelte';
 
@@ -154,12 +153,12 @@
    const s_IGNORE_CLASSES = { ignoreClasses: ['tjs-focus-wrap'] };
 
    /**
-    * @type {Window} The current external application active Window / WindowProxy or `globalThis`.
+    * @type {Window} The current active Window or `globalThis`.
     *
     * Supports registering to the active window / document body for when an underlying application is popped out in a
-    * unique browser window. If not found default to `globalThis`.
+    * unique browser window.
     */
-   const activeWindow = getContext('#external')?.application?.reactive?.activeWindow ?? globalThis;
+   let activeWindow
 
    /** @type {Iterable<import('./index').TJSMenuItemData>} */
    let allItems;
@@ -247,13 +246,18 @@
    onDestroy(() =>
    {
       // To support cases when the active window may be a popped out browser register directly.
-      activeWindow.document.body.removeEventListener('pointerdown', onClose);
-      activeWindow.document.body.removeEventListener('wheel', onClose);
-      activeWindow.removeEventListener('blur', onWindowBlur);
+      activeWindow?.document.body.removeEventListener('pointerdown', onClose);
+      activeWindow?.document.body.removeEventListener('wheel', onClose);
+      activeWindow?.removeEventListener('blur', onWindowBlur);
    });
+
+   let activeWindowTest;
 
    onMount(() =>
    {
+      // Store active window.
+      activeWindow = menuEl?.ownerDocument?.defaultView ?? globalThis;
+
       // To support cases when the active window may be a popped out browser unregister directly.
       activeWindow.document.body.addEventListener('pointerdown', onClose);
       activeWindow.document.body.addEventListener('wheel', onClose);

@@ -6,13 +6,17 @@
    const internalState = getContext('#tjs-color-picker-state');
 
    const addOnState = internalState.addOnState;
+
+   const { enabled } = internalState.stores;
 </script>
 
 {#if $addOnState.length > 0}
     <div class=tjs-color-picker-addons>
         {#each $addOnState as addOn (addOn.id)}
             <section>
-                <TJSSvgFolder folder={addOn.folderData} keyCode={'Space'} />
+                <TJSSvgFolder folder={addOn.folderData}
+                              enabled={$enabled}
+                              keyCode={'Space'} />
             </section>
         {/each}
     </div>

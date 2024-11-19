@@ -16,6 +16,8 @@ export { default as TJSIconFolder } from './TJSIconFolder.svelte';
 /**
  * @typedef {object} TJSFolderData
  *
+ * @property {boolean} [enabled=true] - Enabled state.
+ *
  * @property {string} [id] -
  *
  * @property {string} [label] -

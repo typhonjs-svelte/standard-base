@@ -6,6 +6,8 @@
 
    const internalState = getContext('#tjs-color-picker-state');
 
+   const { enabled } = internalState.stores;
+
    const savedColorsState = internalState.addOnState.get('saved-colors').savedColorsState;
 
    let sectionEl;
@@ -43,8 +45,13 @@
 </script>
 
 <section bind:this={sectionEl}>
-    <TJSIconButton button={buttonAdd} on:press={onAdd} />
-    <TJSIconButton button={buttonDeleteAll} on:press={onDeleteAll} />
+    <TJSIconButton button={buttonAdd}
+                   on:press={onAdd}
+                   enabled={$enabled} />
+
+    <TJSIconButton button={buttonDeleteAll}
+                   on:press={onDeleteAll}
+                   enabled={$enabled} />
 </section>
 
 <style>

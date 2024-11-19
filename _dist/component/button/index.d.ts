@@ -58,7 +58,7 @@ declare namespace TjsIconButton {
     keyCode?: any;
     button?: any;
     title?: any;
-    disabled?: any;
+    enabled?: any;
     icon?: any;
     styles?: any;
     efx?: any;
@@ -104,7 +104,7 @@ declare namespace TjsSlotButton {
   export type Props = {
     keyCode?: any;
     button?: any;
-    disabled?: any;
+    enabled?: any;
     styles?: any;
     efx?: any;
     onPress?: any;
@@ -182,7 +182,7 @@ declare namespace TjsToggleIconButton {
     keyCode?: any;
     button?: any;
     title?: any;
-    disabled?: any;
+    enabled?: any;
     icon?: any;
     styles?: any;
     efx?: any;

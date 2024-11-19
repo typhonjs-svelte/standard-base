@@ -15,7 +15,10 @@
    const internalState = getContext('#tjs-color-picker-state');
    const constraint = getContext('#tjs-color-picker-constraint');
 
-   const { components } = internalState.stores;
+   const {
+      components,
+      enabled } = internalState.stores;
+
    const { sv } = internalState.colorState.stores;
 
    const stylesPickerIndicator = {
@@ -31,7 +34,7 @@
    let isPointerDown = false;
 
    /**
-    * @type {Writable<boolean>}
+    * @type {import('svelte/store').Writable<boolean>}
     */
    let focused = writable(false);
 
@@ -61,6 +64,8 @@
     */
    function onClick(e)
    {
+      if (!$enabled) { return; }
+
       const pointer = { x: e.offsetX, y: e.offsetY };
       const rect = pickerEl.getBoundingClientRect();
 
@@ -78,6 +83,8 @@
     */
    function move(keys)
    {
+      if (!$enabled) { return; }
+
       if (keys.anyPressed())
       {
          if (!focusMovementIntervalId)
@@ -109,6 +116,8 @@
     */
    function onPointerDown(event)
    {
+      if (!$enabled) { return; }
+
       if (event.button === 0)
       {
          isPointerDown = true;
@@ -122,6 +131,8 @@
     */
    function onPointerUp(event)
    {
+      if (!$enabled) { return; }
+
       isPointerDown = false;
       pickerEl.releasePointerCapture(event.pointerId);
    }
@@ -131,6 +142,8 @@
     */
    function onPointerMove(event)
    {
+      if (!$enabled) { return; }
+
       if (isPointerDown)
       {
          const rect = pickerEl.getBoundingClientRect();
@@ -146,7 +159,7 @@
 <svelte:component this={$components.pickerWrapper} {focused}>
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div class=picker
-         tabindex=0
+         tabindex={$enabled ? 0 : null}
          bind:this={pickerEl}
          on:pointerdown|preventDefault={onPointerDown}
          on:pointermove|preventDefault|stopPropagation={onPointerMove}

@@ -11,21 +11,42 @@
 
    import TJSColordButton       from '../TJSColordButton.svelte';
 
-   import { EyeDropper }        from '../model/EyeDropper.js';
-
-   const activeWindow = getContext('#activeWindow');
-
    const internalState = getContext('#tjs-color-picker-state');
+
    const buttonState = internalState.buttonState;
 
    const {
+      enabled,
       hasAddons,
       hasEyeDropper} = internalState.stores;
 
    const { currentColorString } = internalState.colorState.stores;
 
-   // Reconfigure the eye dropper button when the active window changes.
-   $: eyeDropperButton = EyeDropper.buttonData(internalState.colorState, $activeWindow);
+   /**
+    * Defines the button data for TJSIconButton launching the EyeDropper API and assigning any result to `colorState`.
+    */
+   const eyeDropperButton = {
+      icon: 'fas fa-eye-dropper',
+      keyCode: 'Space',
+      onPress: async () =>
+      {
+         try
+         {
+            // Use the `sectionEl` owner document / window as this component could be in a separate window.
+            const eyeDropper = new sectionEl.ownerDocument.defaultView.EyeDropper();
+            const colorSelectionResult = await eyeDropper.open();
+
+            if (typeof colorSelectionResult?.sRGBHex === 'string')
+            {
+               internalState.colorState.setColor(colorSelectionResult.sRGBHex);
+            }
+         }
+         catch (err) { /**/ }
+      }
+   };
+
+   /** @type {HTMLElement} */
+   let sectionEl;
 
    /**
     * Copy current color string to clipboard.
@@ -34,27 +55,36 @@
     */
    function onPress()
    {
-      ClipboardAccess.writeText($currentColorString, $activeWindow);
+      ClipboardAccess.writeText($currentColorString, sectionEl.ownerDocument.defaultView);
    }
 </script>
 
-<section>
+<section bind:this={sectionEl}>
     <TJSColordButton on:press={onPress}
                      color={$currentColorString}
+                     enabled={$enabled}
                      efx={ripple({ keyCode: 'Space' })}
                      keyCode={'Space'}
     />
 
     {#if $hasEyeDropper}
-        <TJSIconButton button={eyeDropperButton} efx={ripple({ keyCode: 'Space' })} />
+        <TJSIconButton button={eyeDropperButton}
+                       enabled={$enabled}
+                       efx={ripple({ keyCode: 'Space' })} />
     {/if}
 
     {#if $hasAddons}
         {#each $buttonState as button}
             {#if button.isToggle}
-                <TJSToggleIconButton {button} efx={ripple({ keyCode: 'Space' })} keyCode={'Space'} />
+                <TJSToggleIconButton {button}
+                                     enabled={$enabled}
+                                     efx={ripple({ keyCode: 'Space' })}
+                                     keyCode={'Space'} />
             {:else}
-                <TJSIconButton {button} efx={ripple({ keyCode: 'Space' })} keyCode={'Space'} />
+                <TJSIconButton {button}
+                               enabled={$enabled}
+                               efx={ripple({ keyCode: 'Space' })}
+                               keyCode={'Space'} />
             {/if}
         {/each}
     {/if}

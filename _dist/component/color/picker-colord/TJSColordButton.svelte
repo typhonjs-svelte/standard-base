@@ -55,7 +55,7 @@
    export let button = void 0;
 
    export let color = void 0;
-   export let disabled = void 0;
+   export let enabled = void 0;
    export let title = void 0;
    export let styles = void 0;
    export let efx = void 0;
@@ -66,8 +66,8 @@
 
    const dispatch = createEventDispatcher();
 
-   $: disabled = isObject(button) && typeof button.disabled === 'boolean' ? button.disabled :
-    typeof disabled === 'boolean' ? disabled : false;
+   $: enabled = isObject(button) && typeof button.enabled === 'boolean' ? button.enabled :
+    typeof enabled === 'boolean' ? enabled : true;
    $: title = isObject(button) && typeof button.title === 'string' ? button.title :
     typeof title === 'string' ? title : '';
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
@@ -99,7 +99,7 @@
     */
    function onClick(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (typeof onPress === 'function') { onPress({ event, color: hslColor }); }
 
@@ -117,7 +117,7 @@
     */
    function onContextMenuPress(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (typeof onContextMenu === 'function') { onContextMenu({ event, color: hslColor }); }
 
@@ -135,7 +135,7 @@
     */
    function onKeydown(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (event.code === keyCode)
       {
@@ -151,7 +151,7 @@
     */
    function onKeyup(event)
    {
-      if (disabled) { return; }
+      if (!enabled) { return; }
 
       if (event.code === keyCode)
       {
@@ -166,7 +166,7 @@
 </script>
 
 <div class=tjs-color-button
-     class:disabled={disabled}
+     class:disabled={!enabled}
      use:applyStyles={styles}
      title={localize(title)}
      style:--tjs-icon-button-background={hslColor}>
@@ -178,8 +178,8 @@
          on:click
          on:contextmenu
          role=button
-         tabindex=0
-         use:efx>
+         tabindex={enabled ? 0 : null}
+         use:efx={{ enabled }}>
         <slot />
     </div>
 </div>

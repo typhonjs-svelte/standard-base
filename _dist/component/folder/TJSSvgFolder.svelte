@@ -80,6 +80,10 @@
     * --tjs-folder-summary-transition: background 0.1s
     * --tjs-folder-summary-width: fit-content; wraps content initially, set to 100% or other width measurement
     *
+    * Summary element (disabled):
+    * --tjs-folder-summary-disabled-color: inherit
+    * --tjs-folder-summary-disabled-cursor: default
+    *
     * Summary element (focus visible):
     * --tjs-folder-summary-box-shadow-focus-visible - fallback: --tjs-default-box-shadow-focus-visible
     * --tjs-folder-summary-outline-focus-visible - fallback: --tjs-default-outline-focus-visible; default: revert
@@ -137,9 +141,7 @@
     * @componentDocumentation
     */
 
-   import {
-      getContext,
-      onDestroy }             from 'svelte';
+   import { onDestroy }       from 'svelte';
 
    import { writable }        from 'svelte/store';
 
@@ -159,6 +161,9 @@
 
    /** @type {boolean} */
    export let animate = void 0;
+
+   /** @type {boolean} */
+   export let enabled = void 0;
 
    /** @type {string} */
    export let id = void 0;
@@ -187,8 +192,6 @@
    /** @type {(data?: { event?: PointerEvent }) => void} */
    export let onContextMenu = void 0;
 
-   const application = getContext('#external')?.application;
-
    /** @type {TJSFolderOptions} */
    const localOptions = {
       chevronOnly: false,
@@ -201,6 +204,9 @@
 
    $: animate = isObject(folder) && typeof folder.animate === 'boolean' ? folder.animate :
     typeof animate === 'boolean' ? animate : true;
+
+   $: enabled = isObject(folder) && typeof folder.enabled === 'boolean' ? folder.enabled :
+    typeof enabled === 'boolean' ? enabled : true;
 
    $: id = isObject(folder) && typeof folder.id === 'string' ? folder.id :
     typeof id === 'string' ? id : void 0;
@@ -334,12 +340,13 @@
     */
    function onClickSummary(event)
    {
-      const activeWindow = application?.reactive?.activeWindow ?? globalThis;
+      if (!enabled) { return; }
 
       // Firefox sends a `click` event / non-standard response so check for mozInputSource equaling 6 (keyboard) or
       // a negative pointerId from Chromium and prevent default. This allows `onKeyUp` to handle any open / close
       // action.
-      if (activeWindow.document.activeElement === summaryEl && (event?.pointerId === -1 || event?.mozInputSource === 6))
+      if (summaryEl === summaryEl?.ownerDocument.activeElement &&
+         (event?.pointerId === -1 || event?.mozInputSource === 6))
       {
          event.preventDefault();
          event.stopPropagation();
@@ -356,6 +363,8 @@
     */
    function onContextMenuPress(event)
    {
+      if (!enabled) { return; }
+
       if (typeof onContextMenu === 'function')
       {
          onContextMenu({ event, element: detailsEl, folder, id, label, store });
@@ -369,9 +378,9 @@
     */
    function onKeyDown(event)
    {
-      const activeWindow = application?.reactive?.activeWindow ?? globalThis;
+      if (!enabled) { return; }
 
-      if (activeWindow.document.activeElement === summaryEl && event.code === keyCode)
+      if (summaryEl === summaryEl?.ownerDocument.activeElement && event.code === keyCode)
       {
          event.preventDefault();
          event.stopPropagation();
@@ -385,9 +394,9 @@
     */
    function onKeyUp(event)
    {
-      const activeWindow = application?.reactive?.activeWindow ?? globalThis;
+      if (!enabled) { return; }
 
-      if (activeWindow.document.activeElement === summaryEl && event.code === keyCode)
+      if (summaryEl === summaryEl?.ownerDocument.activeElement && event.code === keyCode)
       {
          handleOpenClose(event, true);
 
@@ -444,16 +453,19 @@ changing the open state.  -->
          data-id={id}
          data-label={label}
          data-closing='false'>
+   <!-- Note: the use of `tabindex` set to `-1` instead of `null` when not enabled as summary elements are
+        automatically focusable. -->
    <!-- svelte-ignore a11y-no-redundant-roles -->
    <summary bind:this={summaryEl}
             on:click={onClickSummary}
             on:contextmenu={onContextMenuPress}
             on:keydown|capture={onKeyDown}
             on:keyup|capture={onKeyUp}
+            class:disabled={!enabled}
             class:default-cursor={localOptions.chevronOnly}
             class:remove-focus-visible={localOptions.focusIndicator || localOptions.focusChevron}
             role=button
-            tabindex=0>
+            tabindex={enabled ? 0 : -1}>
       <svg bind:this={svgEl} viewBox="0 0 24 24" class:focus-chevron={localOptions.focusChevron}>
          <path fill=currentColor
                stroke=currentColor
@@ -540,6 +552,16 @@ changing the open state.  -->
       transform: var(--tjs-folder-summary-chevron-rotate-closed, rotate(-90deg));
    }
 
+   summary.disabled {
+      color: var(--tjs-folder-summary-disabled-color, inherit);
+      cursor: var(--tjs-folder-summary-disabled-cursor, default);
+   }
+
+   summary.disabled svg {
+      color: var(--tjs-folder-summary-disabled-color, currentColor);
+      cursor: var(--tjs-folder-summary-disabled-cursor, default);
+   }
+
    summary:focus-visible {
       box-shadow: var(--tjs-folder-summary-box-shadow-focus-visible, var(--tjs-default-box-shadow-focus-visible));
       outline: var(--tjs-folder-summary-outline-focus-visible, var(--tjs-default-outline-focus-visible, revert));
@@ -566,7 +588,7 @@ changing the open state.  -->
       outline: none;
    }
 
-   summary:hover svg {
+   summary:hover:not(.disabled) svg {
       opacity: var(--tjs-folder-summary-chevron-opacity-hover, 1);
    }
 

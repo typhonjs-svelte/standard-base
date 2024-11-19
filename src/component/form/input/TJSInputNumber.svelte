@@ -59,7 +59,9 @@
     * --tjs-input-number-width
     *
     * Webkit unique variables:
+    * --tjs-input-number-webkit-inner-spin-button-appearance
     * --tjs-input-number-webkit-inner-spin-button-opacity
+    * --tjs-input-number-webkit-outer-spin-button-appearance
     * --tjs-input-number-webkit-outer-spin-button-opacity
     * ```
     * @componentDocumentation
@@ -243,7 +245,8 @@
         display: inline-block;
         position: relative;
 
-        appearance: var(--tjs-input-number-appearance, var(--tjs-input-appearance, auto));
+        /* For Firefox `textfield` is the default to remove inner spin buttons. Set to `auto` to show them. */
+        appearance: var(--tjs-input-number-appearance, var(--tjs-input-appearance, textfield));
 
         background: transparent;
 
@@ -291,10 +294,12 @@
 
     /* For Webkit */
     input::-webkit-inner-spin-button {
+        appearance: var(--tjs-input-number-webkit-inner-spin-button-appearance, inherit);
         opacity: var(--tjs-input-number-webkit-inner-spin-button-opacity, inherit);
     }
 
     input::-webkit-outer-spin-button {
+        appearance: var(--tjs-input-number-webkit-outer-spin-button-appearance, inherit);
         opacity: var(--tjs-input-number-webkit-outer-spin-button-opacity, inherit);
     }
 </style>

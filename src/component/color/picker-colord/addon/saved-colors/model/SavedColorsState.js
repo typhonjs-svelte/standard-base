@@ -5,14 +5,14 @@
  */
 export class SavedColorsState
 {
-   static #sessionKey = 'trl:svelte-standard:tjs-colord-picker:addon:saved-colors:state';
+   static #webStorageKey = 'trl:standard:tjs-colord-picker:addon:saved-colors:state';
 
    #colorArray = [];
 
    /** @type {import('../../../model').InternalState} */
    #internalState;
 
-   #sessionStore;
+   #webStorageStore;
 
    /**
     * Stores the subscribers.
@@ -35,11 +35,11 @@ export class SavedColorsState
    {
       this.#internalState = internalState;
 
-      const storage = internalState.sessionStorage;
+      const storage = internalState.webStorage;
 
-      this.#sessionStore = storage.getStore(SavedColorsState.#sessionKey, []);
+      this.#webStorageStore = storage.getStore(SavedColorsState.#webStorageKey, []);
 
-      this.#unsubscribe = this.#sessionStore.subscribe(this.#sessionUpdate.bind(this));
+      this.#unsubscribe = this.#webStorageStore.subscribe(this.#webStorageUpdate.bind(this));
    }
 
    destroy()
@@ -47,7 +47,7 @@ export class SavedColorsState
       this.#unsubscribe();
 
       this.#internalState = void 0;
-      this.#sessionStore = void 0;
+      this.#webStorageStore = void 0;
       this.#unsubscribe = void 0;
    }
 
@@ -67,7 +67,7 @@ export class SavedColorsState
          // Remove last color if list length is greater than 16.
          if (this.#colorArray.length > 16) { this.#colorArray.pop(); }
 
-         this.#sessionStore.set(this.#colorArray);
+         this.#webStorageStore.set(this.#colorArray);
       }
       else if (currentIndex === -1)
       {
@@ -76,7 +76,7 @@ export class SavedColorsState
          // Remove last color if list length is greater than 16.
          if (this.#colorArray.length > 16) { this.#colorArray.pop(); }
 
-         this.#sessionStore.set(this.#colorArray);
+         this.#webStorageStore.set(this.#colorArray);
       }
    }
 
@@ -87,13 +87,13 @@ export class SavedColorsState
       if (currentIndex >= 0)
       {
          this.#colorArray.splice(currentIndex, 1);
-         this.#sessionStore.set(this.#colorArray);
+         this.#webStorageStore.set(this.#colorArray);
       }
    }
 
    deleteAll()
    {
-      this.#sessionStore.set([]);
+      this.#webStorageStore.set([]);
    }
 
    /**
@@ -101,7 +101,7 @@ export class SavedColorsState
     *
     * @param {string[]} colorArray -
     */
-   #sessionUpdate(colorArray)
+   #webStorageUpdate(colorArray)
    {
       this.#colorArray = colorArray;
       this.#updateSubscribers();

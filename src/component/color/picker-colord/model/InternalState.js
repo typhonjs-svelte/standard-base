@@ -1,6 +1,7 @@
 import { writable }                 from '#svelte/store';
 
 import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
+import { TJSSessionStorage }        from '#runtime/svelte/store/web-storage';
 import { propertyStore }            from '#runtime/svelte/store/writable-derived';
 
 import {
@@ -46,11 +47,11 @@ export class InternalState
    #internalData = {};
 
    /**
-    * External TJSWebStorage (session) instance.
+    * External WebStorage instance.
     *
-    * @type {import('#runtime/svelte/store/web-storage').TJSWebStorage}
+    * @type {import('#runtime/svelte/store/web-storage').WebStorage}
     */
-   #sessionStorage;
+   #webStorage;
 
    /**
     * @type {import('./').PickerStores}
@@ -62,16 +63,15 @@ export class InternalState
     *
     * @param {import('../').TJSColordPickerOptions}  options -
     *
-    * @param {import('#runtime/svelte/store/web-storage').TJSWebStorage}  tjsSessionStorage - External
-    *        TJSWebStorage (session) instance.
+    * @param {import('#runtime/svelte/store/web-storage').WebStorage}  webStorage - External TJS WebStorage instance.
     */
-   constructor(color, options, tjsSessionStorage)
+   constructor(color, options, webStorage)
    {
       const opts = isObject(options) ? options : {};
 
       this.#validateOptions(opts);
 
-      this.#sessionStorage = tjsSessionStorage;
+      this.#webStorage = webStorage ?? new TJSSessionStorage();
 
       this.#buttonState = new ButtonState(this);
 
@@ -184,12 +184,11 @@ export class InternalState
    }
 
    /**
-    * @returns {import('#runtime/svelte/store/web-storage').TJSWebStorage} Gets associated TJSWebStorage (session)
-    *          instance.
+    * @returns {import('#runtime/svelte/store/web-storage').WebStorage} Gets associated TJS WebStorage instance.
     */
-   get sessionStorage()
+   get webStorage()
    {
-      return this.#sessionStorage;
+      return this.#webStorage;
    }
 
    /**
@@ -211,7 +210,7 @@ export class InternalState
    destroy()
    {
       this.#colorState.destroy();
-      this.#sessionStorage = void 0;
+      this.#webStorage = void 0;
    }
 
    /**

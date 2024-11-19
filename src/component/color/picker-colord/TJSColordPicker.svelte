@@ -10,7 +10,6 @@
 
    import {
       createEventDispatcher,
-      getContext,
       onDestroy,
       setContext }                     from '#svelte';
 
@@ -41,11 +40,17 @@
     */
    export let options = void 0;
 
+   /**
+    * External shared WebStorage instance. By assigning an external `WebStorage` instance you can share state like
+    * the saved colors plugin across color picker instances.
+    *
+    * @type {import('#runtime/svelte/store/web-storage').WebStorage}
+    */
+   export let webStorage = void 0;
+
    const dispatch = createEventDispatcher();
 
-   const external = getContext('#external');
-
-   const internalState = new InternalState(color, options, external?.sessionStorage);
+   const internalState = new InternalState(color, options, webStorage);
 
    setContext('#tjs-color-picker-state', internalState);
 

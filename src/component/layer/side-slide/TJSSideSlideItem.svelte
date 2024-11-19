@@ -37,10 +37,6 @@
    /** @type {'left' | 'right'} */
    export let side = void 0;
 
-   // Retrieve any host application to determine active global window. This may be undefined, so fallback to
-   // `globalThis` in focus management.
-   const application = getContext('#external')?.application;
-
    // Provides a store for all items to share that is updated when an item is locked. When `clickToOpen` is false an
    // item can be locked w/ contextmenu click or key activation.
    const storeLocked = getContext('#side-slide-layer-item-locked');
@@ -109,12 +105,13 @@
    /**
     * Local helper to invoke `A11yHelper` with the active window as applicable.
     *
-    * @param element - Element to test focus within.
+    * @param {HTMLElement} element - Element to test focus within.
     */
    function isFocusWithin(element)
    {
-      // This component may not be embedded in an application so fallback to `globalThis`.
-      const activeWindow = application?.reactive?.activeWindow ?? globalThis;
+      // This component may not be embedded in the default window, so fallback to `globalThis`.
+      const activeWindow = element?.ownerDocument?.defaultView ?? globalThis;
+
       return A11yHelper.isFocusWithin(element, activeWindow);
    }
 

@@ -1,7 +1,5 @@
 <script>
-   import {
-      getContext,
-      onDestroy }          from '#svelte';
+   import { onDestroy }    from '#svelte';
 
    import { slideFade }    from '#runtime/svelte/transition';
    import { A11yHelper }   from '#runtime/util/a11y';
@@ -25,18 +23,11 @@
    /** @type {'left' | 'right'} */
    export let side;
 
-   // Retrieve any host application to determine active global window. This may be undefined, so fallback to
-   // `globalThis` in focus management.
-   const application = getContext('#external')?.application;
-
    onDestroy(() =>
    {
-      // This component may not be embedded in an application so fallback to `globalThis`.
-      const activeWindow = application?.reactive?.activeWindow ?? globalThis;
-
       // Handle the case when the panel is being destroyed and focus transfers to the `document.body`; focus parent
       // container instead.
-      if (activeWindow.document.activeElement === activeWindow.document.body)
+      if (hostEl?.ownerDocument?.activeElement === hostEl?.ownerDocument?.body)
       {
          hostEl?.parentElement?.focus();
       }
@@ -63,12 +54,12 @@
          const firstFocusEl = allFocusable.length > 0 ? allFocusable[0] : void 0;
          const lastFocusEl = allFocusable.length > 0 ? allFocusable[allFocusable.length - 1] : void 0;
 
-         // This component may not be embedded in an application so fallback to `globalThis`.
-         const activeWindow = application?.reactive?.activeWindow ?? globalThis;
+         // This component may be embedded in an alternate window; fallback to `globalThis`.
+         const activeElement = hostEl?.ownerDocument?.activeElement ?? globalThis?.document.activeElement;
 
          if (event.shiftKey)
          {
-            if (firstFocusEl === activeWindow.document.activeElement)
+            if (firstFocusEl === activeElement)
             {
                if (lastFocusEl && firstFocusEl !== lastFocusEl) { lastFocusEl.focus(); }
 
@@ -78,7 +69,7 @@
          }
          else
          {
-            if (lastFocusEl === activeWindow.document.activeElement)
+            if (lastFocusEl === activeElement)
             {
                if (firstFocusEl && firstFocusEl !== lastFocusEl) { firstFocusEl.focus(); }
 

@@ -101,7 +101,8 @@
    const localOptions = {
       blurOnEnterKey: true,
       blurOnEscKey: false,
-      cancelOnEscKey: false
+      cancelOnEscKey: false,
+      innerSpinButton: false
    }
 
    let inputEl;
@@ -121,6 +122,11 @@
       if (typeof options?.blurOnEnterKey === 'boolean') { localOptions.blurOnEnterKey = options.blurOnEnterKey; }
       if (typeof options?.blurOnEscKey === 'boolean') { localOptions.blurOnEscKey = options.blurOnEscKey; }
       if (typeof options?.cancelOnEscKey === 'boolean') { localOptions.cancelOnEscKey = options.cancelOnEscKey; }
+
+      if (typeof options?.innerSpinButton === 'boolean') {
+         // Also consider `readonly` state disabling inner spin buttons if true.
+         localOptions.innerSpinButton = options.innerSpinButton && !readonly;
+      }
    }
 
    $: max = isObject(input) && typeof input.max === 'number' ? input.max :
@@ -209,6 +215,7 @@
               type=number
               bind:this={inputEl}
               bind:value={$store}
+              class:inner-spin-button={localOptions.innerSpinButton}
               class:is-value-invalid={!$storeIsValid}
               max={max}
               min={min}
@@ -286,6 +293,12 @@
         box-shadow: var(--tjs-input-number-box-shadow-focus-visible, var(--tjs-input-box-shadow-focus-visible, unset));
         outline: var(--tjs-input-number-outline-focus-visible, var(--tjs-input-outline-focus-visible));
         transition: var(--tjs-input-number-transition-focus-visible, var(--tjs-input-transition-focus-visible));
+    }
+
+    /* Set CSS vars for `localOptions.innerSpinButton` */
+    input.inner-spin-button {
+       --tjs-input-number-appearance: auto;
+       --tjs-input-number-webkit-inner-spin-button-appearance: auto;
     }
 
     input::placeholder {

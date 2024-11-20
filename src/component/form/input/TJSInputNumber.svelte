@@ -295,12 +295,6 @@
         transition: var(--tjs-input-number-transition-focus-visible, var(--tjs-input-transition-focus-visible));
     }
 
-    /* Set CSS vars for `localOptions.innerSpinButton` */
-    input.inner-spin-button {
-       --tjs-input-number-appearance: auto;
-       --tjs-input-number-webkit-inner-spin-button-appearance: auto;
-    }
-
     input::placeholder {
         color: var(--tjs-input-number-placeholder-color, var(--tjs-input-placeholder-color, inherit));
     }
@@ -314,5 +308,13 @@
     input::-webkit-outer-spin-button {
         appearance: var(--tjs-input-number-webkit-outer-spin-button-appearance, inherit);
         opacity: var(--tjs-input-number-webkit-outer-spin-button-opacity, inherit);
+    }
+
+    /* `localOptions` support classes ------------------------------------------------------------------------------- */
+
+    /* `localOptions.innerSpinButton` true */
+    input.inner-spin-button {
+       --tjs-input-number-appearance: auto;
+       --tjs-input-number-webkit-inner-spin-button-appearance: auto;
     }
 </style>

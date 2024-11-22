@@ -102,6 +102,7 @@
    import { TJSSvelteUtil }      from '#runtime/svelte/util';
 
    import { A11yHelper }         from '#runtime/util/a11y';
+   import { CrossWindowCheck }   from '#runtime/util/browser';
    import { localize }           from '#runtime/util/i18n';
    import { isObject }           from '#runtime/util/object';
 
@@ -194,7 +195,8 @@
       if (keyboardFocus)
       {
          const firstFocusEl = A11yHelper.getFirstFocusableElement(menuEl);
-         if (firstFocusEl instanceof HTMLElement && !firstFocusEl.classList.contains('tjs-focus-wrap'))
+
+         if (CrossWindowCheck.isHTMLElement(firstFocusEl) && !firstFocusEl.classList.contains('tjs-focus-wrap'))
          {
             firstFocusEl.focus();
          }
@@ -339,7 +341,10 @@
                if (menuEl === activeWindow.document.activeElement ||
                 firstFocusEl === activeWindow.document.activeElement)
                {
-                  if (lastFocusEl instanceof HTMLElement && firstFocusEl !== lastFocusEl) { lastFocusEl.focus(); }
+                  if (CrossWindowCheck.isHTMLElement(lastFocusEl) && firstFocusEl !== lastFocusEl)
+                  {
+                     lastFocusEl.focus();
+                  }
 
                   event.preventDefault();
                }

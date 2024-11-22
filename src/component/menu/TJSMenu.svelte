@@ -113,6 +113,8 @@
 
    import { A11yHelper }         from '#runtime/util/a11y';
 
+   import { CrossWindowCheck }   from '#runtime/util/browser';
+
    import { getStackingContext } from '#runtime/util/dom/layout';
 
    import { localize }           from '#runtime/util/i18n';
@@ -271,12 +273,12 @@
 
       // Determine if the parent element to the menu contains the active element and that it is explicitly focused
       // via `:focus-visible` / keyboard navigation. If so then explicitly focus the first menu item possible.
-      if (parentEl instanceof HTMLElement && activeEl instanceof HTMLElement && parentEl.contains(activeEl) &&
+      if (CrossWindowCheck.isHTMLElement(parentEl) && CrossWindowCheck.isHTMLElement(activeEl) && parentEl.contains(activeEl) &&
         activeEl.matches(':focus-visible'))
       {
          const firstFocusEl = A11yHelper.getFirstFocusableElement(menuEl);
 
-         if (firstFocusEl instanceof HTMLElement && !firstFocusEl.classList.contains('tjs-focus-wrap'))
+         if  (CrossWindowCheck.isHTMLElement(firstFocusEl) && !firstFocusEl.classList.contains('tjs-focus-wrap'))
          {
             firstFocusEl.focus();
             hasKeyboardFocus = true;
@@ -436,7 +438,10 @@
                if (menuEl === activeWindow.document.activeElement ||
                 firstFocusEl === activeWindow.document.activeElement)
                {
-                  if (lastFocusEl instanceof HTMLElement && firstFocusEl !== lastFocusEl) { lastFocusEl.focus(); }
+                  if (CrossWindowCheck.isHTMLElement(lastFocusEl) && firstFocusEl !== lastFocusEl)
+                  {
+                     lastFocusEl.focus();
+                  }
 
                   event.preventDefault();
                }

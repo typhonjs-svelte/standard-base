@@ -1,6 +1,6 @@
-import { Timing }             from '#runtime/util';
-import { CrossWindowCheck }   from '#runtime/util/browser';
-import { isObject }           from '#runtime/util/object';
+import { Timing }       from '#runtime/util';
+import { CrossWindow }  from '#runtime/util/browser';
+import { isObject }     from '#runtime/util/object';
 
 /**
  * Defines the classic Material Design ripple effect as an action. `ripple` is a wrapper around the returned action.
@@ -110,7 +110,7 @@ export function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = 
       {
          const actual = event?.detail?.event;
 
-         if (CrossWindowCheck.isInputEvent(actual)) { createRipple(actual); }
+         if (CrossWindow.isInputEvent(actual)) { createRipple(actual); }
       }
 
       /**

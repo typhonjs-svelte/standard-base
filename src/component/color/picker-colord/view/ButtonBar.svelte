@@ -1,15 +1,17 @@
 <script>
-   import { getContext }        from '#svelte';
+   import { getContext }      from '#svelte';
 
-   import { ClipboardAccess }   from '#runtime/util/browser';
+   import {
+      ClipboardAccess,
+      CrossWindow }           from '#runtime/util/browser';
 
-   import { ripple }            from '#standard/action/animate/composable';
+   import { ripple }          from '#standard/action/animate/composable';
 
    import {
       TJSIconButton,
-      TJSToggleIconButton }     from '#standard/component/button';
+      TJSToggleIconButton }   from '#standard/component/button';
 
-   import TJSColordButton       from '../TJSColordButton.svelte';
+   import TJSColordButton     from '../TJSColordButton.svelte';
 
    const internalState = getContext('#tjs-color-picker-state');
 
@@ -55,7 +57,7 @@
     */
    function onPress()
    {
-      ClipboardAccess.writeText($currentColorString, sectionEl.ownerDocument.defaultView);
+      ClipboardAccess.writeText($currentColorString, CrossWindow.getWindow(sectionEl));
    }
 </script>
 

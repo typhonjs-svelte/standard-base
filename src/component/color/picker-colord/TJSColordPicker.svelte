@@ -19,7 +19,7 @@
    import { A11yHelper }               from '#runtime/util/a11y';
    import {
       ClipboardAccess,
-      CrossWindowCheck }               from '#runtime/util/browser';
+      CrossWindow }                    from '#runtime/util/browser';
    import { isObject }                 from '#runtime/util/object';
 
    import { InternalState }            from './model/index.js';
@@ -127,27 +127,29 @@
    /**
     * Copy `currentColorString` to clipboard.
     *
-    * TODO Eventbus: If / when an app eventbus is added trigger UI notification message.
+    * @param {Window} activeWindow - Current active window.
     *
     * @returns {Promise<void>}
     */
-   async function handleCopy()
+   async function handleCopy(activeWindow)
    {
       const copyColor = $currentColorString;
       if (typeof copyColor === 'string')
       {
-         await ClipboardAccess.writeText(copyColor);
+         await ClipboardAccess.writeText(copyColor, activeWindow);
       }
    }
 
    /**
     * Handle pasting any valid color from secure context (localhost / HTTPS).
     *
+    * @param {Window} activeWindow - Current active window.
+    *
     * @returns {Promise<void>}
     */
-   async function handlePaste()
+   async function handlePaste(activeWindow)
    {
-      const newColor = await ClipboardAccess.readText();
+      const newColor = await ClipboardAccess.readText(activeWindow);
       if (colord(newColor).isValid()) { colorState.setColor(newColor); }
    }
 
@@ -173,11 +175,11 @@
          case 'KeyC':
          case 'KeyX':
             // Note: Do not perform action if the active element is TJSInput.
-            if (document.activeElement?.classList.contains('tjs-input')) { break; }
+            if (CrossWindow.getActiveElement(event.target)?.classList.contains('tjs-input')) { break; }
 
             if (event.ctrlKey || event.metaKey)
             {
-               handleCopy();
+               handleCopy(CrossWindow.getWindow(event.target));
 
                event.preventDefault();
                event.stopImmediatePropagation();
@@ -188,9 +190,9 @@
             if (event.ctrlKey || event.metaKey)
             {
                // Note: Do not perform action if the active element is TJSInput.
-               if (document.activeElement?.classList.contains('tjs-input')) { break; }
+               if (CrossWindow.getActiveElement(event.target)?.classList.contains('tjs-input')) { break; }
 
-               handlePaste();
+               handlePaste(CrossWindow.getWindow(event.target));
 
                event.preventDefault();
                event.stopImmediatePropagation();
@@ -249,7 +251,7 @@
 
          case 'Tab':
          {
-            const activeElement = CrossWindowCheck.getActiveElement(containerEl);
+            const activeElement = CrossWindow.getActiveElement(containerEl);
 
             // If the popup is open and `Shift-Tab` is pressed and the active element is the first focus element
             // or container element then search for the last focusable element that is not `FocusWrap` to traverse
@@ -259,7 +261,7 @@
             {
                // Collect all focusable elements from `elementRoot` and ignore TJSFocusWrap.
                const lastFocusEl = A11yHelper.getLastFocusableElement(containerEl, s_IGNORE_CLASSES);
-               if (CrossWindowCheck.isHTMLElement(lastFocusEl)) { lastFocusEl.focus(); }
+               if (CrossWindow.isHTMLElement(lastFocusEl)) { lastFocusEl.focus(); }
 
                event.preventDefault();
                event.stopImmediatePropagation();

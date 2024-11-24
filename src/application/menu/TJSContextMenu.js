@@ -1,7 +1,7 @@
 import { getEasingFunc }      from '#runtime/svelte/easing';
 import { TJSSvelteUtil }      from '#runtime/svelte/util';
 import { A11yHelper }         from '#runtime/util/a11y';
-import { CrossWindowCheck }   from '#runtime/util/browser';
+import { CrossWindow }        from '#runtime/util/browser';
 
 import {
    isIterable,
@@ -106,11 +106,11 @@ export class TJSContextMenu
       }
 
       // If `activeWindow` is not defined determine it from the given event.
-      if (activeWindow === void 0 && event !== void 0) { activeWindow = CrossWindowCheck.getWindow(event?.target); }
+      if (activeWindow === void 0 && event !== void 0) { activeWindow = CrossWindow.getWindow(event?.target); }
 
-      if (!CrossWindowCheck.isWindow(activeWindow))
+      if (!CrossWindow.isWindow(activeWindow))
       {
-         throw new TypeError(`TJSContextMenu.create error: 'activeWindow' is not a Window / WindowProxy.`);
+         throw new TypeError(`TJSContextMenu.create error: 'activeWindow' is not a Window.`);
       }
 
       const focusSource = A11yHelper.getFocusSource({ event, x, y, focusEl, debug: focusDebug });

@@ -95,18 +95,18 @@
    import {
       createEventDispatcher,
       onDestroy,
-      onMount }                  from '#svelte';
+      onMount }               from '#svelte';
 
-   import { applyStyles }        from '#runtime/svelte/action/dom/style';
-   import { slideFade }          from '#runtime/svelte/transition';
-   import { TJSSvelteUtil }      from '#runtime/svelte/util';
+   import { applyStyles }     from '#runtime/svelte/action/dom/style';
+   import { slideFade }       from '#runtime/svelte/transition';
+   import { TJSSvelteUtil }   from '#runtime/svelte/util';
 
-   import { A11yHelper }         from '#runtime/util/a11y';
-   import { CrossWindowCheck }   from '#runtime/util/browser';
-   import { localize }           from '#runtime/util/i18n';
-   import { isObject }           from '#runtime/util/object';
+   import { A11yHelper }      from '#runtime/util/a11y';
+   import { CrossWindow }     from '#runtime/util/browser';
+   import { localize }        from '#runtime/util/i18n';
+   import { isObject }        from '#runtime/util/object';
 
-   import { TJSFocusWrap }       from '#standard/component/dom/focus';
+   import { TJSFocusWrap }    from '#standard/component/dom/focus';
 
    export let menu = void 0;
 
@@ -196,7 +196,7 @@
       {
          const firstFocusEl = A11yHelper.getFirstFocusableElement(menuEl);
 
-         if (CrossWindowCheck.isHTMLElement(firstFocusEl) && !firstFocusEl.classList.contains('tjs-focus-wrap'))
+         if (CrossWindow.isHTMLElement(firstFocusEl) && !firstFocusEl.classList.contains('tjs-focus-wrap'))
          {
             firstFocusEl.focus();
          }
@@ -341,7 +341,7 @@
                if (menuEl === activeWindow.document.activeElement ||
                 firstFocusEl === activeWindow.document.activeElement)
                {
-                  if (CrossWindowCheck.isHTMLElement(lastFocusEl) && firstFocusEl !== lastFocusEl)
+                  if (CrossWindow.isHTMLElement(lastFocusEl) && firstFocusEl !== lastFocusEl)
                   {
                      lastFocusEl.focus();
                   }

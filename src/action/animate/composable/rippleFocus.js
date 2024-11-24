@@ -1,5 +1,6 @@
-import { A11yHelper } from '#runtime/util/a11y';
-import { isObject }  from '#runtime/util/object';
+import { A11yHelper }   from '#runtime/util/a11y';
+import { CrossWindow }  from '#runtime/util/browser';
+import { isObject }     from '#runtime/util/object';
 
 /**
  * Defines the classic Material Design ripple effect as an action that is attached to an elements focus and blur events.
@@ -57,7 +58,7 @@ export function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration 
 
          // When clicking outside the browser window or to another tab `document.activeElement` remains
          // the same despite blur being invoked; IE the target element.
-         if (activeSpans.length === 0 || document.activeElement === targetEl) { return; }
+         if (activeSpans.length === 0 || targetEl === CrossWindow.getActiveElement(targetEl)) { return; }
 
          for (const span of activeSpans)
          {

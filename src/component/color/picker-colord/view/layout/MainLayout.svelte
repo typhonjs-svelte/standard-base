@@ -22,16 +22,20 @@
 
    $: if ($isPopup && $isOpen && containerEl)
    {
-      containerEl?.ownerDocument.body.addEventListener('pointerdown', onPointerDown, { capture: true, once: true });
+      CrossWindow.getDocument(containerEl)?.body.addEventListener('pointerdown', onPointerDown,
+       { capture: true, once: true });
 
       // Focus containerEl on next tick so that potential tab navigation in popup mode can be traversed in reverse.
       setTimeout(() => containerEl.focus(), 0);
    }
 
    // Sanity case to remove listener when `options.isPopup` state changes externally.
-   $: if (!$isPopup) { containerEl?.ownerDocument.body.removeEventListener('pointerdown', onPointerDown); }
+   $: if (!$isPopup && containerEl)
+   {
+      CrossWindow.getDocument(containerEl)?.body.removeEventListener('pointerdown', onPointerDown);
+   }
 
-   onDestroy(() => containerEl?.ownerDocument.body.removeEventListener('pointerdown', onPointerDown));
+   onDestroy(() => CrossWindow.getDocument(containerEl)?.body.removeEventListener('pointerdown', onPointerDown));
 
    /**
     * Handles pointerdown events in popup mode that reach `document.body` to detect when the user clicks away from the

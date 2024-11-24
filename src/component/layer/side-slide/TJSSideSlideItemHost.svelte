@@ -3,6 +3,7 @@
 
    import { slideFade }    from '#runtime/svelte/transition';
    import { A11yHelper }   from '#runtime/util/a11y';
+   import { CrossWindow }  from '#runtime/util/browser';
    import { isObject }     from '#runtime/util/object';
 
    /** @type {HTMLDivElement} */
@@ -27,7 +28,7 @@
    {
       // Handle the case when the panel is being destroyed and focus transfers to the `document.body`; focus parent
       // container instead.
-      if (hostEl?.ownerDocument?.activeElement === hostEl?.ownerDocument?.body)
+      if (CrossWindow.getActiveElement(hostEl) === CrossWindow.getDocument(hostEl)?.body)
       {
          hostEl?.parentElement?.focus();
       }
@@ -54,8 +55,8 @@
          const firstFocusEl = allFocusable.length > 0 ? allFocusable[0] : void 0;
          const lastFocusEl = allFocusable.length > 0 ? allFocusable[allFocusable.length - 1] : void 0;
 
-         // This component may be embedded in an alternate window; fallback to `globalThis`.
-         const activeElement = hostEl?.ownerDocument?.activeElement ?? globalThis?.document.activeElement;
+         // This component may be embedded in an alternate window.
+         const activeElement = CrossWindow.getActiveElement(hostEl);
 
          if (event.shiftKey)
          {

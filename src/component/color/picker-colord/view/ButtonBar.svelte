@@ -35,7 +35,10 @@
          try
          {
             // Use the `sectionEl` owner document / window as this component could be in a separate window.
-            const eyeDropper = new sectionEl.ownerDocument.defaultView.EyeDropper();
+            const EyeDropperCtor = CrossWindow.getWindow(sectionEl).EyeDropper;
+
+            /** @type {EyeDropper} */
+            const eyeDropper = new EyeDropperCtor();
             const colorSelectionResult = await eyeDropper.open();
 
             if (typeof colorSelectionResult?.sRGBHex === 'string')

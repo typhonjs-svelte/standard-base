@@ -67,6 +67,7 @@
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
    import { isObject }                 from '#runtime/util/object';
+   import { CrossWindow }              from '#runtime/util/browser';
 
    import {
       TJSSlotLabel,
@@ -199,7 +200,7 @@
     */
    function onPointerdown()
    {
-      if (localOptions.cancelOnEscKey && inputEl !== inputEl?.ownerDocument?.activeElement)
+      if (localOptions.cancelOnEscKey && inputEl !== CrossWindow.getActiveElement(inputEl))
       {
          initialValue = globalThis.parseFloat(inputEl.value);
          initialPointerdownTime = performance.now();

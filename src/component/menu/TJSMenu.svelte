@@ -108,15 +108,10 @@
 
    import { applyStyles }        from '#runtime/svelte/action/dom/style';
    import { slideFade }          from '#runtime/svelte/transition';
-
    import { TJSSvelteUtil }      from '#runtime/svelte/util';
-
    import { A11yHelper }         from '#runtime/util/a11y';
-
    import { CrossWindow }        from '#runtime/util/browser';
-
    import { getStackingContext } from '#runtime/util/dom/layout';
-
    import { localize }           from '#runtime/util/i18n';
 
    import {
@@ -258,7 +253,7 @@
    onMount(() =>
    {
       // Store active window.
-      activeWindow = menuEl?.ownerDocument?.defaultView ?? globalThis;
+      activeWindow = CrossWindow.getWindow(menuEl);
 
       // To support cases when the active window may be a popped out browser unregister directly.
       activeWindow.document.body.addEventListener('pointerdown', onClose);

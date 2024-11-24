@@ -4,6 +4,7 @@
    import { TJSSvelteConfigUtil }   from '#runtime/svelte/util';
    import { localize }              from '#runtime/util/i18n';
    import { A11yHelper }            from '#runtime/util/a11y';
+   import { CrossWindow }           from '#runtime/util/browser';
    import { isObject }              from '#runtime/util/object';
 
    import TJSSideSlideItemHost      from './TJSSideSlideItemHost.svelte';
@@ -109,10 +110,7 @@
     */
    function isFocusWithin(element)
    {
-      // This component may not be embedded in the default window, so fallback to `globalThis`.
-      const activeWindow = element?.ownerDocument?.defaultView ?? globalThis;
-
-      return A11yHelper.isFocusWithin(element, activeWindow);
+      return A11yHelper.isFocusWithin(element, CrossWindow.getWindow(containerEl));
    }
 
    /**

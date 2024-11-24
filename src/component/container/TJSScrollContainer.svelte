@@ -15,7 +15,7 @@
 
    import { applyScrolltop }  from '#runtime/svelte/action/dom/properties';
    import { applyStyles }     from '#runtime/svelte/action/dom/style';
-
+   import { CrossWindow }     from '#runtime/util/browser';
    import { TJSSvelteUtil }   from '#runtime/svelte/util';
 
    import { isObject }        from '#runtime/util/object';
@@ -54,7 +54,7 @@
          case 'PageDown':
          case 'PageUp':
          {
-            const activeEl = document.activeElement;
+            const activeEl = CrossWindow.getActiveElement(containerEl);
             if (activeEl === containerEl || containerEl.contains(activeEl))
             {
                // Stop propagation against any global key handlers when focus is inside the container.
@@ -79,7 +79,7 @@
          case 'PageDown':
          case 'PageUp':
          {
-            const activeEl = document.activeElement;
+            const activeEl = CrossWindow.getActiveElement(containerEl);
             if (activeEl === containerEl || containerEl.contains(activeEl))
             {
                event.stopPropagation();
@@ -99,7 +99,7 @@
    {
       event.stopPropagation();
 
-      const activeEl = document.activeElement;
+      const activeEl = CrossWindow.getActiveElement(containerEl);
       if (activeEl !== containerEl && !containerEl.contains(activeEl)) { containerEl.focus(); }
    }
 </script>

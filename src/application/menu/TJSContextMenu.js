@@ -1,7 +1,7 @@
 import { getEasingFunc }      from '#runtime/svelte/easing';
 import { TJSSvelteUtil }      from '#runtime/svelte/util';
-
 import { A11yHelper }         from '#runtime/util/a11y';
+import { CrossWindowCheck }   from '#runtime/util/browser';
 
 import {
    isIterable,
@@ -105,13 +105,10 @@ export class TJSContextMenu
           `TJSContextMenu.create error: 'event' is not a KeyboardEvent, MouseEvent, or PointerEvent.`);
       }
 
-      // If `activeWindow` is not defined determine it from the given event or fallback to `globalThis`.
-      if (activeWindow === void 0)
-      {
-         activeWindow = event !== void 0 ? event?.target?.ownerDocument?.defaultView : globalThis;
-      }
+      // If `activeWindow` is not defined determine it from the given event.
+      if (activeWindow === void 0 && event !== void 0) { activeWindow = CrossWindowCheck.getWindow(event?.target); }
 
-      if (Object.prototype.toString.call(activeWindow) !== '[object Window]')
+      if (!CrossWindowCheck.isWindow(activeWindow))
       {
          throw new TypeError(`TJSContextMenu.create error: 'activeWindow' is not a Window / WindowProxy.`);
       }

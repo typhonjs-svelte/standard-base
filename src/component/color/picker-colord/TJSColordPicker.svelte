@@ -17,7 +17,9 @@
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
    import { A11yHelper }               from '#runtime/util/a11y';
-   import { ClipboardAccess }          from '#runtime/util/browser';
+   import {
+      ClipboardAccess,
+      CrossWindowCheck }               from '#runtime/util/browser';
    import { isObject }                 from '#runtime/util/object';
 
    import { InternalState }            from './model/index.js';
@@ -246,20 +248,24 @@
             break;
 
          case 'Tab':
+         {
+            const activeElement = CrossWindowCheck.getActiveElement(containerEl);
+
             // If the popup is open and `Shift-Tab` is pressed and the active element is the first focus element
             // or container element then search for the last focusable element that is not `FocusWrap` to traverse
             // internally in the container.
             if (internalState.isOpen && event.shiftKey &&
-             (containerEl === document.activeElement || $firstFocusEl === document.activeElement))
+             (containerEl === activeElement || $firstFocusEl === activeElement))
             {
                // Collect all focusable elements from `elementRoot` and ignore TJSFocusWrap.
                const lastFocusEl = A11yHelper.getLastFocusableElement(containerEl, s_IGNORE_CLASSES);
-               if (lastFocusEl instanceof HTMLElement) { lastFocusEl.focus(); }
+               if (CrossWindowCheck.isHTMLElement(lastFocusEl)) { lastFocusEl.focus(); }
 
                event.preventDefault();
                event.stopImmediatePropagation();
             }
             break;
+         }
       }
    }
 </script>

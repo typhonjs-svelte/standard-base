@@ -3,6 +3,7 @@
       getContext,
       onDestroy }                from '#svelte';
 
+   import { CrossWindowCheck }   from '#runtime/util/browser';
    import { getStackingContext } from '#runtime/util/dom/layout';
 
    /** @type {HTMLElement} */
@@ -87,7 +88,7 @@
       // Find parent stacking context. This usually is `window-app` or it could be the browser window.
       const result = getStackingContext(node.parentElement);
 
-      if (!(result?.node instanceof HTMLElement))
+      if (!CrossWindowCheck.isHTMLElement(result?.node))
       {
          console.warn(`'TJSColordPicker.updatePosition warning: Could not locate parent stacking context element.`);
          return { delay: 0, duration: 0 };

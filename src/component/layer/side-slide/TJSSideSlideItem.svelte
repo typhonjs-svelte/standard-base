@@ -4,7 +4,6 @@
    import { TJSSvelteConfigUtil }   from '#runtime/svelte/util';
    import { localize }              from '#runtime/util/i18n';
    import { A11yHelper }            from '#runtime/util/a11y';
-   import { CrossWindow }           from '#runtime/util/browser';
    import { isObject }              from '#runtime/util/object';
 
    import TJSSideSlideItemHost      from './TJSSideSlideItemHost.svelte';
@@ -104,16 +103,6 @@
    let containerEl, hostEl;
 
    /**
-    * Local helper to invoke `A11yHelper` with the active window as applicable.
-    *
-    * @param {HTMLElement} element - Element to test focus within.
-    */
-   function isFocusWithin(element)
-   {
-      return A11yHelper.isFocusWithin(element, CrossWindow.getWindow(containerEl));
-   }
-
-   /**
     * Handles locking / unlocking items.
     *
     * @param {PointerEvent}  event - PointerEvent.
@@ -138,7 +127,7 @@
             locked = true;
             setOpened(true);
 
-            if (!isFocusWithin(hostEl)) { containerEl.focus(); }
+            if (!A11yHelper.isFocusWithin(hostEl)) { containerEl.focus(); }
          }
       }
    }
@@ -154,7 +143,7 @@
       {
          // When opened and focus is inside the host panel the first `<Escape>` key press will focus the button
          // element. This allows keyboard navigation to exit the focus trapping of the host panel.
-         if (opened && isFocusWithin(hostEl))
+         if (opened && A11yHelper.isFocusWithin(containerEl))
          {
             buttonEl.focus();
 
@@ -215,7 +204,7 @@
          event.stopPropagation();
 
          // Only focus container when there isn't focus within an existing host panel.
-         if (!isFocusWithin(hostEl)) { containerEl.focus(); }
+         if (!A11yHelper.isFocusWithin(hostEl)) { containerEl.focus(); }
       }
    }
 

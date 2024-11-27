@@ -91,7 +91,7 @@ export class TJSContextMenu
       }
 
       // Perform duck typing on event constructor name.
-      if (event !== void 0 && !CrossWindow.isInputEvent(event))
+      if (event !== void 0 && !CrossWindow.isUserInputEvent(event))
       {
          throw new TypeError(
           `TJSContextMenu.create error: 'event' is not a KeyboardEvent, MouseEvent, or PointerEvent.`);

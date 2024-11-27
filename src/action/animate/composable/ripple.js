@@ -122,7 +122,7 @@ export function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = 
       {
          const actual = event?.detail?.event;
 
-         if (CrossWindow.isInputEvent(actual)) { createRipple(actual); }
+         if (CrossWindow.isUserInputEvent(actual)) { createRipple(actual); }
 
          event.preventDefault();
          event.stopPropagation();

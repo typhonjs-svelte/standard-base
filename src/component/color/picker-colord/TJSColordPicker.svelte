@@ -121,9 +121,6 @@
    /** @type {HTMLDivElement} */
    let inputEl = void 0;
 
-   /** @type {HTMLSpanElement} */
-   let spanEl = void 0;
-
    /**
     * Copy `currentColorString` to clipboard.
     *

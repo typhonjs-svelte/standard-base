@@ -61,9 +61,21 @@ export function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = 
          const diameter = Math.max(elementRect.width, elementRect.height);
          const radius = diameter / 2;
 
-         // Find the adjusted click location relative to center or if no `clientX/Y` parameters choose center.
-         const left = e.clientX ? `${e.clientX - (elementRect.left + radius)}px` : '0';
-         const top = e.clientY ? `${e.clientY - (elementRect.top + radius)}px` : '0';
+         let left, top;
+
+         // Firefox currently (11/24) does not correctly determine the location of a keyboard originated
+         // context menu location, so default to 0 instead of using `clientX` / `clientY`.
+         if (e?.button !== 2 && e.type === 'contextmenu')
+         {
+            left = '0';
+            top = '0';
+         }
+         else
+         {
+            // Find the adjusted click location relative to center or if no `clientX/Y` parameters choose center.
+            left = e.clientX ? `${e.clientX - (elementRect.left + radius)}px` : '0';
+            top = e.clientY ? `${e.clientY - (elementRect.top + radius)}px` : '0';
+         }
 
          const span = document.createElement('span');
 
@@ -111,6 +123,9 @@ export function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = 
          const actual = event?.detail?.event;
 
          if (CrossWindow.isInputEvent(actual)) { createRipple(actual); }
+
+         event.preventDefault();
+         event.stopPropagation();
       }
 
       /**

@@ -35,8 +35,8 @@
    })
 
    /**
-    * Provides focus cycling inside the the host element acting on `<Shift-Tab>` and if `firstFocusEl` is
-    * the actively focused element then last focusable element is focused.
+    * Provides focus cycling inside the host element acting on `<Shift-Tab>` and if `firstFocusEl` is the actively
+    * focused element then last focusable element is focused.
     *
     * Note: When popped out to different browser window the `<Shift-Tab>` is not received when the first element is
     * focused. On Chrome focus will traverse backward to another element outside the host element. On Firefox the key
@@ -49,14 +49,14 @@
       if (event.code === 'Tab')
       {
          // Collect all focusable elements from `containerEl` and ignore TJSFocusWrap.
-         const allFocusable = A11yHelper.getFocusableElements(hostEl, { ignoreElements: new Set() });
+         const allFocusable = A11yHelper.getFocusableElements(hostEl);
 
          // Find first and last focusable elements.
          const firstFocusEl = allFocusable.length > 0 ? allFocusable[0] : void 0;
          const lastFocusEl = allFocusable.length > 0 ? allFocusable[allFocusable.length - 1] : void 0;
 
          // This component may be embedded in an alternate window.
-         const activeElement = CrossWindow.getActiveElement(hostEl);
+         const activeElement = CrossWindow.getActiveElement(event);
 
          if (event.shiftKey)
          {

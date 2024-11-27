@@ -197,10 +197,12 @@
    /**
     * When `cancelOnEscKey` is active capture the initial value before it changes and store current time to
     * avoid taking the initial value after focus.
+    *
+    * @param {PointerEvent} event -
     */
-   function onPointerdown()
+   function onPointerdown(event)
    {
-      if (localOptions.cancelOnEscKey && inputEl !== CrossWindow.getActiveElement(inputEl))
+      if (localOptions.cancelOnEscKey && inputEl !== CrossWindow.getActiveElement(event))
       {
          initialValue = globalThis.parseFloat(inputEl.value);
          initialPointerdownTime = performance.now();

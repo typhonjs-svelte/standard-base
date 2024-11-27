@@ -54,8 +54,8 @@
          case 'PageDown':
          case 'PageUp':
          {
-            const activeEl = CrossWindow.getActiveElement(containerEl);
-            if (activeEl === containerEl || containerEl.contains(activeEl))
+            const activeEl = CrossWindow.getActiveElement(event);
+            if (activeEl === containerEl || containerEl.contains(event))
             {
                // Stop propagation against any global key handlers when focus is inside the container.
                event.stopPropagation();
@@ -79,7 +79,7 @@
          case 'PageDown':
          case 'PageUp':
          {
-            const activeEl = CrossWindow.getActiveElement(containerEl);
+            const activeEl = CrossWindow.getActiveElement(event);
             if (activeEl === containerEl || containerEl.contains(activeEl))
             {
                event.stopPropagation();
@@ -99,7 +99,7 @@
    {
       event.stopPropagation();
 
-      const activeEl = CrossWindow.getActiveElement(containerEl);
+      const activeEl = CrossWindow.getActiveElement(event);
       if (activeEl !== containerEl && !containerEl.contains(activeEl)) { containerEl.focus(); }
    }
 </script>

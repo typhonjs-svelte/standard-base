@@ -98,7 +98,7 @@ export class TJSContextMenu
       }
 
       // If `activeWindow` is not defined determine it from the given event.
-      if (activeWindow === void 0 && event !== void 0) { activeWindow = CrossWindow.getWindow(event?.target); }
+      if (activeWindow === void 0 && event !== void 0) { activeWindow = CrossWindow.getWindow(event); }
 
       if (!CrossWindow.isWindow(activeWindow))
       {

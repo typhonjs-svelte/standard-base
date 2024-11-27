@@ -175,11 +175,11 @@
          case 'KeyC':
          case 'KeyX':
             // Note: Do not perform action if the active element is TJSInput.
-            if (CrossWindow.getActiveElement(event.target)?.classList.contains('tjs-input')) { break; }
+            if (CrossWindow.getActiveElement(event)?.classList.contains('tjs-input')) { break; }
 
             if (event.ctrlKey || event.metaKey)
             {
-               handleCopy(CrossWindow.getWindow(event.target));
+               handleCopy(CrossWindow.getWindow(event));
 
                event.preventDefault();
                event.stopImmediatePropagation();
@@ -190,9 +190,9 @@
             if (event.ctrlKey || event.metaKey)
             {
                // Note: Do not perform action if the active element is TJSInput.
-               if (CrossWindow.getActiveElement(event.target)?.classList.contains('tjs-input')) { break; }
+               if (CrossWindow.getActiveElement(event)?.classList.contains('tjs-input')) { break; }
 
-               handlePaste(CrossWindow.getWindow(event.target));
+               handlePaste(CrossWindow.getWindow(event));
 
                event.preventDefault();
                event.stopImmediatePropagation();

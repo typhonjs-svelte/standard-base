@@ -273,8 +273,7 @@
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<span bind:this={spanEl}
-      class=tjs-color-picker
+<span class=tjs-color-picker
       class:disabled-main={!$enabled}
       on:keydown={onKeydown}
       style:--_tjs-color-picker-current-color-hsl={$hslString}

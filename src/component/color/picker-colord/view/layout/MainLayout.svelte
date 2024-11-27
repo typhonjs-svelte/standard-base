@@ -22,8 +22,10 @@
 
    $: if ($isPopup && $isOpen && containerEl)
    {
-      CrossWindow.getDocument(containerEl)?.body.addEventListener('pointerdown', onPointerDown,
+      CrossWindow.getDocument(containerEl)?.body.addEventListener('pointerdown', onPointerdown,
        { capture: true, once: true });
+
+      CrossWindow.getWindow(containerEl)?.addEventListener('blur', closePopup, { once: true });
 
       // Focus containerEl on next tick so that potential tab navigation in popup mode can be traversed in reverse.
       setTimeout(() => containerEl.focus(), 0);
@@ -32,10 +34,22 @@
    // Sanity case to remove listener when `options.isPopup` state changes externally.
    $: if (!$isPopup && containerEl)
    {
-      CrossWindow.getDocument(containerEl)?.body.removeEventListener('pointerdown', onPointerDown);
+      CrossWindow.getDocument(containerEl)?.body.removeEventListener('pointerdown', onPointerdown);
+      CrossWindow.getWindow(containerEl)?.removeEventListener('blur', closePopup);
    }
 
-   onDestroy(() => CrossWindow.getDocument(containerEl)?.body.removeEventListener('pointerdown', onPointerDown));
+   onDestroy(() => {
+      CrossWindow.getDocument(containerEl)?.body.removeEventListener('pointerdown', onPointerdown)
+      CrossWindow.getWindow(containerEl)?.removeEventListener('blur', closePopup);
+   });
+
+   /**
+    * Closes popup on pointer down outside `containerEl` or when the window is blurred.
+    */
+   function closePopup()
+   {
+      if ($isPopup) { $isOpen = false; }
+   }
 
    /**
     * Handles pointerdown events in popup mode that reach `document.body` to detect when the user clicks away from the
@@ -43,16 +57,12 @@
     *
     * @param {PointerEvent}   event -
     */
-   function onPointerDown(event)
+   function onPointerdown(event)
    {
       // Early out if pointer down on container element or child element of wrapper.
       if (containerEl !== null && (event.target === containerEl || containerEl.contains(event.target))) { return; }
 
-      if ($isPopup)
-      {
-         // Close picker / popup.
-         $isOpen = false;
-      }
+      closePopup();
    }
 
    /**
@@ -60,7 +70,7 @@
     * in popup mode even when interactions where interactions are pointer driven. The container focus is not shown
     * visually.
     */
-   function onPointerDownLocal()
+   function onPointerdownLocal()
    {
       if (containerEl) { containerEl.focus(); }
    }
@@ -148,7 +158,7 @@
 {#if $isOpen}
 <main class=tjs-color-picker-main-layout
       in:updatePosition|global
-      on:pointerdown|stopPropagation={onPointerDownLocal}
+      on:pointerdown|stopPropagation={onPointerdownLocal}
       class:isOpen={$isOpen}
       class:isPopup={$isPopup}
       bind:this={containerEl}

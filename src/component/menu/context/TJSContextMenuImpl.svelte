@@ -380,8 +380,14 @@
                dispatch('close:contextmenu');
                TJSSvelteUtil.outroAndDestroy(current_component);
 
-               A11yHelper.applyFocusSource(focusSource)
-               focusSource = void 0;
+               // Note: Due to the differences between browsers a small delay is added before applying any previous
+               // focus source. Browsers like Firefox will trigger a `contextmenu` event in response to the keyboard
+               // `ContextMenu` event and this will be received by any previous focus source which is not desired.
+               setTimeout(() =>
+               {
+                  A11yHelper.applyFocusSource(focusSource)
+                  focusSource = void 0;
+               }, 50);
             }
             break;
       }
@@ -441,6 +447,7 @@
 <nav id={id}
      class=tjs-context-menu
      bind:this={menuEl}
+     on:contextmenu|preventDefault|stopPropagation
      on:click|preventDefault|stopPropagation
      on:keydown|stopPropagation={onKeydownMenu}
      on:keyup|preventDefault|stopPropagation={onKeyupMenu}

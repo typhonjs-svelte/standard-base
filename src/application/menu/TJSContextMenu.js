@@ -26,14 +26,6 @@ export class TJSContextMenu
    static #contextMenu = void 0;
 
    /**
-    * Provides the event constructor names to duck type against. This is necessary for when HTML nodes / elements are
-    * moved to another browser window as `instanceof` checks will fail.
-    *
-    * @type {Set<string>}
-    */
-   static #eventTypes = new Set(['KeyboardEvent', 'MouseEvent', 'PointerEvent']);
-
-   /**
     * Creates and manages a browser wide context menu. The best way to create the context menu is to pass in the source
     * DOM event as it is processed for the location of the context menu to display. Likewise, a A11yFocusSource object
     * is generated that allows focus to be returned to the source location. You may supply a default focus target as a
@@ -99,7 +91,7 @@ export class TJSContextMenu
       }
 
       // Perform duck typing on event constructor name.
-      if (event !== void 0 && !TJSContextMenu.#eventTypes.has(event?.constructor?.name))
+      if (event !== void 0 && !CrossWindow.isInputEvent(event))
       {
          throw new TypeError(
           `TJSContextMenu.create error: 'event' is not a KeyboardEvent, MouseEvent, or PointerEvent.`);

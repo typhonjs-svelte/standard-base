@@ -251,7 +251,7 @@
 
          case 'Tab':
          {
-            const activeElement = CrossWindow.getActiveElement(containerEl);
+            const activeElement = CrossWindow.getActiveElement(event);
 
             // If the popup is open and `Shift-Tab` is pressed and the active element is the first focus element
             // or container element then search for the last focusable element that is not `FocusWrap` to traverse

@@ -1,4 +1,6 @@
-import { URLParser } from '#runtime/util/browser';
+import {
+   CrossWindow,
+   URLParser } from '#runtime/util/browser';
 
 /**
  * Provides a utility to validate media file types and determine the appropriate HTML element type for rendering.
@@ -36,6 +38,8 @@ export class AssetValidator
     *
     * @param {boolean}     [options.raiseException] - When true exceptions are thrown.
     *
+    * @param {string}      [options.routePrefix] - An additional route / URL prefix to add in constructing URL.
+    *
     * @returns {object} The parsed asset information containing the file path, extension, element type, and whether
     *          the parsing is valid for the file extension is supported and not excluded.
     *          TODO: create type information when made public.
@@ -47,7 +51,7 @@ export class AssetValidator
    {
       const throws = typeof raiseException === 'boolean' ? raiseException : true;
 
-      if (typeof url !== 'string' && !(url instanceof URL))
+      if (typeof url !== 'string' && !CrossWindow.isURL(url))
       {
          if (throws) { throw new TypeError(`'url' is not a string or URL instance.`); }
          else { return { url, valid: false }; }
@@ -59,13 +63,13 @@ export class AssetValidator
          else { return { url, valid: false }; }
       }
 
-      if (exclude !== void 0 && !(exclude instanceof Set))
+      if (exclude !== void 0 && !CrossWindow.isSet(exclude))
       {
          if (throws) { throw new TypeError(`'exclude' is not a Set.`); }
          else { return { url, valid: false }; }
       }
 
-      if (!(mediaTypes instanceof Set))
+      if (!CrossWindow.isSet(mediaTypes))
       {
          if (throws) { throw new TypeError(`'mediaTypes' is not a Set.`); }
          else { return { url, valid: false }; }
@@ -82,7 +86,7 @@ export class AssetValidator
       const extensionMatch = targetURL.pathname.match(/\.([a-zA-Z0-9]+)$/);
       const extension = extensionMatch ? extensionMatch[1].toLowerCase() : null;
 
-      const isExcluded = exclude instanceof Set ? exclude.has(extension) : false;
+      const isExcluded = CrossWindow.isSet(exclude) ? exclude.has(extension) : false;
 
       let elementType = null;
       let valid = false;

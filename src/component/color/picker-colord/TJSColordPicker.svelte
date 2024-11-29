@@ -75,8 +75,10 @@
       hslaString,
    } = colorState.stores;
 
-   // Provides options to `A11yHelper.getFocusableElements` to ignore FocusWrap by CSS class.
-   const s_IGNORE_CLASSES = { ignoreClasses: ['tjs-color-picker-last-focus'] };
+   // Provides options to `A11yHelper.getLastFocusableElement` to ignore FocusWrap by CSS class, but also filter
+   // any elements that have hidden parents due to container queries marking elements as hidden when width is less than
+   // 115px;
+   const lastFocusableElementOptions = { ignoreClasses: ['tjs-color-picker-last-focus'], parentHidden: true };
 
    onDestroy(() => internalState.destroy());
 
@@ -257,7 +259,7 @@
              (containerEl === activeElement || $firstFocusEl === activeElement))
             {
                // Collect all focusable elements from `elementRoot` and ignore TJSFocusWrap.
-               const lastFocusEl = A11yHelper.getLastFocusableElement(containerEl, s_IGNORE_CLASSES);
+               const lastFocusEl = A11yHelper.getLastFocusableElement(containerEl, lastFocusableElementOptions);
                if (CrossWindow.isHTMLElement(lastFocusEl)) { lastFocusEl.focus(); }
 
                event.preventDefault();

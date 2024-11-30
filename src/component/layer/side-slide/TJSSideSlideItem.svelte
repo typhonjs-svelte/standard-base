@@ -1,9 +1,12 @@
 <script>
-   import { getContext }            from '#svelte';
+   import {
+      getContext,
+      tick }                        from '#svelte';
 
    import { TJSSvelteConfigUtil }   from '#runtime/svelte/util';
    import { localize }              from '#runtime/util/i18n';
    import { A11yHelper }            from '#runtime/util/a11y';
+   import { CrossWindow }           from '#runtime/util/browser';
    import { isObject }              from '#runtime/util/object';
 
    import TJSSideSlideItemHost      from './TJSSideSlideItemHost.svelte';
@@ -103,6 +106,28 @@
    let containerEl, hostEl;
 
    /**
+    * When opened by keyboard attempt to focus first child element in `hostEl`.
+    */
+   async function focusFirstChild()
+   {
+      await tick();
+
+      // Focus first element in `hostEl` when opened by keyboard action.
+      if (hostEl)
+      {
+         const firstFocusEl = A11yHelper.getFirstFocusableElement(hostEl);
+         if (firstFocusEl)
+         {
+            firstFocusEl.focus();
+         }
+         else
+         {
+            containerEl.focus();
+         }
+      }
+   }
+
+   /**
     * Handles locking / unlocking items.
     *
     * @param {PointerEvent}  event - PointerEvent.
@@ -127,17 +152,80 @@
             locked = true;
             setOpened(true);
 
-            if (!A11yHelper.isFocusWithin(hostEl)) { containerEl.focus(); }
+            // Focus first child element when coming from keyboard event.
+            if (opened && event?.button !== 2) { focusFirstChild(); }
          }
       }
    }
 
    /**
-    * Handles escaping from the host panel focus trapping via keyboard navigation.
+    * Provides focus cycling inside the host element acting on `<Shift-Tab>` and if `firstFocusEl` is the actively
+    * focused element then last focusable element is focused.
     *
     * @param {KeyboardEvent} event - Keyboard Event.
     */
    function onKeydownContainer(event)
+   {
+      switch (event.code)
+      {
+         case 'Escape':
+            if (opened)
+            {
+               event.preventDefault();
+               event.stopPropagation();
+            }
+            break;
+
+         case 'Tab':
+            if (hostEl)
+            {
+               // Collect all focusable elements from `hostEl`.
+               const allFocusable = A11yHelper.getFocusableElements(hostEl);
+
+               // Find first and last focusable elements.
+               const firstFocusEl = allFocusable.length > 0 ? allFocusable[0] : void 0;
+               const lastFocusEl = allFocusable.length > 0 ? allFocusable[allFocusable.length - 1] : void 0;
+
+               // This component may be embedded in an alternate window.
+               const activeElement = CrossWindow.getActiveElement(event);
+
+               if (event.shiftKey)
+               {
+                  if (containerEl === activeElement && lastFocusEl)
+                  {
+                     lastFocusEl.focus();
+                     event.preventDefault();
+                     event.stopPropagation();
+                  }
+                  if (firstFocusEl === activeElement)
+                  {
+                     if (lastFocusEl && firstFocusEl !== lastFocusEl) { lastFocusEl.focus(); }
+
+                     event.preventDefault();
+                     event.stopPropagation();
+                  }
+               }
+               else
+               {
+                  if (lastFocusEl === activeElement)
+                  {
+                     if (firstFocusEl && firstFocusEl !== lastFocusEl) { firstFocusEl.focus(); }
+
+                     event.preventDefault();
+                     event.stopPropagation();
+                  }
+               }
+            }
+            break;
+      }
+   }
+
+   /**
+    * Handles escaping from the host panel focus trapping via keyboard navigation / Escape key.
+    *
+    * @param {KeyboardEvent} event - Keyboard Event.
+    */
+   function onKeyupContainer(event)
    {
       if (event.code === 'Escape')
       {
@@ -149,13 +237,7 @@
 
             event.preventDefault();
             event.stopPropagation();
-
-            return;
          }
-
-         // Otherwise on first (no focus trapping) or second `<Escape>` key press blur the target allowing other key
-         // handlers to take effect.
-         if (event.target === containerEl || event.target === buttonEl) { event.target.blur(); }
       }
    }
 
@@ -166,12 +248,27 @@
     */
    function onKeyupButton(event)
    {
-      if (event.code === 'Enter' && !isAnyLocked)
+      switch (event.code)
       {
-         event.preventDefault();
-         event.stopPropagation();
+         case 'Escape':
+            if (!locked) { setOpened(false); }
+            break;
 
-         setOpened(!opened);
+         case 'Enter':
+         {
+            if (!isAnyLocked)
+            {
+               event.preventDefault();
+               event.stopPropagation();
+
+               setOpened(!opened);
+
+               // Focus first child element.
+               if (opened) { focusFirstChild(); }
+            }
+
+            break;
+         }
       }
    }
 
@@ -275,6 +372,7 @@
      class:right={side === 'right'}
      class:opened={opened}
      on:keydown={onKeydownContainer}
+     on:keyup={onKeyupContainer}
      on:pointerdown={onPointerdownContainer}
      on:pointerleave={onPointerleaveContainer}
      tabindex=-1>

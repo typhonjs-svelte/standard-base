@@ -22,8 +22,7 @@
 
    $: if ($isPopup && $isOpen && containerEl)
    {
-      CrossWindow.getDocument(containerEl)?.body.addEventListener('pointerdown', onPointerdown,
-       { capture: true, once: true });
+      CrossWindow.getDocument(containerEl)?.body.addEventListener('pointerdown', onPointerdown, { capture: true });
 
       CrossWindow.getWindow(containerEl)?.addEventListener('blur', closePopup, { once: true });
 

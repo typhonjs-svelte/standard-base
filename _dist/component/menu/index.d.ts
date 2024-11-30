@@ -266,7 +266,7 @@ declare namespace TjsContextMenuImpl {
     current_component?: svelte.SvelteComponent;
   };
   /** Events type alias for {@link TjsContextMenuImpl | associated component}. */
-  export type Events = { click: MouseEvent; 'close:contextmenu': CustomEvent<any> } & {
+  export type Events = { contextmenu: MouseEvent; click: MouseEvent; 'close:contextmenu': CustomEvent<any> } & {
     [evt: string]: CustomEvent<any>;
   };
   /** Slots type alias for {@link TjsContextMenuImpl | associated component}. */

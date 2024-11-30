@@ -17,7 +17,9 @@
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
    import { A11yHelper }               from '#runtime/util/a11y';
-   import { ClipboardAccess }          from '#runtime/util/browser';
+   import {
+      ClipboardAccess,
+      CrossWindow }                    from '#runtime/util/browser';
    import { isObject }                 from '#runtime/util/object';
 
    import { InternalState }            from './model/index.js';
@@ -73,8 +75,10 @@
       hslaString,
    } = colorState.stores;
 
-   // Provides options to `A11yHelper.getFocusableElements` to ignore FocusWrap by CSS class.
-   const s_IGNORE_CLASSES = { ignoreClasses: ['tjs-color-picker-last-focus'] };
+   // Provides options to `A11yHelper.getLastFocusableElement` to ignore FocusWrap by CSS class, but also filter
+   // any elements that have hidden parents due to container queries marking elements as hidden when width is less than
+   // 115px;
+   const lastFocusableElementOptions = { ignoreClasses: ['tjs-color-picker-last-focus'], parentHidden: true };
 
    onDestroy(() => internalState.destroy());
 
@@ -119,33 +123,32 @@
    /** @type {HTMLDivElement} */
    let inputEl = void 0;
 
-   /** @type {HTMLSpanElement} */
-   let spanEl = void 0;
-
    /**
     * Copy `currentColorString` to clipboard.
     *
-    * TODO Eventbus: If / when an app eventbus is added trigger UI notification message.
+    * @param {Window} activeWindow - Current active window.
     *
     * @returns {Promise<void>}
     */
-   async function handleCopy()
+   async function handleCopy(activeWindow)
    {
       const copyColor = $currentColorString;
       if (typeof copyColor === 'string')
       {
-         await ClipboardAccess.writeText(copyColor);
+         await ClipboardAccess.writeText(copyColor, activeWindow);
       }
    }
 
    /**
     * Handle pasting any valid color from secure context (localhost / HTTPS).
     *
+    * @param {Window} activeWindow - Current active window.
+    *
     * @returns {Promise<void>}
     */
-   async function handlePaste()
+   async function handlePaste(activeWindow)
    {
-      const newColor = await ClipboardAccess.readText();
+      const newColor = await ClipboardAccess.readText(activeWindow);
       if (colord(newColor).isValid()) { colorState.setColor(newColor); }
    }
 
@@ -171,11 +174,11 @@
          case 'KeyC':
          case 'KeyX':
             // Note: Do not perform action if the active element is TJSInput.
-            if (document.activeElement?.classList.contains('tjs-input')) { break; }
+            if (CrossWindow.getActiveElement(event)?.classList.contains('tjs-input')) { break; }
 
             if (event.ctrlKey || event.metaKey)
             {
-               handleCopy();
+               handleCopy(CrossWindow.getWindow(event));
 
                event.preventDefault();
                event.stopImmediatePropagation();
@@ -186,9 +189,9 @@
             if (event.ctrlKey || event.metaKey)
             {
                // Note: Do not perform action if the active element is TJSInput.
-               if (document.activeElement?.classList.contains('tjs-input')) { break; }
+               if (CrossWindow.getActiveElement(event)?.classList.contains('tjs-input')) { break; }
 
-               handlePaste();
+               handlePaste(CrossWindow.getWindow(event));
 
                event.preventDefault();
                event.stopImmediatePropagation();
@@ -246,27 +249,30 @@
             break;
 
          case 'Tab':
+         {
+            const activeElement = CrossWindow.getActiveElement(event);
+
             // If the popup is open and `Shift-Tab` is pressed and the active element is the first focus element
             // or container element then search for the last focusable element that is not `FocusWrap` to traverse
             // internally in the container.
             if (internalState.isOpen && event.shiftKey &&
-             (containerEl === document.activeElement || $firstFocusEl === document.activeElement))
+             (containerEl === activeElement || $firstFocusEl === activeElement))
             {
                // Collect all focusable elements from `elementRoot` and ignore TJSFocusWrap.
-               const lastFocusEl = A11yHelper.getLastFocusableElement(containerEl, s_IGNORE_CLASSES);
-               if (lastFocusEl instanceof HTMLElement) { lastFocusEl.focus(); }
+               const lastFocusEl = A11yHelper.getLastFocusableElement(containerEl, lastFocusableElementOptions);
+               if (CrossWindow.isHTMLElement(lastFocusEl)) { lastFocusEl.focus(); }
 
                event.preventDefault();
                event.stopImmediatePropagation();
             }
             break;
+         }
       }
    }
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<span bind:this={spanEl}
-      class=tjs-color-picker
+<span class=tjs-color-picker
       class:disabled-main={!$enabled}
       on:keydown={onKeydown}
       style:--_tjs-color-picker-current-color-hsl={$hslString}

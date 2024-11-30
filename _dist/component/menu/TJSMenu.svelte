@@ -108,13 +108,10 @@
 
    import { applyStyles }        from '#runtime/svelte/action/dom/style';
    import { slideFade }          from '#runtime/svelte/transition';
-
    import { TJSSvelteUtil }      from '#runtime/svelte/util';
-
    import { A11yHelper }         from '#runtime/util/a11y';
-
+   import { CrossWindow }        from '#runtime/util/browser';
    import { getStackingContext } from '#runtime/util/dom/layout';
-
    import { localize }           from '#runtime/util/i18n';
 
    import {
@@ -256,7 +253,7 @@
    onMount(() =>
    {
       // Store active window.
-      activeWindow = menuEl?.ownerDocument?.defaultView ?? globalThis;
+      activeWindow = CrossWindow.getWindow(menuEl);
 
       // To support cases when the active window may be a popped out browser unregister directly.
       activeWindow.document.body.addEventListener('pointerdown', onClose);
@@ -271,12 +268,12 @@
 
       // Determine if the parent element to the menu contains the active element and that it is explicitly focused
       // via `:focus-visible` / keyboard navigation. If so then explicitly focus the first menu item possible.
-      if (parentEl instanceof HTMLElement && activeEl instanceof HTMLElement && parentEl.contains(activeEl) &&
+      if (CrossWindow.isHTMLElement(parentEl) && CrossWindow.isHTMLElement(activeEl) && parentEl.contains(activeEl) &&
         activeEl.matches(':focus-visible'))
       {
          const firstFocusEl = A11yHelper.getFirstFocusableElement(menuEl);
 
-         if (firstFocusEl instanceof HTMLElement && !firstFocusEl.classList.contains('tjs-focus-wrap'))
+         if  (CrossWindow.isHTMLElement(firstFocusEl) && !firstFocusEl.classList.contains('tjs-focus-wrap'))
          {
             firstFocusEl.focus();
             hasKeyboardFocus = true;
@@ -436,7 +433,10 @@
                if (menuEl === activeWindow.document.activeElement ||
                 firstFocusEl === activeWindow.document.activeElement)
                {
-                  if (lastFocusEl instanceof HTMLElement && firstFocusEl !== lastFocusEl) { lastFocusEl.focus(); }
+                  if (CrossWindow.isHTMLElement(lastFocusEl) && firstFocusEl !== lastFocusEl)
+                  {
+                     lastFocusEl.focus();
+                  }
 
                   event.preventDefault();
                }

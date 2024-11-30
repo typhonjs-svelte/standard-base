@@ -67,6 +67,7 @@
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
    import { isObject }                 from '#runtime/util/object';
+   import { CrossWindow }              from '#runtime/util/browser';
 
    import {
       TJSSlotLabel,
@@ -196,10 +197,12 @@
    /**
     * When `cancelOnEscKey` is active capture the initial value before it changes and store current time to
     * avoid taking the initial value after focus.
+    *
+    * @param {PointerEvent} event -
     */
-   function onPointerdown()
+   function onPointerdown(event)
    {
-      if (localOptions.cancelOnEscKey && inputEl !== inputEl?.ownerDocument?.activeElement)
+      if (localOptions.cancelOnEscKey && inputEl !== CrossWindow.getActiveElement(event))
       {
          initialValue = globalThis.parseFloat(inputEl.value);
          initialPointerdownTime = performance.now();

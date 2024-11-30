@@ -95,17 +95,18 @@
    import {
       createEventDispatcher,
       onDestroy,
-      onMount }                  from 'svelte';
+      onMount }               from 'svelte';
 
-   import { applyStyles }        from '#runtime/svelte/action/dom/style';
-   import { slideFade }          from '#runtime/svelte/transition';
-   import { TJSSvelteUtil }      from '#runtime/svelte/util';
+   import { applyStyles }     from '#runtime/svelte/action/dom/style';
+   import { slideFade }       from '#runtime/svelte/transition';
+   import { TJSSvelteUtil }   from '#runtime/svelte/util';
 
-   import { A11yHelper }         from '#runtime/util/a11y';
-   import { localize }           from '#runtime/util/i18n';
-   import { isObject }           from '#runtime/util/object';
+   import { A11yHelper }      from '#runtime/util/a11y';
+   import { CrossWindow }     from '#runtime/util/browser';
+   import { localize }        from '#runtime/util/i18n';
+   import { isObject }        from '#runtime/util/object';
 
-   import { TJSFocusWrap }       from '#standard/component/dom/focus';
+   import { TJSFocusWrap }    from '#standard/component/dom/focus';
 
    export let menu = void 0;
 
@@ -194,7 +195,8 @@
       if (keyboardFocus)
       {
          const firstFocusEl = A11yHelper.getFirstFocusableElement(menuEl);
-         if (firstFocusEl instanceof HTMLElement && !firstFocusEl.classList.contains('tjs-focus-wrap'))
+
+         if (CrossWindow.isHTMLElement(firstFocusEl) && !firstFocusEl.classList.contains('tjs-focus-wrap'))
          {
             firstFocusEl.focus();
          }
@@ -339,7 +341,10 @@
                if (menuEl === activeWindow.document.activeElement ||
                 firstFocusEl === activeWindow.document.activeElement)
                {
-                  if (lastFocusEl instanceof HTMLElement && firstFocusEl !== lastFocusEl) { lastFocusEl.focus(); }
+                  if (CrossWindow.isHTMLElement(lastFocusEl) && firstFocusEl !== lastFocusEl)
+                  {
+                     lastFocusEl.focus();
+                  }
 
                   event.preventDefault();
                }
@@ -375,8 +380,14 @@
                dispatch('close:contextmenu');
                TJSSvelteUtil.outroAndDestroy(current_component);
 
-               A11yHelper.applyFocusSource(focusSource)
-               focusSource = void 0;
+               // Note: Due to the differences between browsers a small delay is added before applying any previous
+               // focus source. Browsers like Firefox will trigger a `contextmenu` event in response to the keyboard
+               // `ContextMenu` event and this will be received by any previous focus source which is not desired.
+               setTimeout(() =>
+               {
+                  A11yHelper.applyFocusSource(focusSource)
+                  focusSource = void 0;
+               }, 50);
             }
             break;
       }
@@ -436,6 +447,7 @@
 <nav id={id}
      class=tjs-context-menu
      bind:this={menuEl}
+     on:contextmenu|preventDefault|stopPropagation
      on:click|preventDefault|stopPropagation
      on:keydown|stopPropagation={onKeydownMenu}
      on:keyup|preventDefault|stopPropagation={onKeyupMenu}

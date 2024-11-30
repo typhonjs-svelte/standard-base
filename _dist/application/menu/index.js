@@ -1,6 +1,7 @@
 import { getEasingFunc } from '#runtime/svelte/easing';
 import { TJSSvelteUtil } from '#runtime/svelte/util';
 import { A11yHelper } from '#runtime/util/a11y';
+import { CrossWindow } from '#runtime/util/browser';
 import { isIterable, isObject } from '#runtime/util/object';
 import { TJSContextMenuImpl } from '#standard/component/menu';
 
@@ -19,14 +20,6 @@ class TJSContextMenu
     * Stores any active context menu.
     */
    static #contextMenu = void 0;
-
-   /**
-    * Provides the event constructor names to duck type against. This is necessary for when HTML nodes / elements are
-    * moved to another browser window as `instanceof` checks will fail.
-    *
-    * @type {Set<string>}
-    */
-   static #eventTypes = new Set(['KeyboardEvent', 'MouseEvent', 'PointerEvent']);
 
    /**
     * Creates and manages a browser wide context menu. The best way to create the context menu is to pass in the source
@@ -94,21 +87,18 @@ class TJSContextMenu
       }
 
       // Perform duck typing on event constructor name.
-      if (event !== void 0 && !TJSContextMenu.#eventTypes.has(event?.constructor?.name))
+      if (event !== void 0 && !CrossWindow.isUserInputEvent(event))
       {
          throw new TypeError(
           `TJSContextMenu.create error: 'event' is not a KeyboardEvent, MouseEvent, or PointerEvent.`);
       }
 
-      // If `activeWindow` is not defined determine it from the given event or fallback to `globalThis`.
-      if (activeWindow === void 0)
-      {
-         activeWindow = event !== void 0 ? event?.target?.ownerDocument?.defaultView : globalThis;
-      }
+      // If `activeWindow` is not defined determine it from the given event.
+      if (activeWindow === void 0 && event !== void 0) { activeWindow = CrossWindow.getWindow(event); }
 
-      if (Object.prototype.toString.call(activeWindow) !== '[object Window]')
+      if (!CrossWindow.isWindow(activeWindow))
       {
-         throw new TypeError(`TJSContextMenu.create error: 'activeWindow' is not a Window / WindowProxy.`);
+         throw new TypeError(`TJSContextMenu.create error: 'activeWindow' is not a Window.`);
       }
 
       const focusSource = A11yHelper.getFocusSource({ event, x, y, focusEl, debug: focusDebug });

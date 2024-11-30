@@ -2,7 +2,7 @@
    import { onDestroy }    from 'svelte';
 
    import { slideFade }    from '#runtime/svelte/transition';
-   import { A11yHelper }   from '#runtime/util/a11y';
+   import { CrossWindow }  from '#runtime/util/browser';
    import { isObject }     from '#runtime/util/object';
 
    /** @type {HTMLDivElement} */
@@ -27,58 +27,11 @@
    {
       // Handle the case when the panel is being destroyed and focus transfers to the `document.body`; focus parent
       // container instead.
-      if (hostEl?.ownerDocument?.activeElement === hostEl?.ownerDocument?.body)
+      if (CrossWindow.getActiveElement(hostEl) === CrossWindow.getDocument(hostEl)?.body)
       {
          hostEl?.parentElement?.focus();
       }
    })
-
-   /**
-    * Provides focus cycling inside the the host element acting on `<Shift-Tab>` and if `firstFocusEl` is
-    * the actively focused element then last focusable element is focused.
-    *
-    * Note: When popped out to different browser window the `<Shift-Tab>` is not received when the first element is
-    * focused. On Chrome focus will traverse backward to another element outside the host element. On Firefox the key
-    * event is not received either, but the first focusable element stays focused.
-    *
-    * @param {KeyboardEvent} event - Keyboard Event.
-    */
-   function onKeydown(event)
-   {
-      if (event.code === 'Tab')
-      {
-         // Collect all focusable elements from `containerEl` and ignore TJSFocusWrap.
-         const allFocusable = A11yHelper.getFocusableElements(hostEl, { ignoreElements: new Set() });
-
-         // Find first and last focusable elements.
-         const firstFocusEl = allFocusable.length > 0 ? allFocusable[0] : void 0;
-         const lastFocusEl = allFocusable.length > 0 ? allFocusable[allFocusable.length - 1] : void 0;
-
-         // This component may be embedded in an alternate window; fallback to `globalThis`.
-         const activeElement = hostEl?.ownerDocument?.activeElement ?? globalThis?.document.activeElement;
-
-         if (event.shiftKey)
-         {
-            if (firstFocusEl === activeElement)
-            {
-               if (lastFocusEl && firstFocusEl !== lastFocusEl) { lastFocusEl.focus(); }
-
-               event.preventDefault();
-               event.stopPropagation();
-            }
-         }
-         else
-         {
-            if (lastFocusEl === activeElement)
-            {
-               if (firstFocusEl && firstFocusEl !== lastFocusEl) { firstFocusEl.focus(); }
-
-               event.preventDefault();
-               event.stopPropagation();
-            }
-         }
-      }
-   }
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -86,7 +39,6 @@
      class=tjs-side-slide-layer-item-host
      class:left={side === 'left'}
      class:right={side === 'right'}
-     on:keydown={onKeydown}
      in:slideFade={{ axis: 'x', duration, easingSlide: easingIn }}
      out:slideFade={{ axis: 'x', duration, easingSlide: easingOut }}>
    <svelte:component this={item.svelte.class} {...(isObject(item.svelte.props) ? item.svelte.props : {})} />

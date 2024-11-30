@@ -152,7 +152,6 @@
 
           /* For Webkit */
           --tjs-input-number-webkit-inner-spin-button-appearance: none;
-          --tjs-input-number-webkit-inner-spin-button-opacity: 0;
        }
     }
 
@@ -170,19 +169,11 @@
 
     @container tjs-color-picker-container (min-width: 235px) {
        .picker-text-input {
-          /* For Firefox */
+          /* Enable inner spin button */
           --tjs-input-number-appearance: auto;
 
           /* For Webkit */
-          --tjs-input-number-webkit-inner-spin-button-opacity: 1;
-       }
-
-       /**
-        * For Webkit: It is necessary to include an explicit style to modify -webkit-appearance otherwise Chrome posts
-        * warning messages constantly if set by a CSS variable in TJSInputNumber.
-        */
-       .input-container :global(input[type="number"]::-webkit-inner-spin-button) {
-          appearance: auto;
+          --tjs-input-number-webkit-inner-spin-button-appearance: auto;
        }
     }
 </style>

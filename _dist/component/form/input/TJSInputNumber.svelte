@@ -59,7 +59,9 @@
     * --tjs-input-number-width
     *
     * Webkit unique variables:
+    * --tjs-input-number-webkit-inner-spin-button-appearance
     * --tjs-input-number-webkit-inner-spin-button-opacity
+    * --tjs-input-number-webkit-outer-spin-button-appearance
     * --tjs-input-number-webkit-outer-spin-button-opacity
     * ```
     * @componentDocumentation
@@ -99,7 +101,8 @@
    const localOptions = {
       blurOnEnterKey: true,
       blurOnEscKey: false,
-      cancelOnEscKey: false
+      cancelOnEscKey: false,
+      innerSpinButton: false
    }
 
    let inputEl;
@@ -119,6 +122,11 @@
       if (typeof options?.blurOnEnterKey === 'boolean') { localOptions.blurOnEnterKey = options.blurOnEnterKey; }
       if (typeof options?.blurOnEscKey === 'boolean') { localOptions.blurOnEscKey = options.blurOnEscKey; }
       if (typeof options?.cancelOnEscKey === 'boolean') { localOptions.cancelOnEscKey = options.cancelOnEscKey; }
+
+      if (typeof options?.innerSpinButton === 'boolean') {
+         // Also consider `readonly` state disabling inner spin buttons if true.
+         localOptions.innerSpinButton = options.innerSpinButton && !readonly;
+      }
    }
 
    $: max = isObject(input) && typeof input.max === 'number' ? input.max :
@@ -207,6 +215,7 @@
               type=number
               bind:this={inputEl}
               bind:value={$store}
+              class:inner-spin-button={localOptions.innerSpinButton}
               class:is-value-invalid={!$storeIsValid}
               max={max}
               min={min}
@@ -243,7 +252,8 @@
         display: inline-block;
         position: relative;
 
-        appearance: var(--tjs-input-number-appearance, var(--tjs-input-appearance, auto));
+        /* For Firefox `textfield` is the default to remove inner spin buttons. Set to `auto` to show them. */
+        appearance: var(--tjs-input-number-appearance, var(--tjs-input-appearance, textfield));
 
         background: transparent;
 
@@ -291,10 +301,20 @@
 
     /* For Webkit */
     input::-webkit-inner-spin-button {
+        appearance: var(--tjs-input-number-webkit-inner-spin-button-appearance, inherit);
         opacity: var(--tjs-input-number-webkit-inner-spin-button-opacity, inherit);
     }
 
     input::-webkit-outer-spin-button {
+        appearance: var(--tjs-input-number-webkit-outer-spin-button-appearance, inherit);
         opacity: var(--tjs-input-number-webkit-outer-spin-button-opacity, inherit);
+    }
+
+    /* `localOptions` support classes ------------------------------------------------------------------------------- */
+
+    /* `localOptions.innerSpinButton` true */
+    input.inner-spin-button {
+       --tjs-input-number-appearance: auto;
+       --tjs-input-number-webkit-inner-spin-button-appearance: auto;
     }
 </style>

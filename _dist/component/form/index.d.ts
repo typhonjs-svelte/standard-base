@@ -186,7 +186,9 @@ declare namespace TjsInputCheckbox {
  * --tjs-input-number-width
  *
  * Webkit unique variables:
+ * --tjs-input-number-webkit-inner-spin-button-appearance
  * --tjs-input-number-webkit-inner-spin-button-opacity
+ * --tjs-input-number-webkit-outer-spin-button-appearance
  * --tjs-input-number-webkit-outer-spin-button-opacity
  * ```
  */

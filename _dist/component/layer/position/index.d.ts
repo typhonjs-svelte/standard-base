@@ -38,7 +38,7 @@ declare class ControlsStore {
   /**
    * @param {DOMRect|void}  boundingRect - Assigns the validation bounding rect.
    */
-  set boundingRect(boundingRect: void | DOMRect);
+  set boundingRect(boundingRect: DOMRect | void);
   /**
    * @returns {DOMRect} Returns any validation bounding rect.
    */

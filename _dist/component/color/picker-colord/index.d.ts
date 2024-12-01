@@ -2,6 +2,7 @@ import * as svelte from 'svelte';
 import { SvelteComponent } from 'svelte';
 import * as _runtime_svelte_store_util from '#runtime/svelte/store/util';
 import * as _runtime_svelte_store_web_storage from '#runtime/svelte/store/web-storage';
+import * as _standard_component_folder from '#standard/component/folder';
 import * as svelte_store from 'svelte/store';
 
 /**
@@ -222,7 +223,7 @@ declare class AddOnState {
    *
    * @returns {import('svelte/store').Unsubscriber} Unsubscribe function.
    */
-  subscribe(handler: svelte_store.Subscriber<any[]>): svelte_store.Unsubscriber;
+  subscribe(handler: svelte_store.Subscriber<_standard_component_folder.TJSFolderData[]>): svelte_store.Unsubscriber;
   #private;
 }
 
@@ -261,7 +262,7 @@ declare class ActiveTextState {
   /**
    * @returns {object} Current active text mode configuration.
    */
-  get active(): any;
+  get active(): object;
   /**
    * Advances to the next color text mode.
    */
@@ -744,11 +745,11 @@ declare class ColorState {
   /**
    * @returns {"hex"|"hsl"|"hsv"|"rgb"} Color format.
    */
-  get format(): 'rgb' | 'hex' | 'hsl' | 'hsv';
+  get format(): 'hex' | 'hsl' | 'hsv' | 'rgb';
   /**
    * @returns {"object"|"string"} Color format data type.
    */
-  get formatType(): 'string' | 'object';
+  get formatType(): 'object' | 'string';
   /**
    * @returns {number} Color hue data.
    */
@@ -938,7 +939,7 @@ declare class TJSColordPickerSavedColors {
    * @returns {import('#standard/component/folder').TJSFolderData} The TJSFolderData object to configure the
    * TJSSvgFolder component the addon is installed into.
    */
-  get folderData(): any;
+  get folderData(): _standard_component_folder.TJSFolderData;
   destroy(): void;
   #private;
 }

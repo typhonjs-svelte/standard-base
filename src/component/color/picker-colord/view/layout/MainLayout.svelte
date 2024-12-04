@@ -79,6 +79,7 @@
     * height / width of the element and the containing stacking context element. This allows the picker when in popup
     * mode to position in the most visible way inside the stacking context / app.
     *
+    * @privateRemarks
     * TODO: Modify to use future TRL popup API to move popup outside of stacking context / app window.
     *
     * @param {HTMLElement} node - Container element.

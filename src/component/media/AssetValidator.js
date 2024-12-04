@@ -5,6 +5,7 @@ import {
 /**
  * Provides a utility to validate media file types and determine the appropriate HTML element type for rendering.
  *
+ * @privateRemarks
  * TODO: This is the initial implementation and is only used locally in {@link TJSMediaContent}.
  *
  * A few refinements are needed to make this a general utility in `#runtime/util/browser`.
@@ -27,6 +28,9 @@ export class AssetValidator
     * Parses the provided file path to determine the media type and validity based on the file extension. Certain
     * extensions can be excluded in addition to filtering by specified media types.
     *
+    * @privateRemarks
+    * TODO: create type information when made public.
+    *
     * @param {object}      options - Options.
     *
     * @param {string | URL}   options.url - The URL of the media asset to validate.
@@ -42,7 +46,6 @@ export class AssetValidator
     *
     * @returns {object} The parsed asset information containing the file path, extension, element type, and whether
     *          the parsing is valid for the file extension is supported and not excluded.
-    *          TODO: create type information when made public.
     *
     * @throws {TypeError} If the provided `url` is not a string or URL, `routePrefix` is not a string,
     *         `exclude` is not a Set, or `mediaTypes` is not a Set.

@@ -9,7 +9,10 @@
   ],
   "imports": {
     "#runtime/*": "@typhonjs-svelte/runtime-base/*",
-    "#standard/*": "@typhonjs-svelte/standard-base/*",
+    "#standard/*": {
+      "types": "./_dist/*/index.d.ts",
+      "default": "@typhonjs-svelte/standard-base/*"
+    },
     "#svelte/*": "svelte/*",
     "#svelte": "svelte"
   },

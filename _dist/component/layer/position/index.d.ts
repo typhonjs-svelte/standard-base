@@ -178,6 +178,7 @@ declare class SelectedAPI {
 }
 
 /**
+ * @privateRemarks
  * TODO: Add description
  *
  */

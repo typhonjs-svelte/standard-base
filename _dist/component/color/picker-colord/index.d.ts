@@ -80,6 +80,7 @@ declare namespace TjsColordButton {
 }
 
 /**
+ * @privateRemarks
  * TODO: Finish documentation.
  *
  * Events:

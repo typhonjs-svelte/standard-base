@@ -26,7 +26,7 @@
 
       CrossWindow.getWindow(containerEl)?.addEventListener('blur', closePopup, { once: true });
 
-      // Focus containerEl on next tick so that potential tab navigation in popup mode can be traversed in reverse.
+      // Focus containerEl on next macrotask so that potential tab navigation in popup mode can be traversed in reverse.
       setTimeout(() => containerEl.focus(), 0);
    }
 
@@ -79,6 +79,7 @@
     * height / width of the element and the containing stacking context element. This allows the picker when in popup
     * mode to position in the most visible way inside the stacking context / app.
     *
+    * @privateRemarks
     * TODO: Modify to use future TRL popup API to move popup outside of stacking context / app window.
     *
     * @param {HTMLElement} node - Container element.

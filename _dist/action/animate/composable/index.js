@@ -131,6 +131,7 @@ function animateWAAPI({ debounce, enabled = true, duration = 600, event = 'click
  *
  * Note: The update function passes the same variable to all update functions of each action.
  *
+ * @privateRemarks
  * TODO: This is a naive implementation and will be further refined in the near future.
  *
  * @param {...import('svelte/action').Action} actions - One or more composable action functions to combine.

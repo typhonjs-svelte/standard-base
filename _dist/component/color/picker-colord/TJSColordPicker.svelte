@@ -1,5 +1,6 @@
 <script>
    /**
+    * @privateRemarks
     * TODO: Finish documentation.
     *
     * Events:

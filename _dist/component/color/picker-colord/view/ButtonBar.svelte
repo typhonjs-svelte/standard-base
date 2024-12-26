@@ -56,6 +56,7 @@
    /**
     * Copy current color string to clipboard.
     *
+    * @privateRemarks
     * TODO Eventbus: If / when an app eventbus is added trigger UI notification message
     */
    function onPress()

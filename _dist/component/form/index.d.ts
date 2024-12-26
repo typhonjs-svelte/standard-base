@@ -1,6 +1,7 @@
 import { SvelteComponent } from 'svelte';
 
 /**
+ * @privateRemarks
  * TODO: Add description
  *
  */

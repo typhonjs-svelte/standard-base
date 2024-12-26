@@ -26,7 +26,7 @@
 
       CrossWindow.getWindow(containerEl)?.addEventListener('blur', closePopup, { once: true });
 
-      // Focus containerEl on next tick so that potential tab navigation in popup mode can be traversed in reverse.
+      // Focus containerEl on next macrotask so that potential tab navigation in popup mode can be traversed in reverse.
       setTimeout(() => containerEl.focus(), 0);
    }
 

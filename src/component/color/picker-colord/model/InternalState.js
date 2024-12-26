@@ -296,7 +296,7 @@ export class InternalState
       {
          this.#stores.isOpen.set(!newIsPopup);
 
-         // The open state must take effect before changing popup mode, so defer to next tick.
+         // The open state must take effect before changing popup mode, so defer to next macrotask.
          setTimeout(() => this.#stores.isPopup.set(newIsPopup), 0);
       }
 

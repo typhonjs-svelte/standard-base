@@ -377,7 +377,7 @@
      on:pointerleave={onPointerleaveContainer}
      tabindex=-1>
 
-   {#if opened && TJSSvelte.config.isConfig(item.svelte)}
+   {#if opened && TJSSvelte.config.isConfigEmbed(item.svelte)}
       <TJSSideSlideItemHost bind:hostEl {duration} {item} {easingIn} {easingOut} {side} />
    {/if}
 
@@ -392,7 +392,7 @@
               on:pointerdown={onPointerdownButton}
               on:pointerenter={onPointerenterButton}
               disabled={isOtherLocked}>
-         {#if TJSSvelte.config.isConfig(item.icon)}
+         {#if TJSSvelte.config.isConfigEmbed(item.icon)}
             <svelte:component this={item.icon.class} {...(isObject(item.icon.props) ? item.icon.props : {})} />
          {:else}
             <i class={item.icon}></i>

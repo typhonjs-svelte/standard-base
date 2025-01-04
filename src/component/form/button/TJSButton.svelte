@@ -49,9 +49,9 @@
    $: icon = isObject(button) && typeof button.icon === 'string' ? button.icon :
     typeof icon === 'string' ? icon : void 0;
 
-   $: label = isObject(button) && (typeof button.label === 'string' || TJSSvelte.config.isConfig(button.label)) ?
+   $: label = isObject(button) && (typeof button.label === 'string' || TJSSvelte.config.isConfigEmbed(button.label)) ?
     button.label :
-     (typeof label === 'string' || TJSSvelte.config.isConfig(label)) ? label : void 0;
+     (typeof label === 'string' || TJSSvelte.config.isConfigEmbed(label)) ? label : void 0;
 
    $: title = isObject(button) && typeof button.title === 'string' ? button.title :
     typeof title === 'string' ? title : void 0;
@@ -170,7 +170,7 @@
             <slot />
          {:else if typeof label === 'string'}
             {localize(label)}
-         {:else if TJSSvelte.config.isConfig(label)}
+         {:else if TJSSvelte.config.isConfigEmbed(label)}
             <svelte:component this={label.class} {...(isObject(label.props) ? label.props : {})} />
          {/if}
       </span>

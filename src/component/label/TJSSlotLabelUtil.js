@@ -10,6 +10,6 @@ export class TJSSlotLabelUtil
     */
    static isValid(label)
    {
-      return typeof label === 'string' || TJSSvelte.config.isConfig(label);
+      return typeof label === 'string' || TJSSvelte.config.isConfigEmbed(label);
    }
 }

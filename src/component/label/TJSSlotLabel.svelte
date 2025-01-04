@@ -55,7 +55,7 @@
                class:disabled={!enabled}>
             {localize(label)}
          </span>
-      {:else if TJSSvelte.config.isConfig(label)}
+      {:else if TJSSvelte.config.isConfigEmbed(label)}
          <svelte:component this={label.class} {...(isObject(label.props) ? label.props : {})} {enabled} />
       {/if}
 

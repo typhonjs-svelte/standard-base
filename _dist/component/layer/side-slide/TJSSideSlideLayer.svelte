@@ -11,7 +11,7 @@
 
    import { applyStyles }           from '#runtime/svelte/action/dom/style';
    import { getEasingFunc }         from '#runtime/svelte/easing';
-   import { TJSSvelteConfigUtil }   from '#runtime/svelte/util';
+   import { TJSSvelte }             from '#runtime/svelte/util';
    import {
       isIterable,
       isObject }                    from '#runtime/util/object';
@@ -27,8 +27,8 @@
     *
     * @type {(Iterable<{
     *    condition?: boolean | (() => boolean)
-    *    icon: string | import('#runtime/svelte/util').TJSSvelteConfig,
-    *    svelte: import('#runtime/svelte/util').TJSSvelteConfig,
+    *    icon: string | import('#runtime/svelte/util').TJSSvelte.Config.Embed,
+    *    svelte: import('#runtime/svelte/util').TJSSvelte.Config.Embed,
     *    title?: string
     * }>)}
     */
@@ -165,13 +165,13 @@
             throw new TypeError(`TJSSideSlideLayer error: 'items[${cntr}].condition' is not a boolean or function.`);
          }
 
-         if (typeof item.icon !== 'string' && !TJSSvelteConfigUtil.isConfig(item.icon))
+         if (typeof item.icon !== 'string' && !TJSSvelte.config.isConfigEmbed(item.icon))
          {
             throw new TypeError(
              `TJSSideSlideLayer error: 'items[${cntr}].icon' is not a string or Svelte configuration object.`);
          }
 
-         if (!TJSSvelteConfigUtil.isConfig(item.svelte))
+         if (!TJSSvelte.config.isConfigEmbed(item.svelte))
          {
             throw new TypeError(
              `TJSSideSlideLayer error: 'items[${cntr}].svelte' is not a Svelte configuration object.`);

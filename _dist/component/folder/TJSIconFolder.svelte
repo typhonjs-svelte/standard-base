@@ -147,7 +147,7 @@
       isMinimalWritableStore,
       subscribeIgnoreFirst }  from '#runtime/svelte/store/util';
 
-   import { TJSSvelteUtil }   from '#runtime/svelte/util';
+   import { TJSSvelte }       from '#runtime/svelte/util';
    import { CrossWindow }     from '#runtime/util/browser';
    import { localize }        from '#runtime/util/i18n';
    import { isObject }        from '#runtime/util/object';
@@ -487,7 +487,7 @@ changing the open state.  -->
       {/if}
 
       <slot name=label>
-         {#if TJSSvelteUtil.isComponent(folder?.slotLabel?.class)}
+         {#if TJSSvelte.util.isComponent(folder?.slotLabel?.class)}
             <svelte:component this={folder.slotLabel.class} {...(isObject(folder?.slotLabel?.props) ? folder.slotLabel.props : {})} />
          {:else}
             <div bind:this={labelEl} class=label>{localize(label)}</div>
@@ -495,7 +495,7 @@ changing the open state.  -->
       </slot>
 
       <slot name="summary-end">
-         {#if TJSSvelteUtil.isComponent(folder?.slotSummaryEnd?.class)}
+         {#if TJSSvelte.util.isComponent(folder?.slotSummaryEnd?.class)}
             <svelte:component this={folder.slotSummaryEnd.class} {...(isObject(folder?.slotSummaryEnd?.props) ? folder.slotSummaryEnd.props : {})} />
          {/if}
       </slot>
@@ -503,7 +503,7 @@ changing the open state.  -->
 
    <div class=contents class:hidden={!visible} aria-hidden={!visible}>
       <slot>
-         {#if TJSSvelteUtil.isComponent(folder?.slotDefault?.class)}
+         {#if TJSSvelte.util.isComponent(folder?.slotDefault?.class)}
             <svelte:component this={folder.slotDefault.class} {...(isObject(folder?.slotDefault?.props) ? folder.slotDefault.props : {})} />
          {/if}
       </slot>

@@ -16,7 +16,7 @@
    import { applyScrolltop }  from '#runtime/svelte/action/dom/properties';
    import { applyStyles }     from '#runtime/svelte/action/dom/style';
    import { CrossWindow }     from '#runtime/util/browser';
-   import { TJSSvelteUtil }   from '#runtime/svelte/util';
+   import { TJSSvelte }       from '#runtime/svelte/util';
 
    import { isObject }        from '#runtime/util/object';
 
@@ -35,7 +35,7 @@
    $: styles = isObject(container) && isObject(container.styles) ? container.styles :
     isObject(styles) ? styles : void 0;
 
-   $: child = isObject(container) && TJSSvelteUtil.isComponent(container.class) ? container.class : void 0;
+   $: child = isObject(container) && TJSSvelte.util.isComponent(container.class) ? container.class : void 0;
    $: props = isObject(container) && isObject(container.props) ? container.props : {};
 
    /** @type {HTMLElement} */

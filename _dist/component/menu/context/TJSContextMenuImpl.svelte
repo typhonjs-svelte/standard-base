@@ -99,7 +99,7 @@
 
    import { applyStyles }     from '#runtime/svelte/action/dom/style';
    import { slideFade }       from '#runtime/svelte/transition';
-   import { TJSSvelteUtil }   from '#runtime/svelte/util';
+   import { TJSSvelte }       from '#runtime/svelte/util';
 
    import { A11yHelper }      from '#runtime/util/a11y';
    import { CrossWindow }     from '#runtime/util/browser';
@@ -268,7 +268,7 @@
       {
          dispatch('close:contextmenu');
          closed = true;
-         TJSSvelteUtil.outroAndDestroy(current_component);
+         TJSSvelte.util.outroAndDestroy(current_component);
       }
    }
 
@@ -292,7 +292,7 @@
       {
          dispatch('close:contextmenu');
          closed = true;
-         TJSSvelteUtil.outroAndDestroy(current_component);
+         TJSSvelte.util.outroAndDestroy(current_component);
       }
    }
 
@@ -378,7 +378,7 @@
             {
                closed = true;
                dispatch('close:contextmenu');
-               TJSSvelteUtil.outroAndDestroy(current_component);
+               TJSSvelte.util.outroAndDestroy(current_component);
 
                // Note: Due to the differences between browsers a small delay is added before applying any previous
                // focus source. Browsers like Firefox will trigger a `contextmenu` event in response to the keyboard
@@ -408,7 +408,7 @@
          {
             closed = true;
             dispatch('close:contextmenu');
-            TJSSvelteUtil.outroAndDestroy(current_component);
+            TJSSvelte.util.outroAndDestroy(current_component);
 
             event.preventDefault();
             event.stopPropagation();
@@ -435,7 +435,7 @@
       {
          dispatch('close:contextmenu');
          closed = true;
-         TJSSvelteUtil.outroAndDestroy(current_component);
+         TJSSvelte.util.outroAndDestroy(current_component);
 
          A11yHelper.applyFocusSource(focusSource)
          focusSource = void 0;

@@ -1,5 +1,6 @@
-import * as _runtime_svelte_util from '#runtime/svelte/util';
+import * as svelte from 'svelte';
 import { SvelteComponent } from 'svelte';
+import { TJSSvelte } from '#runtime/svelte/util';
 
 /**
  * Provides a helper utility to verify if a label prop is valid for the TJSSlotLabel component.
@@ -8,7 +9,14 @@ declare class TJSSlotLabelUtil {
   /**
    * Test if the given label is valid data / prop for the TJSSlotLabel component.
    */
-  static isValid(label: any): label is string | _runtime_svelte_util.TJSSvelteConfig;
+  static isValid(label: any): label is
+    | string
+    | TJSSvelte.Config.Embed<
+        svelte.SvelteComponent<any, any, any>,
+        {
+          PropsOmit: never;
+        }
+      >;
 }
 
 /**

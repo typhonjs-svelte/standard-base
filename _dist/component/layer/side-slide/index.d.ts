@@ -46,15 +46,15 @@ declare namespace TjsSideSlideLayer {
      *
      * @type {(Iterable<{
      *    condition?: boolean | (() => boolean)
-     *    icon: string | import('#runtime/svelte/util').TJSSvelteConfig,
-     *    svelte: import('#runtime/svelte/util').TJSSvelteConfig,
+     *    icon: string | import('#runtime/svelte/util').TJSSvelte.Config.Embed,
+     *    svelte: import('#runtime/svelte/util').TJSSvelte.Config.Embed,
      *    title?: string
      * }>)}
      */
     items?: Iterable<{
       condition?: boolean | (() => boolean);
-      icon: string | _runtime_svelte_util.TJSSvelteConfig;
-      svelte: _runtime_svelte_util.TJSSvelteConfig;
+      icon: string | _runtime_svelte_util.TJSSvelte.Config.Embed;
+      svelte: _runtime_svelte_util.TJSSvelte.Config.Embed;
       title?: string;
     }>;
     /**

@@ -30,11 +30,11 @@
     * @componentDocumentation
     */
 
-   import { TJSSvelteConfigUtil }   from '#runtime/svelte/util';
-   import { localize }              from '#runtime/util/i18n';
-   import { isObject }              from '#runtime/util/object';
+   import { TJSSvelte }          from '#runtime/svelte/util';
+   import { localize }           from '#runtime/util/i18n';
+   import { isObject }           from '#runtime/util/object';
 
-   import { TJSSlotLabelUtil }      from './TJSSlotLabelUtil.js';
+   import { TJSSlotLabelUtil }   from './TJSSlotLabelUtil.js';
 
    export let label = void 0;
 
@@ -55,7 +55,7 @@
                class:disabled={!enabled}>
             {localize(label)}
          </span>
-      {:else if TJSSvelteConfigUtil.isConfig(label)}
+      {:else if TJSSvelte.config.isConfig(label)}
          <svelte:component this={label.class} {...(isObject(label.props) ? label.props : {})} {enabled} />
       {/if}
 

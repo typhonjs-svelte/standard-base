@@ -108,7 +108,7 @@
 
    import { applyStyles }        from '#runtime/svelte/action/dom/style';
    import { slideFade }          from '#runtime/svelte/transition';
-   import { TJSSvelteUtil }      from '#runtime/svelte/util';
+   import { TJSSvelte }          from '#runtime/svelte/util';
    import { A11yHelper }         from '#runtime/util/a11y';
    import { CrossWindow }        from '#runtime/util/browser';
    import { getStackingContext } from '#runtime/util/dom/layout';
@@ -179,7 +179,7 @@
 
          let type;
 
-         if (TJSSvelteUtil.isComponent(item.class)) { type = 'class'; }
+         if (TJSSvelte.util.isComponent(item.class)) { type = 'class'; }
          else if (typeof item.icon === 'string') { type = 'icon'; }
          else if (typeof item.image === 'string') { type = 'image'; }
          else if (item.icon === void 0 && item.image === void 0 && typeof item.label === 'string') { type = 'label'; }
@@ -532,7 +532,7 @@
    <ol class=tjs-menu-items role=menu>
       <!-- TJSMenu supports hosting a slot for menu content -->
       <slot>
-         {#if TJSSvelteUtil.isComponent(menu?.slotDefault?.class)}
+         {#if TJSSvelte.util.isComponent(menu?.slotDefault?.class)}
             <svelte:component this={menu.slotDefault.class} {...(isObject(menu?.slotDefault?.props) ? menu.slotDefault.props : {})} />
          {/if}
       </slot>
@@ -546,7 +546,7 @@
              tabindex=0>
             <span class=tjs-menu-focus-indicator></span>
             <slot name=before>
-               {#if TJSSvelteUtil.isComponent(menu?.slotBefore?.class)}
+               {#if TJSSvelte.util.isComponent(menu?.slotBefore?.class)}
                   <svelte:component this={menu.slotBefore.class} {...(isObject(menu?.slotBefore?.props) ? menu.slotBefore.props : {})} />
                {/if}
             </slot>
@@ -608,7 +608,7 @@
              tabindex=0>
             <span class=tjs-menu-focus-indicator></span>
             <slot name=after>
-               {#if TJSSvelteUtil.isComponent(menu?.slotAfter?.class)}
+               {#if TJSSvelte.util.isComponent(menu?.slotAfter?.class)}
                   <svelte:component this={menu.slotAfter.class} {...(isObject(menu?.slotAfter?.props) ? menu.slotAfter.props : {})} />
                {/if}
             </slot>

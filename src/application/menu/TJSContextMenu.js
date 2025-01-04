@@ -1,5 +1,5 @@
 import { getEasingFunc }      from '#runtime/svelte/easing';
-import { TJSSvelteUtil }      from '#runtime/svelte/util';
+import { TJSSvelte }          from '#runtime/svelte/util';
 import { A11yHelper }         from '#runtime/util/a11y';
 import { CrossWindow }        from '#runtime/util/browser';
 
@@ -163,7 +163,7 @@ export class TJSContextMenu
 
          let type;
 
-         if (TJSSvelteUtil.isComponent(item.class)) { type = 'class'; }
+         if (TJSSvelte.util.isComponent(item.class)) { type = 'class'; }
          else if (typeof item.icon === 'string') { type = 'icon'; }
          else if (typeof item.image === 'string') { type = 'image'; }
          else if (item.icon === void 0 && item.image === void 0 && typeof item.label === 'string') { type = 'label'; }

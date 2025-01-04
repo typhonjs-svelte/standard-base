@@ -1,15 +1,15 @@
 <script>
    import {
       getContext,
-      tick }                        from '#svelte';
+      tick }                     from '#svelte';
 
-   import { TJSSvelteConfigUtil }   from '#runtime/svelte/util';
-   import { localize }              from '#runtime/util/i18n';
-   import { A11yHelper }            from '#runtime/util/a11y';
-   import { CrossWindow }           from '#runtime/util/browser';
-   import { isObject }              from '#runtime/util/object';
+   import { TJSSvelte }          from '#runtime/svelte/util';
+   import { localize }           from '#runtime/util/i18n';
+   import { A11yHelper }         from '#runtime/util/a11y';
+   import { CrossWindow }        from '#runtime/util/browser';
+   import { isObject }           from '#runtime/util/object';
 
-   import TJSSideSlideItemHost      from './TJSSideSlideItemHost.svelte';
+   import TJSSideSlideItemHost   from './TJSSideSlideItemHost.svelte';
 
    /** @type {boolean} */
    export let allowLocking = void 0;
@@ -30,8 +30,8 @@
     * The side slide item icon (Font awesome string) and a Svelte configuration object.
     *
     * @type {({
-    *    icon: string | import('#runtime/svelte/util').TJSSvelteConfig,
-    *    svelte: import('#runtime/svelte/util').TJSSvelteConfig,
+    *    icon: string | import('#runtime/svelte/util').TJSSvelte.Config.Embed,
+    *    svelte: import('#runtime/svelte/util').TJSSvelte.Config.Embed,
     *    title?: string
     * })}
     */
@@ -377,7 +377,7 @@
      on:pointerleave={onPointerleaveContainer}
      tabindex=-1>
 
-   {#if opened && TJSSvelteConfigUtil.isConfig(item.svelte)}
+   {#if opened && TJSSvelte.config.isConfig(item.svelte)}
       <TJSSideSlideItemHost bind:hostEl {duration} {item} {easingIn} {easingOut} {side} />
    {/if}
 
@@ -392,7 +392,7 @@
               on:pointerdown={onPointerdownButton}
               on:pointerenter={onPointerenterButton}
               disabled={isOtherLocked}>
-         {#if TJSSvelteConfigUtil.isConfig(item.icon)}
+         {#if TJSSvelte.config.isConfig(item.icon)}
             <svelte:component this={item.icon.class} {...(isObject(item.icon.props) ? item.icon.props : {})} />
          {:else}
             <i class={item.icon}></i>

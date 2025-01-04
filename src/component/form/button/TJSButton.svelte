@@ -9,7 +9,7 @@
    import { createEventDispatcher } from '#svelte';
 
    import { applyStyles }           from '#runtime/svelte/action/dom/style';
-   import { TJSSvelteConfigUtil }   from '#runtime/svelte/util';
+   import { TJSSvelte }             from '#runtime/svelte/util';
    import { localize }              from '#runtime/util/i18n';
    import { isObject }              from '#runtime/util/object';
 
@@ -49,9 +49,9 @@
    $: icon = isObject(button) && typeof button.icon === 'string' ? button.icon :
     typeof icon === 'string' ? icon : void 0;
 
-   $: label = isObject(button) && (typeof button.label === 'string' || TJSSvelteConfigUtil.isConfig(button.label)) ?
+   $: label = isObject(button) && (typeof button.label === 'string' || TJSSvelte.config.isConfig(button.label)) ?
     button.label :
-     (typeof label === 'string' || TJSSvelteConfigUtil.isConfig(label)) ? label : void 0;
+     (typeof label === 'string' || TJSSvelte.config.isConfig(label)) ? label : void 0;
 
    $: title = isObject(button) && typeof button.title === 'string' ? button.title :
     typeof title === 'string' ? title : void 0;
@@ -170,7 +170,7 @@
             <slot />
          {:else if typeof label === 'string'}
             {localize(label)}
-         {:else if TJSSvelteConfigUtil.isConfig(label)}
+         {:else if TJSSvelte.config.isConfig(label)}
             <svelte:component this={label.class} {...(isObject(label.props) ? label.props : {})} />
          {/if}
       </span>

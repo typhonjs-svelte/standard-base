@@ -27,7 +27,7 @@
 
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
-   import { TJSSvelteUtil }            from '#runtime/svelte/util';
+   import { TJSSvelte }                from '#runtime/svelte/util';
    import { localize }                 from '#runtime/util/i18n';
    import { isObject }                 from '#runtime/util/object';
 
@@ -57,8 +57,8 @@
     typeof enabled === 'boolean' ? enabled : true;
    $: text = isObject(label) && typeof label.text === 'string' ? label.text :
     typeof text === 'string' ? text : void 0;
-   $: comp = isObject(label) && TJSSvelteUtil.isComponent(label.comp) ? label.comp :
-    TJSSvelteUtil.isComponent(comp) ? comp : void 0;
+   $: comp = isObject(label) && TJSSvelte.util.isComponent(label.comp) ? label.comp :
+    TJSSvelte.util.isComponent(comp) ? comp : void 0;
    $: title = isObject(label) && typeof label.title === 'string' ? label.title :
     typeof title === 'string' ? title : '';
    $: titleSelected = isObject(label) && typeof label.titleSelected === 'string' ? label.titleSelected :

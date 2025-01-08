@@ -8,6 +8,10 @@ const sourcemap = true; // Defines whether source maps are generated.
 
 const external = [/^#runtime/, /^#standard/];
 
+const dtsOptions = {
+  rollupExternal: external
+};
+
 const rollupConfigs = [
    {
       input: {
@@ -15,7 +19,7 @@ const rollupConfigs = [
          external,
          plugins: [
             resolve(),
-            generateDTS.plugin()
+            generateDTS.plugin(dtsOptions)
          ]
       },
       output: {
@@ -31,7 +35,7 @@ const rollupConfigs = [
          external,
          plugins: [
             resolve(),
-            generateDTS.plugin()
+            generateDTS.plugin(dtsOptions)
          ]
       },
       output: {
@@ -67,16 +71,16 @@ for (const compFile of compFiles)
    fs.writeFileSync(compFile, fileData);
 }
 
-await generateDTS({ input: '_dist/component/button/index.js' });
-await generateDTS({ input: '_dist/component/container/index.js' });
-await generateDTS({ input: '_dist/component/dom/focus/index.js' });
-await generateDTS({ input: '_dist/component/folder/index.js' });
-await generateDTS({ input: '_dist/component/label/index.js' });
-await generateDTS({ input: '_dist/component/layer/position/index.js' });
-await generateDTS({ input: '_dist/component/layer/side-slide/index.js' });
-await generateDTS({ input: '_dist/component/media/index.js' });
-await generateDTS({ input: '_dist/component/menu/index.js' });
+await generateDTS({ input: '_dist/component/button/index.js', ...dtsOptions });
+await generateDTS({ input: '_dist/component/container/index.js', ...dtsOptions });
+await generateDTS({ input: '_dist/component/dom/focus/index.js', ...dtsOptions });
+await generateDTS({ input: '_dist/component/folder/index.js', ...dtsOptions });
+await generateDTS({ input: '_dist/component/label/index.js', ...dtsOptions });
+await generateDTS({ input: '_dist/component/layer/position/index.js', ...dtsOptions });
+await generateDTS({ input: '_dist/component/layer/side-slide/index.js', ...dtsOptions });
+await generateDTS({ input: '_dist/component/media/index.js', ...dtsOptions });
+await generateDTS({ input: '_dist/component/menu/index.js', ...dtsOptions });
 
 // Generate types last that have dependencies on other local components.
-await generateDTS({ input: '_dist/component/form/index.js' });
-await generateDTS({ input: '_dist/component/color/picker-colord/index.js' });
+await generateDTS({ input: '_dist/component/form/index.js', ...dtsOptions });
+await generateDTS({ input: '_dist/component/color/picker-colord/index.js', ...dtsOptions });

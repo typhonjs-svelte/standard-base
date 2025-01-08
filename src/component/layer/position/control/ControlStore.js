@@ -20,7 +20,7 @@ export class ControlStore
       selected: false
    };
 
-   /** @type {import('#runtime/svelte/store/position').TJSPosition} */
+   /** @type {TJSPosition} */
    #position;
 
    #stores;

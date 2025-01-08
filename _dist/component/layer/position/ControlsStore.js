@@ -359,7 +359,7 @@ class SelectedAPI
    #selectedMap = new Map();
 
    /**
-    * @type {Map<*, import('#runtime/svelte/store/position').TJSTransformData>}
+    * @type {Map<*, TJSPosition.API.Transform.TransformData>}
     */
    #transformDataMap = new Map();
 
@@ -371,8 +371,8 @@ class SelectedAPI
    /**
     * @type {(Map<
     *    *,
-    *    import('#runtime/svelte/store/position').quickToCallback &
-    *     { initialPosition?: import('#runtime/svelte/store/position').Data.TJSPositionData }
+    *    TJSPosition.API.Animation.QuickToCallback &
+    *     { initialPosition?: TJSPosition.API.Data.TJSPositionData }
     * >)}
     */
    #quickToMap = new Map();

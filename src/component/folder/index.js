@@ -11,6 +11,15 @@ export { default as TJSIconFolder } from './TJSIconFolder.svelte';
  *
  * @property {boolean} [focusIndicator=false] When true a `focus-visible` focus indicator is inserted between the
  * chevron and summary label. This is a useful a11y focus indicator when `outline` isn't suitable.
+ *
+ * @property {'hidden' | 'remove'} [strategy='remove'] There are two strategies for how content is handled when the folder is closed.
+ * The default is `remove`, but depending on the application and performance characteristics `hide` may be a more
+ * optimum solution.
+ * Strategy options:
+ * ```
+ * - `remove`: Will remove / unmount the content from the DOM.
+ * - `hidden`: Will mark the content as hidden / not visible in the DOM.
+ * ```
  */
 
 /**

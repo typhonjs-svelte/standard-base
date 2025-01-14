@@ -197,7 +197,8 @@
    const localOptions = {
       chevronOnly: false,
       focusChevron: false,
-      focusIndicator: false
+      focusIndicator: false,
+      strategy: 'remove'
    }
 
    let detailsEl, labelEl, summaryEl, svgEl;
@@ -225,6 +226,10 @@
       if (typeof options?.chevronOnly === 'boolean') { localOptions.chevronOnly = options.chevronOnly; }
       if (typeof options?.focusChevron === 'boolean') { localOptions.focusChevron = options.focusChevron; }
       if (typeof options?.focusIndicator === 'boolean') { localOptions.focusIndicator = options.focusIndicator; }
+      if (options?.strategy === 'remove' || options?.strategy === 'hidden')
+      {
+         localOptions.strategy = options.strategy;
+      }
    }
 
    $: {
@@ -493,13 +498,25 @@ changing the open state.  -->
       </slot>
    </summary>
 
-   <div class=contents class:hidden={!visible} aria-hidden={!visible}>
-      <slot>
-         {#if TJSSvelte.util.isComponent(folder?.slotDefault?.class)}
-            <svelte:component this={folder.slotDefault.class} {...(isObject(folder?.slotDefault?.props) ? folder.slotDefault.props : {})} />
-         {/if}
-      </slot>
-   </div>
+   {#if localOptions.strategy === 'remove'}
+      <div class=contents>
+      {#if visible}
+         <slot>
+            {#if TJSSvelte.util.isComponent(folder?.slotDefault?.class)}
+               <svelte:component this={folder.slotDefault.class} {...(isObject(folder?.slotDefault?.props) ? folder.slotDefault.props : {})} />
+            {/if}
+         </slot>
+      {/if}
+      </div>
+   {:else}
+      <div class=contents class:hidden={!visible} aria-hidden={!visible}>
+         <slot>
+            {#if TJSSvelte.util.isComponent(folder?.slotDefault?.class)}
+               <svelte:component this={folder.slotDefault.class} {...(isObject(folder?.slotDefault?.props) ? folder.slotDefault.props : {})} />
+            {/if}
+         </slot>
+      </div>
+   {/if}
 </details>
 
 <style>

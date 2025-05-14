@@ -44,8 +44,18 @@ export class AssetValidator
     *
     * @param {string}      [options.routePrefix] - An additional route / URL prefix to add in constructing URL.
     *
-    * @returns {object} The parsed asset information containing the file path, extension, element type, and whether
-    *          the parsing is valid for the file extension is supported and not excluded.
+    * @returns {({
+    *    url: string | URL,
+    *    valid: false
+    * } |
+    * {
+    *    src: string | URL,
+    *    url: URL,
+    *    extension: string,
+    *    elementType: 'img' | 'video' | 'audio',
+    *    valid: true
+    * })} The parsed asset information containing the file path, extension, element type, and whether the parsing is
+    * valid for the file extension is supported and not excluded.
     *
     * @throws {TypeError} If the provided `url` is not a string or URL, `routePrefix` is not a string,
     *         `exclude` is not a Set, or `mediaTypes` is not a Set.

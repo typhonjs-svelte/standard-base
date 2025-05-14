@@ -88,6 +88,24 @@ declare namespace TjsSideSlideLayer {
      */
     easingOut?: _runtime_svelte_easing.EasingReference;
     /**
+     * The side in layers parent element to display.
+     *
+     * @type {'left' | 'right'}
+     */
+    side?: 'left' | 'right';
+    /**
+     * Whether to apply absolute positioning for left / right layout.
+     *
+     * @type {boolean}
+     */
+    sideAbs?: boolean;
+    /**
+     * Additional inline styles to apply to the side slide layer. Useful for setting CSS variables.
+     *
+     * @type {{ [key: string]: string | null }}
+     */
+    styles?: { [key: string]: string | null };
+    /**
      * When `top` is defined as a number and `topUnit` is defined then it is used to create the top style. This
      * facilitates creating a UI for editing side slide layer via a range input and separately storing the unit type.
      *
@@ -96,18 +114,6 @@ declare namespace TjsSideSlideLayer {
      * @type {string}
      */
     topUnit?: string;
-    /**
-     * The side in layers parent element to display.
-     *
-     * @type {'left' | 'right'}
-     */
-    side?: 'left' | 'right';
-    /**
-     * Additional inline styles to apply to the side slide layer. Useful for setting CSS variables.
-     *
-     * @type {{ [key: string]: string | null }}
-     */
-    styles?: { [key: string]: string | null };
   };
   /** Events type alias for {@link TjsSideSlideLayer | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };

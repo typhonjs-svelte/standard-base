@@ -77,6 +77,27 @@
    export let easingOut = 'linear';
 
    /**
+    * The side in layers parent element to display.
+    *
+    * @type {'left' | 'right'}
+    */
+   export let side = 'right';
+
+   /**
+    * Whether to apply absolute positioning for left / right layout.
+    *
+    * @type {boolean}
+    */
+   export let sideAbs = true;
+
+   /**
+    * Additional inline styles to apply to the side slide layer. Useful for setting CSS variables.
+    *
+    * @type {{ [key: string]: string | null }}
+    */
+   export let styles = void 0;
+
+   /**
     * A valid CSS value for the `top` positioning attribute for the top of the side slide layer.
     *
     * When top is a number it will be treated as pixels unless `topUnit` is defined.
@@ -94,20 +115,6 @@
     * @type {string}
     */
    export let topUnit = void 0;
-
-   /**
-    * The side in layers parent element to display.
-    *
-    * @type {'left' | 'right'}
-    */
-   export let side = 'right';
-
-   /**
-    * Additional inline styles to apply to the side slide layer. Useful for setting CSS variables.
-    *
-    * @type {{ [key: string]: string | null }}
-    */
-   export let styles = void 0;
 
    /**
     * The z-index for the side slide layer inside the parent element.
@@ -197,7 +204,7 @@
       {
          case 'left':
             allStyles = {
-               left: 0,
+               left: sideAbs ? 0 : null,
                right: null,
                top: typeof top === 'number' ? `${top}${typeof topUnit === 'string' ? topUnit : 'px'}` : top,
                'z-index': typeof zIndex === 'number' ? zIndex : 10,
@@ -208,7 +215,7 @@
          case 'right':
             allStyles = {
                left: null,
-               right: 0,
+               right: sideAbs ? 0 : null,
                top: typeof top === 'number' ? `${top}${typeof topUnit === 'string' ? topUnit : 'px'}` : top,
                'z-index': typeof zIndex === 'number' ? zIndex : 10,
                ...(isObject(styles) ? styles : {})

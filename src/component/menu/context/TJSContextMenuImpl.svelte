@@ -122,8 +122,6 @@
 
    export let items = [];
 
-   export let zIndex = Number.MAX_SAFE_INTEGER - 100;
-
    /** @type {{ [key: string]: string | null }} */
    export let styles = void 0;
 
@@ -226,6 +224,9 @@
     */
    function animate(node)
    {
+      // Must enable popout state in the action so that bounds checking below works.
+      node.showPopover();
+
       const browserClientWidth = activeWindow.document.body.clientWidth;
       const browserClientHeight = activeWindow.document.body.clientHeight;
 
@@ -451,7 +452,7 @@
      on:click|preventDefault|stopPropagation
      on:keydown|stopPropagation={onKeydownMenu}
      on:keyup|preventDefault|stopPropagation={onKeyupMenu}
-     style:z-index={zIndex}
+     popover=manual
      transition:animate|global
      use:applyStyles={styles}
      tabindex=-1>
@@ -515,6 +516,9 @@
         width: fit-content;
         height: max-content;
         overflow: hidden;
+
+        margin: 0;
+        inset: unset;
 
         background: var(--tjs-context-menu-background, var(--tjs-default-menu-background, var(--tjs-default-popup-background, #23221d)));
         border: var(--tjs-context-menu-border, var(--tjs-default-popover-border, 1px solid #000));

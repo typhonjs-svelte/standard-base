@@ -59,8 +59,6 @@ export class TJSContextMenu
     *
     * @param {{ [key: string]: string | null }}  [opts.styles] - Optional inline styles to apply.
     *
-    * @param {number}      [opts.zIndex=Number.MAX_SAFE_INTEGER - 100] - Z-index for context menu.
-    *
     * @param {number}      [opts.duration] - Transition option for duration of transition.
     *
     * @param {import('#runtime/svelte/easing').EasingReference}   [opts.easing] - Transition option for ease. Either an
@@ -70,8 +68,7 @@ export class TJSContextMenu
     *        displaying inside.
     */
    static create({ id = '', event, x, y, items, offsetX = 2, offsetY = 2, focusDebug = false, focusEl,
-    keyCode = 'Enter', styles, zIndex = Number.MAX_SAFE_INTEGER - 100, duration = 200, easing,
-     activeWindow } = {})
+    keyCode = 'Enter', styles, duration = 200, easing, activeWindow } = {})
    {
       if (this.#contextMenu !== void 0) { return; }
 
@@ -124,7 +121,6 @@ export class TJSContextMenu
             keyCode,
             styles,
             transitionOptions: { duration, easing: easingFn },
-            zIndex,
             activeWindow
          }
       });

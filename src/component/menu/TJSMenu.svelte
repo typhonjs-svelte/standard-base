@@ -218,7 +218,7 @@
     typeof keyCode === 'string' ? keyCode : 'Enter';
 
    $: transitionOptions = isObject(menu) && isObject(menu.transitionOptions) ? menu.transitionOptions :
-     isObject(transitionOptions) ? transitionOptions : { duration: 200, easing: 'quintOut' };
+    isObject(transitionOptions) ? transitionOptions : { duration: 150, easing: 'quintOut' };
 
    // Bound to the nav element / menu.
    let menuEl;

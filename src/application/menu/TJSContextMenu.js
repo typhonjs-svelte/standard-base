@@ -68,7 +68,7 @@ export class TJSContextMenu
     *        displaying inside.
     */
    static create({ id = '', event, x, y, items, offsetX = 2, offsetY = 2, focusDebug = false, focusEl,
-    keyCode = 'Enter', styles, duration = 200, easing, activeWindow } = {})
+    keyCode = 'Enter', styles, duration = 150, easing, activeWindow } = {})
    {
       if (this.#contextMenu !== void 0) { return; }
 

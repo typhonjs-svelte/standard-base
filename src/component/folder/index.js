@@ -41,14 +41,14 @@ export { default as TJSIconFolder } from './TJSIconFolder.svelte';
  *
  * @property {TJSFolderOptions} [options] Additional folder options.
  *
- * @property {{ class: Function, props?: object }} [slotDefault] A minimal Svelte config defining the default content
- * component.
+ * @property {import('#runtime/svelte/util').TJSSvelte.Config.Embed} [slotDefault] A minimal Svelte config defining
+ * the default content component.
  *
- * @property {{ class: Function, props?: object }} [slotLabel] A minimal Svelte config defining the summary label
- * component.
+ * @property {import('#runtime/svelte/util').TJSSvelte.Config.Embed} [slotLabel] A minimal Svelte config defining the
+ * summary label component.
  *
- * @property {{ class: Function, props?: object }} [slotSummaryEnd] A minimal Svelte config defining the summary end
- * component.
+ * @property {import('#runtime/svelte/util').TJSSvelte.Config.Embed} [slotSummaryEnd] A minimal Svelte config defining
+ * the summary end component.
  *
  * @property {import('svelte/store').Writable<boolean>} [store] Folder open / close store.
  *

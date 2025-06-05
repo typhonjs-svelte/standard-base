@@ -77,6 +77,7 @@
     * --tjs-folder-summary-font-family: inherit
     * --tjs-folder-summary-gap: 0.125em
     * --tjs-folder-summary-padding: 0.25em
+    * --tjs-folder-summary-text-shadow: none
     * --tjs-folder-summary-transition: background 0.1s
     * --tjs-folder-summary-width: fit-content; wraps content initially, set to 100% or other width measurement
     *
@@ -550,6 +551,7 @@ changing the open state.  -->
       list-style: none;
       margin: var(--tjs-folder-summary-margin, 0);
       padding: var(--tjs-folder-summary-padding, 0.25em) 0;
+      text-shadow: var(--tjs-folder-summary-text-shadow, none);
       transition: var(--tjs-folder-summary-transition, background 0.1s);
       user-select: none;
       width: var(--tjs-folder-summary-width, fit-content);

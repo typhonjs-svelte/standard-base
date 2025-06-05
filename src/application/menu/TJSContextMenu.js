@@ -107,6 +107,11 @@ export class TJSContextMenu
          throw new TypeError(`TJSContextMenu.create error: 'activeWindow' is not a Window.`);
       }
 
+      const processedItems = this.#processItems(items);
+
+      // No applicable menu items. Abort showing the menu.
+      if (processedItems.length === 0) { return; }
+
       const focusSource = A11yHelper.getFocusSource({ event, x, y, focusEl, debug: focusDebug });
 
       const easingFn = getEasingFunc(easing, { default: false });
@@ -121,7 +126,7 @@ export class TJSContextMenu
             y: focusSource.y,
             offsetX,
             offsetY,
-            items: this.#processItems(items),
+            items: processedItems,
             focusSource,
             keyCode,
             styles,

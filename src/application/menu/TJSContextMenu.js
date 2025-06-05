@@ -59,7 +59,7 @@ export class TJSContextMenu
     *
     * @param {{ [key: string]: string | null }}  [opts.styles] - Optional inline styles to apply.
     *
-    * @param {number}      [opts.duration] - Transition option for duration of transition.
+    * @param {number}      [opts.duration] - Transition option for duration of transition in milliseconds.
     *
     * @param {import('#runtime/svelte/easing').EasingReference}   [opts.easing] - Transition option for ease. Either an
     *        easing function or easing function name.
@@ -68,7 +68,7 @@ export class TJSContextMenu
     *        displaying inside.
     */
    static create({ id = '', event, x, y, items, offsetX = 2, offsetY = 2, focusDebug = false, focusEl,
-    keyCode = 'Enter', styles, duration = 150, easing, activeWindow } = {})
+    keyCode = 'Enter', styles, duration = 120, easing, activeWindow } = {})
    {
       if (this.#contextMenu !== void 0) { return; }
 
@@ -85,6 +85,11 @@ export class TJSContextMenu
       if (Number.isInteger(offsetY) && offsetY < 0)
       {
          throw new TypeError(`TJSContextMenu.create error: offsetY is not a positive integer.`);
+      }
+
+      if (!Number.isInteger(duration) || duration < 0)
+      {
+         throw new TypeError(`TJSContextMenu.create error: 'duration' is not a positive integer.`);
       }
 
       // Perform duck typing on event constructor name.

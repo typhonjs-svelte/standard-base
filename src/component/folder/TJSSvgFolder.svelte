@@ -71,6 +71,7 @@
     * --tjs-folder-summary-border: none
     * --tjs-folder-summary-border-radius: 0
     * --tjs-folder-summary-border-width: initial
+    * --tjs-folder-summary-color: inherit
     * --tjs-folder-summary-cursor: pointer
     * --tjs-folder-summary-font-size: inherit
     * --tjs-folder-summary-font-weight: bold
@@ -535,6 +536,7 @@ changing the open state.  -->
       border: var(--tjs-folder-summary-border, none);
       border-radius: var(--tjs-folder-summary-border-radius, 0);
       border-width: var(--tjs-folder-summary-border-width, initial);
+      color: var(--tjs-folder-summary-color, inherit);
       cursor: var(--tjs-folder-summary-cursor, pointer);
       font-size: var(--tjs-folder-summary-font-size, inherit);
       font-weight: var(--tjs-folder-summary-font-weight, bold);

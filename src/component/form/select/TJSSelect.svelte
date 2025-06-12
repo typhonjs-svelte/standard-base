@@ -174,7 +174,7 @@
       text-align: var(--tjs-select-text-align, var(--tjs-input-text-align));
       text-overflow: var(--tjs-select-text-overflow, var(--tjs-input-text-overflow, ellipsis));
 
-      cursor: var(--tjs-select-cursor, var(--tjs-input-cursor));
+      cursor: var(--tjs-select-cursor, var(--tjs-input-cursor, var(--tjs-cursor-pointer, pointer)));
 
       transform: translateZ(1px);
    }
@@ -187,7 +187,7 @@
 
    select:disabled {
       color: var(--tjs-select-color-disabled, var(--tjs-input-color-disabled, revert));
-      cursor: var(--tjs-select-cursor-disabled, var(--tjs-input-cursor-disabled, default));
+      cursor: var(--tjs-select-cursor-disabled, var(--tjs-input-cursor-disabled, var(--tjs-cursor-default, default)));
       pointer-events: none;
    }
 

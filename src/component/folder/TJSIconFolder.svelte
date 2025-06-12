@@ -72,7 +72,6 @@
     * --tjs-folder-summary-border-radius: 0
     * --tjs-folder-summary-border-width: initial
     * --tjs-folder-summary-color: inherit
-    * --tjs-folder-summary-cursor: pointer
     * --tjs-folder-summary-font-size: inherit
     * --tjs-folder-summary-font-weight: bold
     * --tjs-folder-summary-font-family: inherit
@@ -545,7 +544,7 @@ changing the open state.  -->
       border-radius: var(--tjs-folder-summary-border-radius, 0);
       border-width: var(--tjs-folder-summary-border-width, initial);
       color: var(--tjs-folder-summary-color, inherit);
-      cursor: var(--tjs-folder-summary-cursor, pointer);
+      cursor: var(--tjs-cursor-pointer, pointer);
       font-size: var(--tjs-folder-summary-font-size, inherit);
       font-weight: var(--tjs-folder-summary-font-weight, bold);
       font-family: var(--tjs-folder-summary-font-family, inherit);
@@ -568,7 +567,7 @@ changing the open state.  -->
       flex-shrink: 0;
       border-radius: var(--tjs-folder-summary-chevron-border-radius, 0);
       color: var(--tjs-folder-summary-chevron-color, inherit);
-      cursor: var(--tjs-folder-summary-cursor, pointer);
+      cursor: var(--tjs-cursor-pointer, pointer);
       opacity: var(--tjs-folder-summary-chevron-opacity, 1);
       margin: var(--tjs-folder-summary-chevron-margin, 0 0 0 0.25em);
       width: var(--tjs-folder-summary-chevron-width, 1.25em);
@@ -577,7 +576,7 @@ changing the open state.  -->
 
    summary.disabled, summary.disabled i {
       color: var(--tjs-folder-summary-disabled-color, inherit);
-      cursor: var(--tjs-folder-summary-disabled-cursor, default);
+      cursor: var(--tjs-folder-summary-disabled-cursor, var(--tjs-cursor-default, default));
    }
 
    summary:focus-visible {
@@ -621,7 +620,7 @@ changing the open state.  -->
    }
 
    .default-cursor {
-      cursor: default;
+      cursor: var(--tjs-cursor-default, default);
    }
 
    details[open] > summary {

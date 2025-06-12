@@ -81,7 +81,7 @@
     typeof efx === 'function' ? efx : () => {};
 </script>
 
-<TJSSlotLabel {label} {enabled}>
+<TJSSlotLabel {label} {enabled} isPointer={true}>
    <div class=tjs-input-container use:efx use:applyStyles={styles} on:pointerdown>
       <input class=tjs-input
              type=checkbox
@@ -97,7 +97,8 @@
     /* TODO: cssVariable defaults */
 
     .tjs-input-container {
-       display: block;
+       display: grid;
+       place-items: center;
        pointer-events: none;
        transform-style: preserve-3d;
 
@@ -114,6 +115,7 @@
        display: inline-block;
        position: relative;
 
+       /*TODO: hard coded Foundry CSS var as default*/
        accent-color: var(--tjs-input-checkbox-accent-color, var(--color-checkbox-checked));
 
        appearance: var(--tjs-input-checkbox-appearance, var(--tjs-input-appearance, auto));
@@ -125,14 +127,14 @@
 
        outline-offset: var(--tjs-input-checkbox-outline-offset, var(--tjs-input-outline-offset));
 
-       cursor: var(--tjs-input-checkbox-cursor, var(--tjs-input-cursor, default));
+       cursor: var(--tjs-input-checkbox-cursor, var(--tjs-input-cursor, var(--tjs-cursor-pointer, pointer)));
 
        transform: translateZ(1px);
     }
 
     input:disabled {
        border: var(--tjs-input-checkbox-border-disabled, var(--tjs-input-border-disabled, none));
-       cursor: var(--tjs-input-checkbox-cursor-disabled, var(--tjs-input-cursor-disabled, default));
+       cursor: var(--tjs-input-checkbox-cursor-disabled, var(--tjs-input-cursor-disabled, var(--tjs-cursor-default, default)));
        pointer-events: none;
     }
 

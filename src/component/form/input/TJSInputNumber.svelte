@@ -273,7 +273,7 @@
         outline-offset: var(--tjs-input-number-outline-offset, var(--tjs-input-outline-offset));
         text-align: var(--tjs-input-number-text-align, var(--tjs-input-text-align));
 
-        cursor: var(--tjs-input-number-cursor, var(--tjs-input-cursor, text));
+        cursor: var(--tjs-input-number-cursor, var(--tjs-input-cursor, var(--tjs-cursor-text, text)));
 
         transform: translateZ(1px);
     }
@@ -281,7 +281,7 @@
     input:disabled {
        border: var(--tjs-input-number-border-disabled, var(--tjs-input-border-disabled, none));
        color: var(--tjs-input-number-color-disabled, var(--tjs-input-color-disabled, revert));
-       cursor: var(--tjs-input-number-cursor-disabled, var(--tjs-input-cursor-disabled, default));
+       cursor: var(--tjs-input-number-cursor-disabled, var(--tjs-input-cursor-disabled, var(--tjs-cursor-default, default)));
        pointer-events: none;
     }
 

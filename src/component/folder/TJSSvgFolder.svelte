@@ -72,7 +72,6 @@
     * --tjs-folder-summary-border-radius: 0
     * --tjs-folder-summary-border-width: initial
     * --tjs-folder-summary-color: inherit
-    * --tjs-folder-summary-cursor: pointer
     * --tjs-folder-summary-font-size: inherit
     * --tjs-folder-summary-font-weight: bold
     * --tjs-folder-summary-font-family: inherit
@@ -537,7 +536,7 @@ changing the open state.  -->
       border-radius: var(--tjs-folder-summary-border-radius, 0);
       border-width: var(--tjs-folder-summary-border-width, initial);
       color: var(--tjs-folder-summary-color, inherit);
-      cursor: var(--tjs-folder-summary-cursor, pointer);
+      cursor: var(--tjs-cursor-pointer, pointer);
       font-size: var(--tjs-folder-summary-font-size, inherit);
       font-weight: var(--tjs-folder-summary-font-weight, bold);
       font-family: var(--tjs-folder-summary-font-family, inherit);
@@ -557,7 +556,7 @@ changing the open state.  -->
    }
 
    .default-cursor {
-      cursor: default;
+      cursor: var(--tjs-cursor-default, default);
    }
 
    summary svg {
@@ -566,7 +565,7 @@ changing the open state.  -->
       height: var(--tjs-folder-summary-chevron-size, var(--tjs-folder-summary-font-size, 1.25em));
       border-radius: var(--tjs-folder-summary-chevron-border-radius, 0);
       color: var(--tjs-folder-summary-chevron-color, currentColor);
-      cursor: var(--tjs-folder-summary-cursor, pointer);
+      cursor: var(--tjs-cursor-pointer, pointer);
       opacity: var(--tjs-folder-summary-chevron-opacity, 0.2);
       margin: var(--tjs-folder-summary-chevron-margin, 0);
       transition: var(--tjs-folder-summary-chevron-transition, opacity 0.2s, transform 0.1s);
@@ -575,12 +574,12 @@ changing the open state.  -->
 
    summary.disabled {
       color: var(--tjs-folder-summary-disabled-color, inherit);
-      cursor: var(--tjs-folder-summary-disabled-cursor, default);
+      cursor: var(--tjs-folder-summary-disabled-cursor, var(--tjs-cursor-default, default));
    }
 
    summary.disabled svg {
       color: var(--tjs-folder-summary-disabled-color, currentColor);
-      cursor: var(--tjs-folder-summary-disabled-cursor, default);
+      cursor: var(--tjs-folder-summary-disabled-cursor, var(--tjs-cursor-default, default));
    }
 
    summary:focus-visible {

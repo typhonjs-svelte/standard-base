@@ -3,6 +3,8 @@
     * ### CSS Variables
     *
     * ```
+    * -tjs-cursor-pointer
+    *
     * --tjs-toggle-label-background
     * --tjs-toggle-label-background-focus-visible
     * --tjs-toggle-label-background-hover
@@ -20,6 +22,8 @@
     * --tjs-toggle-label-text-shadow-selected - undefined; default: --tjs-default-text-shadow-focus-hover
     * --tjs-toggle-label-transition - global default: 'background 0.2s ease-in-out'
     * --tjs-toggle-label-transition-focus-visible - fallback: --tjs-default-transition-focus-visible
+    *
+    * --tjs-toggle-label-cursor-disabled - fallback: var(--tjs-cursor-default, default)
     * ```
     * @componentDocumentation
     */
@@ -248,17 +252,19 @@
    div {
       display: block;
       position: relative;
+
+      cursor: var(--tjs-cursor-pointer, pointer);
       height: var(--tjs-toggle-label-height, var(--tjs-input-height));
    }
 
    div.disabled > * {
       color: #4b4a44; /* TODO replace with cssVariables default */
-      cursor: var(--tjs-toggle-label-cursor-disabled, default);
+      cursor: var(--tjs-toggle-label-cursor-disabled, var(--tjs-cursor-default, default));
    }
 
    div.disabled *:hover {
       text-shadow: none;
-      cursor: var(--tjs-toggle-label-cursor-disabled, default);
+      cursor: var(--tjs-toggle-label-cursor-disabled, var(--tjs-cursor-default, default));
    }
 
    span {

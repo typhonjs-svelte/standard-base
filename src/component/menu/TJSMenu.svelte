@@ -71,6 +71,7 @@
     * Icon / Image menu items (considered a button item):
     * --tjs-menu-item-button-gap - fallback: --tjs-default-menu-item-button-gap; default: 0.25em
     * --tjs-menu-item-highlight-color - fallback: --tjs-default-menu-highlight-color; fallback: --tjs-default-popup-highlight-color; default: #f0f0e0
+    * --tjs-menu-item-cursor-hover - fallback: --tjs-default-menu-cursor-hover; fallback: --tjs-cursor-pointer
     * --tjs-menu-item-text-shadow-focus-hover - fallback: --tjs-default-text-shadow-focus-hover; default: 0 0 8px red
     *
     * Specific targeting for the label of button items (allows control of wrapping / set `white-space` to `nowrap`):
@@ -683,6 +684,7 @@
 
    .tjs-menu-item-button:hover {
       color: var(--tjs-menu-item-highlight-color, var(--tjs-default-menu-highlight-color, var(--tjs-default-popup-highlight-color, #f0f0e0)));
+      cursor: var(--tjs-menu-item-cursor-hover, var(--tjs-default-menu-cursor-hover, var(--tjs-cursor-pointer, pointer)));
       text-shadow: var(--tjs-menu-item-text-shadow-focus-hover, var(--tjs-default-text-shadow-focus-hover, 0 0 8px red));
    }
 

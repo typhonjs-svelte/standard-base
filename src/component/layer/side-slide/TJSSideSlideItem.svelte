@@ -440,7 +440,7 @@
       border: var(--tjs-side-slide-layer-item-border, solid 2px black);
       box-shadow: var(--tjs-side-slide-layer-item-box-shadow, rgba(0, 0, 0, 0.35) 0px 5px 15px);
       color: var(--tjs-side-slide-layer-item-color, rgba(255, 255, 255, 0.7));
-      cursor: var(--tjs-side-slide-layer-item-cursor, pointer);
+      cursor: var(--tjs-side-slide-layer-item-cursor, var(--tjs-cursor-pointer, pointer));
       font-size: var(--tjs-side-slide-layer-item-font-size, calc(var(--tjs-side-slide-layer-item-diameter, 30px) / 2.25));
       line-height: var(--tjs-side-slide-layer-item-diameter, 100%);
       overflow: var(--tjs-side-slide-layer-item-overflow, hidden);

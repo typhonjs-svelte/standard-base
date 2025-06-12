@@ -207,7 +207,7 @@
       /*border-radius: var(--tjs-form-button-border-radius, var(--tjs-button-border-radius));*/
       /*border-width: var(--tjs-form-button-border-width, var(--tjs-button-border-width));*/
 
-      cursor: var(--tjs-form-button-cursor, var(--tjs-button-cursor, pointer));
+      cursor: var(--tjs-cursor-pointer, pointer);
       height: var(--tjs-form-button-height, var(--tjs-input-height, inherit));
       width: var(--tjs-form-button-width, 100%);
 
@@ -218,7 +218,7 @@
    }
 
    button:disabled {
-      cursor: var(--tjs-form-button-cursor-disabled, var(--tjs-input-cursor-disabled, default));
+      cursor: var(--tjs-button-cursor-disabled, var(--tjs-input-cursor-disabled, default));
       filter: var(--tjs-form-button-filter-disabled, var(--tjs-button-filter-disabled, grayscale(100%) contrast(50%)));
       pointer-events: none;
    }

@@ -18,7 +18,6 @@
     * --tjs-button-clip-path
     * --tjs-button-clip-path-focus
     * --tjs-button-clip-path-hover
-    * --tjs-button-cursor
     * --tjs-button-cursor-disabled
     * --tjs-button-diameter
     * --tjs-button-outline-focus-visible
@@ -39,8 +38,6 @@
     * --tjs-icon-button-clip-path
     * --tjs-icon-button-clip-path-focus
     * --tjs-icon-button-clip-path-hover
-    * --tjs-icon-button-cursor
-    * --tjs-icon-button-cursor-disabled
     * --tjs-icon-button-diameter
     * --tjs-icon-button-outline-focus-visible
     * --tjs-icon-button-text-shadow-focus: undefined
@@ -275,7 +272,7 @@
 
    div.disabled a {
       color: #4b4a44; /* TODO replace with cssVariables default */
-      cursor: var(--tjs-icon-button-cursor-disabled, var(--tjs-button-cursor-disabled, default));
+      cursor: var(--tjs-button-cursor-disabled, var(--tjs-cursor-default, default));
    }
 
    div.disabled a:hover {
@@ -291,7 +288,7 @@
       border: var(--tjs-icon-button-border, var(--tjs-button-border));
       border-radius: var(--tjs-icon-button-border-radius, var(--tjs-button-border-radius, 50%));
       border-width: var(--tjs-icon-button-border-width, var(--tjs-button-border-width));
-      cursor: var(--tjs-icon-button-cursor, var(--tjs-button-cursor, pointer));
+      cursor: var(--tjs-cursor-pointer, pointer);
       position: relative;
       clip-path: var(--tjs-icon-button-clip-path, var(--tjs-button-clip-path, none));
       transform-style: preserve-3d;

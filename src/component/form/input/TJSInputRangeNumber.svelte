@@ -34,7 +34,8 @@
    export let store = void 0;
    export let styles = void 0;
 
-   export let efx = void 0;
+   export let efxRange = void 0;
+   export let efxNumber = void 0;
 
    // ----------------------------------------------------------------------------------------------------------------
 
@@ -64,11 +65,14 @@
    $: styles = isObject(input) && isObject(input.styles) ? input.styles :
     isObject(styles) ? styles : void 0;
 
-   $: efx = isObject(input) && typeof input.efx === 'function' ? input.efx :
-    typeof efx === 'function' ? efx : () => {};
+   $: efxNumber = isObject(input) && typeof input.efxNumber === 'function' ? input.efxNumber :
+    typeof efxNumber === 'function' ? efxNumber : () => {};
+
+   $: efxRange = isObject(input) && typeof input.efxRange === 'function' ? input.efxRange :
+    typeof efxRange === 'function' ? efxRange : () => {};
 </script>
 
 <TJSSlotLabel {label} {enabled}>
-   <TJSInputRange label={false} {enabled} {efx} {max} {min} {options} {step} {store} {styles} />
-   <TJSInputNumber label={false} {enabled} {efx} {max} {min} {options} {readonly} {step} {store} {styles} />
+   <TJSInputRange label={false} {enabled} efx={efxRange} {max} {min} {options} {step} {store} {styles} />
+   <TJSInputNumber label={false} {enabled} efx={efxNumber} {max} {min} {options} {readonly} {step} {store} {styles} />
 </TJSSlotLabel>

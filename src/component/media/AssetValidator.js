@@ -19,9 +19,9 @@ export class AssetValidator
    static #audioExtensions = new Set(['mp3', 'wav', 'ogg', 'aac', 'flac', 'webm']);
 
    /** Supported image extensions. */
-   static #imageExtensions = new Set(['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']);
+   static #imageExtensions = new Set(['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp']);
 
-   /** Supported image extensions. */
+   /** Supported SVG extensions. */
    static #svgExtensions = new Set(['svg']);
 
    /** Supported video extensions. */

@@ -13,13 +13,16 @@ import {
 export class AssetValidator
 {
    /** Supported media types. */
-   static #allMediaTypes = new Set(['audio', 'img', 'video']);
+   static #allMediaTypes = new Set(['audio', 'img', 'svg', 'video']);
 
    /** Supported audio extensions. */
    static #audioExtensions = new Set(['mp3', 'wav', 'ogg', 'aac', 'flac', 'webm']);
 
    /** Supported image extensions. */
-   static #imageExtensions = new Set(['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp']);
+   static #imageExtensions = new Set(['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']);
+
+   /** Supported image extensions. */
+   static #svgExtensions = new Set(['svg']);
 
    /** Supported video extensions. */
    static #videoExtensions = new Set(['mp4', 'webm', 'ogg']);
@@ -37,8 +40,8 @@ export class AssetValidator
     *
     * @param {Set<string>} [options.exclude] - A set of file extensions to exclude from validation.
     *
-    * @param {Set<('audio' | 'img' | 'video')>} [options.mediaTypes] - A set of media types to validate against
-    *        including: `audio`, `img`, `video`. Defaults to all media types if not specified.
+    * @param {Set<('audio' | 'img' | 'svg' | 'video')>} [options.mediaTypes] - A set of media types to validate against
+    *        including: `audio`, `img`, `svg`, `video`. Defaults to all media types if not specified.
     *
     * @param {boolean}     [options.raiseException] - When true exceptions are thrown.
     *
@@ -106,7 +109,12 @@ export class AssetValidator
 
       if (extension && !isExcluded)
       {
-         if (this.#imageExtensions.has(extension) && mediaTypes.has('img'))
+         if (this.#svgExtensions.has(extension) && mediaTypes.has('svg'))
+         {
+            elementType = 'svg';
+            valid = true;
+         }
+         else if (this.#imageExtensions.has(extension) && mediaTypes.has('img'))
          {
             elementType = 'img';
             valid = true;

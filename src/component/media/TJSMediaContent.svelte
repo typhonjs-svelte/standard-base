@@ -21,6 +21,7 @@
    import { getContext }      from 'svelte';
 
    import { clamp }           from '#runtime/math/util';
+   import { inlineSvg }       from '#runtime/svelte/action/dom/inline-svg';
    import { isReadableStore } from '#runtime/svelte/store/util';
    import { CrossWindow }     from '#runtime/util/browser';
    import { localize }        from '#runtime/util/i18n';
@@ -47,7 +48,7 @@
     *
     * @type {Set<string>}
     */
-   const mediaTypes = new Set(['img', 'video']);
+   const mediaTypes = new Set(['img', 'svg', 'video']);
 
    /**
     * @type {object}
@@ -212,7 +213,9 @@
 
 <div class=tjs-media-content>
     {#key parsed}
-       {#if parsed?.elementType === 'img'}
+       {#if parsed?.elementType === 'svg'}
+          <svg use:inlineSvg={parsed.src}></svg>
+       {:else if parsed?.elementType === 'img'}
           <img src={parsed.src} alt={imgAlt} title={title} />
        {:else if parsed?.elementType === 'video'}
           <video bind:this={videoEl}
@@ -244,7 +247,7 @@
       border-radius: var(--tjs-media-content-border-radius, 0);
    }
 
-   video, img {
+   video, img, svg {
       position: relative;
       background: transparent;
       border: none;

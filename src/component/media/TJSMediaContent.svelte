@@ -23,11 +23,11 @@
    import { clamp }           from '#runtime/math/util';
    import { inlineSvg }       from '#runtime/svelte/action/dom/inline-svg';
    import { isReadableStore } from '#runtime/svelte/store/util';
-   import { CrossWindow }     from '#runtime/util/browser';
+   import {
+      AssetValidator,
+      CrossWindow }           from '#runtime/util/browser';
    import { localize }        from '#runtime/util/i18n';
    import { isObject }        from '#runtime/util/object';
-
-   import { AssetValidator }  from './AssetValidator.js';
 
    /**
     * The `url` store potentially set from a parent component like `TJSFileSlotButton`.

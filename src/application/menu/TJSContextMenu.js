@@ -26,6 +26,14 @@ export class TJSContextMenu
    static #contextMenu = void 0;
 
    /**
+    * @hideconstructor
+    */
+   constructor()
+   {
+      throw new Error('TJSContextMenu constructor: This is a static class and should not be constructed.');
+   }
+
+   /**
     * Creates and manages a browser wide context menu. The best way to create the context menu is to pass in the source
     * DOM event as it is processed for the location of the context menu to display. Likewise, a A11yFocusSource object
     * is generated that allows focus to be returned to the source location. You may supply a default focus target as a
@@ -33,9 +41,9 @@ export class TJSContextMenu
     *
     * @param {object}      opts - Optional parameters.
     *
-    * @param {string}      [opts.id] - A custom CSS ID to add to the menu. This allows CSS style targeting.
-    *
     * @param {KeyboardEvent | MouseEvent}  [opts.event] - The source MouseEvent or KeyboardEvent.
+    *
+    * @param {Iterable<TJSContextMenuItemData>} [opts.items] - Menu items to display.
     *
     * @param {number}      [opts.x] - X position override for the top / left of the menu.
     *
@@ -47,7 +55,8 @@ export class TJSContextMenu
     * @param {number}      [opts.offsetY=2] - Small positive integer offset for context menu so the pointer / mouse is
     *        over the menu on display.
     *
-    * @param {Iterable<TJSContextMenuItemData>} [opts.items] - Menu items to display.
+    * @param {Iterable<string>}    [opts.classes] - Additional custom CSS classes to add to the menu. This allows CSS
+    *        style targeting.
     *
     * @param {boolean}     [opts.focusDebug] - When true the associated A11yFocusSource object will log focus target
     *        data when applied.
@@ -56,6 +65,8 @@ export class TJSContextMenu
     *        target.
     *
     * @param {string}      [opts.keyCode='Enter'] - Key to select menu items.
+    *
+    * @param {string}      [opts.id] - A custom CSS ID to add to the menu. This allows CSS style targeting.
     *
     * @param {{ [key: string]: string | null }}  [opts.styles] - Optional inline styles to apply.
     *
@@ -67,10 +78,10 @@ export class TJSContextMenu
     * @param {Window}      [opts.activeWindow=globalThis] - The active browser window that the context menu is
     *        displaying inside.
     */
-   static create({ id = '', event, x, y, items, offsetX = 2, offsetY = 2, focusDebug = false, focusEl,
-    keyCode = 'Enter', styles, duration = 120, easing, activeWindow } = {})
+   static create({ event, items, x, y, offsetX = 2, offsetY = 2, focusDebug = false, focusEl,
+    keyCode = 'Enter', classes = [], id = '', styles, duration = 120, easing, activeWindow })
    {
-      if (this.#contextMenu !== void 0) { return; }
+      if (TJSContextMenu.#contextMenu !== void 0) { return; }
 
       if (!event && (typeof x !== 'number' || typeof y !== 'number'))
       {
@@ -107,7 +118,17 @@ export class TJSContextMenu
          throw new TypeError(`TJSContextMenu.create error: 'activeWindow' is not a Window.`);
       }
 
-      const processedItems = this.#processItems(items);
+      if (typeof id !== 'string')
+      {
+         throw new TypeError(`TJSContextMenu.create error: 'id' is not a string.`);
+      }
+
+      if (!isIterable(classes))
+      {
+         throw new TypeError(`TJSContextMenu.create error: 'classes' is not a list of strings.`);
+      }
+
+      const processedItems = TJSContextMenu.#processItems(items);
 
       // No applicable menu items. Abort showing the menu.
       if (processedItems.length === 0) { return; }
@@ -117,29 +138,30 @@ export class TJSContextMenu
       const easingFn = getEasingFunc(easing, { default: false });
 
       // Create the new context menu with the last click x / y point.
-      this.#contextMenu = new TJSContextMenuImpl({
+      TJSContextMenu.#contextMenu = new TJSContextMenuImpl({
          target: activeWindow.document.body,
          intro: true,
          props: {
-            id,
             x: focusSource.x,
             y: focusSource.y,
             offsetX,
             offsetY,
             items: processedItems,
+            classes: Array.from(classes),
             focusSource,
             keyCode,
+            id,
             styles,
             transitionOptions: { duration, easing: easingFn },
             activeWindow
          }
       });
 
-      this.#contextMenu.$set({ current_component: this.#contextMenu });
+      TJSContextMenu.#contextMenu.$set({ current_component: TJSContextMenu.#contextMenu });
 
       // Register an event listener to remove any active context menu if closed from a menu selection or pointer
       // down event to `document.body`.
-      this.#contextMenu.$on('close:contextmenu', () => { this.#contextMenu = void 0; });
+      TJSContextMenu.#contextMenu.$on('close:contextmenu', () => { TJSContextMenu.#contextMenu = void 0; });
    }
 
    /**

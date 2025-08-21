@@ -625,13 +625,13 @@
       width: max-content;
       height: max-content;
 
-      background: var(--tjs-menu-background, var(--tjs-default-menu-background, var(--tjs-default-popup-background, #23221d)));
-      border: var(--tjs-menu-border, var(--tjs-default-popup-border, 1px solid #000));
-      border-radius: var(--tjs-menu-border-radius, var(--tjs-default-popup-border-radius, 5px));
-      box-shadow: var(--tjs-menu-box-shadow, var(--tjs-default-popup-box-shadow, 0 0 2px #000));
-      color: var(--tjs-menu-primary-color, var(--tjs-default-menu-primary-color, var(--tjs-default-popup-primary-color, #b5b3a4)));
-      max-width: var(--tjs-menu-max-width, var(--tjs-default-menu-max-width, 360px));
-      min-width: var(--tjs-menu-min-width, var(--tjs-default-menu-min-width, 20px));
+      background: var(--tjs-menu-background);
+      border: var(--tjs-menu-border);
+      border-radius: var(--tjs-menu-border-radius);
+      box-shadow: var(--tjs-menu-box-shadow);
+      color: var(--tjs-menu-color);
+      max-width: var(--tjs-menu-max-width, 360px);
+      min-width: var(--tjs-menu-min-width, 20px);
 
       text-align: start;
 

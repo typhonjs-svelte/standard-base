@@ -120,6 +120,9 @@
 
    export let offsetY = 2;
 
+   /** @type {string[]} */
+   export let classes = [];
+
    export let items = [];
 
    /** @type {{ [key: string]: string | null }} */
@@ -446,7 +449,7 @@
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <nav id={id}
-     class=tjs-context-menu
+     class="tjs-context-menu {classes.join(' ')}"
      bind:this={menuEl}
      on:contextmenu|preventDefault|stopPropagation
      on:click|preventDefault|stopPropagation
@@ -520,13 +523,13 @@
         margin: 0;
         inset: unset;
 
-        background: var(--tjs-context-menu-background, var(--tjs-default-menu-background, var(--tjs-default-popup-background, #23221d)));
-        border: var(--tjs-context-menu-border, var(--tjs-default-popover-border, 1px solid #000));
-        border-radius: var(--tjs-context-menu-border-radius, var(--tjs-default-popover-border-radius, 5px));
-        box-shadow: var(--tjs-context-menu-box-shadow, var(--tjs-default-popover-box-shadow, 0 0 10px #000));
-        color: var(--tjs-context-menu-primary-color, var(--tjs-default-menu-primary-color, var(--tjs-default-popup-primary-color, #b5b3a4)));
-        max-width: var(--tjs-context-menu-max-width, var(--tjs-default-menu-max-width, 360px));
-        min-width: var(--tjs-context-menu-min-width, var(--tjs-default-menu-min-width, 20px));
+        background: var(--tjs-context-menu-background);
+        border: var(--tjs-context-menu-border);
+        border-radius: var(--tjs-context-menu-border-radius);
+        box-shadow: var(--tjs-context-menu-box-shadow);
+        color: var(--tjs-context-menu-color);
+        max-width: var(--tjs-context-menu-max-width, 360px);
+        min-width: var(--tjs-context-menu-min-width, 20px);
 
         text-align: start;
     }

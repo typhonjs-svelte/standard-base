@@ -1,6 +1,7 @@
 import { getEasingFunc }      from '#runtime/svelte/easing';
 import { TJSSvelte }          from '#runtime/svelte/util';
 import { A11yHelper }         from '#runtime/util/a11y';
+import { ThemeObserver }      from '#runtime/util/dom/theme';
 import { CrossWindow }        from '#runtime/util/browser';
 
 import {
@@ -137,6 +138,14 @@ export class TJSContextMenu
 
       const easingFn = getEasingFunc(easing, { default: false });
 
+      // Retrieve any additional platform theme classes depending on event target.
+      const themedClasses = ThemeObserver.nearestThemedClasses({
+         element: event?.target,
+         output: new Set(classes),
+         override: false,
+         strict: true
+      });
+
       // Create the new context menu with the last click x / y point.
       TJSContextMenu.#contextMenu = new TJSContextMenuImpl({
          target: activeWindow.document.body,
@@ -147,7 +156,7 @@ export class TJSContextMenu
             offsetX,
             offsetY,
             items: processedItems,
-            classes: Array.from(classes),
+            classes: Array.from(themedClasses),
             focusSource,
             keyCode,
             id,

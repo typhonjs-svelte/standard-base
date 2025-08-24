@@ -80,11 +80,8 @@
     * --tjs-menu-item-label-white-space - fallback: --tjs-default-menu-item-label-white-space; default: undefined
     *
     * Icon menu item:
+    * --tjs-menu-item-icon-height - fallback: --tjs-default-menu-item-icon-height; default: 1.25em
     * --tjs-menu-item-icon-width - fallback: --tjs-default-menu-item-icon-width; default: 1.25em
-    *
-    * Image menu item:
-    * --tjs-menu-item-image-width - fallback: --tjs-default-menu-item-image-width; default: 1.25em
-    * --tjs-menu-item-image-height - fallback: --tjs-default-menu-item-image-height; default: 1.25em
     *
     * Separator / HR:
     * --tjs-menu-hr-margin - fallback: --tjs-default-hr-margin; default: 0 0.25em
@@ -164,9 +161,18 @@
    /** @type {Iterable<import('./index').TJSMenuItemData>} */
    let allItems;
 
+   /**
+    * When true, label only menu items will be indented.
+    *
+    * @type {boolean}
+    */
+   let hasIcon = false;
+
    $: {
       const tempList = isObject(menu) && isIterable(menu.items) ? menu.items :
        isIterable(items) ? items : [];
+
+      hasIcon = false;
 
       const tempItems = [];
 
@@ -188,6 +194,8 @@
          {
             const result = AssetValidator.parseMedia({ url: item.icon, mediaTypes: AssetValidator.MediaTypes.img_svg });
             type = result.valid ? result.elementType : 'font';
+
+            hasIcon = true;
          }
          else if (item.icon === void 0 && typeof item.label === 'string') { type = 'label'; }
          else if (typeof item.separator === 'string')
@@ -600,7 +608,7 @@
                 role=menuitem
                 tabindex=0>
                <span class=tjs-menu-focus-indicator></span>
-               <span class=tjs-menu-item-label>{localize(item.label)}</span>
+               <span class=tjs-menu-item-label class:has-icons={hasIcon}>{localize(item.label)}</span>
             </li>
          {:else if item['#type'] === 'separator-hr'}
             <hr>
@@ -698,8 +706,8 @@
    }
 
    .tjs-menu-item img, .tjs-menu-item svg {
-      width: var(--tjs-menu-item-image-width, var(--tjs-default-menu-item-image-width, 1.25em));
-      height: var(--tjs-menu-item-image-height, var(--tjs-default-menu-item-image-height, 1.25em));
+      width: var(--tjs-menu-item-icon-width, var(--tjs-default-menu-item-icon-width, 1.25em));
+      height: var(--tjs-menu-item-icon-height, var(--tjs-default-menu-item-icon-height, 1.25em));
    }
 
    .tjs-menu-item-button {
@@ -748,5 +756,9 @@
       overflow: var(--tjs-menu-item-label-overflow, var(--tjs-default-menu-item-label-overflow, hidden));
       text-overflow: var(--tjs-menu-item-label-text-overflow, var(--tjs-default-menu-item-label-text-overflow, ellipsis));
       white-space: var(--tjs-menu-item-label-white-space, var(--tjs-default-menu-item-label-white-space));
+   }
+
+   .tjs-menu-item-label.has-icons {
+      padding-left: calc(var(--tjs-menu-item-icon-width, 1.25em) + var(--tjs-menu-item-button-gap, 0.25em));
    }
 </style>

@@ -68,11 +68,8 @@
     * --tjs-context-menu-item-label-white-space - fallback: --tjs-default-menu-item-label-white-space; default: undefined
     *
     * Icon menu item:
+    * --tjs-context-menu-item-icon-height - fallback: --tjs-default-menu-item-icon-height; default: 1.25em
     * --tjs-context-menu-item-icon-width - fallback: --tjs-default-menu-item-icon-width; default: 1.25em
-    *
-    * Image menu item:
-    * --tjs-context-menu-item-image-width - fallback: --tjs-default-menu-item-image-width; default: 1.25em
-    * --tjs-context-menu-item-image-height - fallback: --tjs-default-menu-item-image-height; default: 1.25em
     *
     * Separator / HR:
     * --tjs-context-menu-hr-margin - fallback: --tjs-default-hr-margin; default: 0 0.25em
@@ -109,8 +106,6 @@
 
    import { TJSFocusWrap }    from '#standard/component/dom/focus';
 
-   export let menu = void 0;
-
    export let id = '';
 
    export let x = 0;
@@ -123,6 +118,13 @@
 
    /** @type {string[]} */
    export let classes = [];
+
+   /**
+    * When true, label only menu items will be indented.
+    *
+    * @type {boolean}
+    */
+   export let hasIcon = false;
 
    export let items = [];
 
@@ -150,12 +152,6 @@
     * @internal
     */
    export let current_component = void 0;
-
-   $: styles = isObject(menu) && isObject(menu.styles) ? menu.styles :
-    isObject(styles) ? styles : void 0;
-
-   $: keyCode = isObject(menu) && typeof menu.keyCode === 'string' ? menu.keyCode :
-    typeof keyCode === 'string' ? keyCode : 'Enter';
 
    // Provides options to `A11yHelper.getFocusableElements` to ignore TJSFocusWrap by CSS class.
    const s_IGNORE_CLASSES = { ignoreClasses: ['tjs-focus-wrap'] };
@@ -504,7 +500,7 @@
                     role=menuitem
                     tabindex=0>
                     <span class=tjs-context-menu-focus-indicator></span>
-                    <span class=tjs-context-menu-item-label>{localize(item.label)}</span>
+                    <span class=tjs-context-menu-item-label class:has-icons={hasIcon}>{localize(item.label)}</span>
                 </li>
             {:else if item['#type'] === 'separator-hr'}
                 <hr>
@@ -589,8 +585,8 @@
     }
 
     .tjs-context-menu-item img, .tjs-context-menu-item svg {
-        width: var(--tjs-context-menu-item-image-width, var(--tjs-default-menu-item-image-width, 1.25em));
-        height: var(--tjs-context-menu-item-image-height, var(--tjs-default-menu-item-image-height, 1.25em));
+        width: var(--tjs-context-menu-item-icon-width, var(--tjs-default-menu-item-icon-width, 1.25em));
+        height: var(--tjs-context-menu-item-icon-height, var(--tjs-default-menu-item-icon-height, 1.25em));
     }
 
     .tjs-context-menu-item-button {
@@ -637,5 +633,9 @@
         overflow: var(--tjs-context-menu-item-label-overflow, var(--tjs-default-menu-item-label-overflow, hidden));
         text-overflow: var(--tjs-context-menu-item-label-text-overflow, var(--tjs-default-menu-item-label-text-overflow, ellipsis));
         white-space: var(--tjs-context-menu-item-label-white-space, var(--tjs-default-menu-item-label-white-space));
+    }
+
+    .tjs-context-menu-item-label.has-icons {
+       padding-left: calc(var(--tjs-context-menu-item-icon-width, 1.25em) + var(--tjs-context-menu-item-button-gap, 0.25em));
     }
 </style>

@@ -135,6 +135,8 @@ export class TJSContextMenu
       // No applicable menu items. Abort showing the menu.
       if (processedItems.length === 0) { return; }
 
+      const hasIcon = processedItems.some((entry) => entry['#type'] === 'font' || entry['#type'] === 'svg');
+
       const focusSource = A11yHelper.getFocusSource({ event, x, y, focusEl, debug: focusDebug });
 
       const easingFn = getEasingFunc(easing, { default: false });
@@ -156,6 +158,7 @@ export class TJSContextMenu
             y: focusSource.y,
             offsetX,
             offsetY,
+            hasIcon,
             items: processedItems,
             classes: Array.from(themedClasses),
             focusSource,

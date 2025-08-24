@@ -44,13 +44,6 @@
    const storeURLString = getContext('urlString');
 
    /**
-    * Only process image / video assets from AssetValidator / skip audio.
-    *
-    * @type {Set<string>}
-    */
-   const mediaTypes = new Set(['img', 'svg', 'video']);
-
-   /**
     * @type {object}
     */
    export let media = void 0;
@@ -175,7 +168,10 @@
        (isReadableStore(storeURL) ? $storeURL : void 0) ??
         (isReadableStore(storeURLString) ? $storeURLString : void 0);
 
-      const result = AssetValidator.parseMedia({ url: mediaTarget, mediaTypes });
+      const result = AssetValidator.parseMedia({
+         url: mediaTarget,
+         mediaTypes: AssetValidator.MediaTypes.img_svg_video
+      });
 
       // Validate that the result is a valid format / type otherwise fallback to `urlDefault` if provided.
       if (result?.valid)
@@ -184,7 +180,11 @@
       }
       else if (urlDefault)
       {
-         const resultDefault = AssetValidator.parseMedia({ url: urlDefault, mediaTypes });
+         const resultDefault = AssetValidator.parseMedia({
+            url: urlDefault,
+            mediaTypes: AssetValidator.MediaTypes.img_svg_video
+         });
+
          if (resultDefault?.valid)
          {
             parsed = resultDefault;

@@ -1,6 +1,7 @@
 import { getEasingFunc }      from '#runtime/svelte/easing';
 import { TJSSvelte }          from '#runtime/svelte/util';
 import { A11yHelper }         from '#runtime/util/a11y';
+import { AssetValidator }     from '#runtime/util/browser';
 import { ThemeObserver }      from '#runtime/util/dom/theme';
 import { CrossWindow }        from '#runtime/util/browser';
 
@@ -201,9 +202,12 @@ export class TJSContextMenu
          let type;
 
          if (TJSSvelte.util.isComponent(item.class)) { type = 'class'; }
-         else if (typeof item.icon === 'string') { type = 'icon'; }
-         else if (typeof item.image === 'string') { type = 'image'; }
-         else if (item.icon === void 0 && item.image === void 0 && typeof item.label === 'string') { type = 'label'; }
+         else if (typeof item.icon === 'string')
+         {
+            const result = AssetValidator.parseMedia({ url: item.icon, mediaTypes: AssetValidator.MediaTypes.img_svg });
+            type = result.valid ? result.elementType : 'font';
+         }
+         else if (item.icon === void 0 && typeof item.label === 'string') { type = 'label'; }
          else if (typeof item.separator === 'string')
          {
             if (item.separator !== 'hr')
@@ -226,7 +230,7 @@ export class TJSContextMenu
 
 /**
  * @typedef {object} TJSContextMenuItemData Defines a menu item entry. Depending on the item data that is passed
- * into the menu you can define 4 types of items: 'icon / label', 'image / label', 'class / Svelte component', and
+ * into the menu you can define 3 types of items: 'icon / label', 'class / Svelte component', and
  * 'separator / hr'. A single callback function `onPress` is supported.
  *
  * @property {(item: TJSContextMenuItemData, object) => void} [onPress] A callback function that receives the selected
@@ -240,14 +244,9 @@ export class TJSContextMenu
  *
  * @property {object} [props] An object passed on as props for any Svelte component.
  *
- *
- * @property {string} [icon] A string containing icon classes.
- *
- *
- * @property {string} [image] An image icon path.
+ * @property {string} [icon] A string containing font icon classes or an image / svg URL path to load.
  *
  * @property {string} [imageAlt] An image 'alt' text description.
- *
  *
  * @property {string} [label] A text string that is passed through localization.
  *

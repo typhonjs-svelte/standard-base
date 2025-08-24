@@ -97,6 +97,7 @@
       onDestroy,
       onMount }               from '#svelte';
 
+   import { inlineSvg }       from '#runtime/svelte/action/dom/inline-svg';
    import { applyStyles }     from '#runtime/svelte/action/dom/style';
    import { slideFade }       from '#runtime/svelte/transition';
    import { TJSSvelte }       from '#runtime/svelte/util';
@@ -473,7 +474,7 @@
                     <span class=tjs-context-menu-focus-indicator></span>
                     <svelte:component this={item.class} {...(isObject(item.props) ? item.props : {})} />
                 </li>
-            {:else if item['#type'] === 'icon'}
+            {:else if item['#type'] === 'font'}
                 <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
                 <li class="tjs-context-menu-item tjs-context-menu-item-button"
                     on:click={(event) => onClick(event, item)}
@@ -484,7 +485,7 @@
                     <i class={item.icon}></i>
                     <span class=tjs-context-menu-item-label>{localize(item.label)}</span>
                 </li>
-            {:else if item['#type'] === 'image'}
+            {:else if item['#type'] === 'img'}
                 <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
                 <li class="tjs-context-menu-item tjs-context-menu-item-button"
                     on:click={(event) => onClick(event, item)}
@@ -492,7 +493,7 @@
                     role=menuitem
                     tabindex=0>
                     <span class=tjs-context-menu-focus-indicator></span>
-                    <img src={item.image} alt={item.imageAlt}>
+                    <img src={item.icon} alt={item.imageAlt}>
                     <span class=tjs-context-menu-item-label>{localize(item.label)}</span>
                 </li>
             {:else if item['#type'] === 'label'}
@@ -507,6 +508,17 @@
                 </li>
             {:else if item['#type'] === 'separator-hr'}
                 <hr>
+            {:else if item['#type'] === 'svg'}
+               <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
+               <li class="tjs-context-menu-item tjs-context-menu-item-button"
+                   on:click={(event) => onClick(event, item)}
+                   on:keyup={(event) => onKeyupItem(event, item)}
+                   role=menuitem
+                   tabindex=0>
+                  <span class=tjs-context-menu-focus-indicator></span>
+                  <svg use:inlineSvg={{ src: item.icon }}></svg>
+                  <span class=tjs-context-menu-item-label>{localize(item.label)}</span>
+               </li>
             {/if}
         {/each}
     </ol>
@@ -514,6 +526,13 @@
 </nav>
 
 <style>
+    /**
+     * Allow click through any `svg` element.
+     */
+    svg {
+        pointer-events: none;
+    }
+
     .tjs-context-menu {
         position: fixed;
         width: fit-content;
@@ -569,7 +588,7 @@
         width: var(--tjs-context-menu-item-icon-width, var(--tjs-default-menu-item-icon-width, 1.25em));
     }
 
-    .tjs-context-menu-item img {
+    .tjs-context-menu-item img, .tjs-context-menu-item svg {
         width: var(--tjs-context-menu-item-image-width, var(--tjs-default-menu-item-image-width, 1.25em));
         height: var(--tjs-context-menu-item-image-height, var(--tjs-default-menu-item-image-height, 1.25em));
     }

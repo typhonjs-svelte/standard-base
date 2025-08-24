@@ -107,11 +107,14 @@
       onDestroy,
       onMount }                  from '#svelte';
 
+   import { inlineSvg }          from '#runtime/svelte/action/dom/inline-svg';
    import { applyStyles }        from '#runtime/svelte/action/dom/style';
    import { slideFade }          from '#runtime/svelte/transition';
    import { TJSSvelte }          from '#runtime/svelte/util';
    import { A11yHelper }         from '#runtime/util/a11y';
-   import { CrossWindow }        from '#runtime/util/browser';
+   import {
+      AssetValidator,
+      CrossWindow}               from '#runtime/util/browser';
    import { getStackingContext } from '#runtime/util/dom/layout';
    import { localize }           from '#runtime/util/i18n';
 
@@ -181,9 +184,12 @@
          let type;
 
          if (TJSSvelte.util.isComponent(item.class)) { type = 'class'; }
-         else if (typeof item.icon === 'string') { type = 'icon'; }
-         else if (typeof item.image === 'string') { type = 'image'; }
-         else if (item.icon === void 0 && item.image === void 0 && typeof item.label === 'string') { type = 'label'; }
+         else if (typeof item.icon === 'string')
+         {
+            const result = AssetValidator.parseMedia({ url: item.icon, mediaTypes: AssetValidator.MediaTypes.img_svg });
+            type = result.valid ? result.elementType : 'font';
+         }
+         else if (item.icon === void 0 && typeof item.label === 'string') { type = 'label'; }
          else if (typeof item.separator === 'string')
          {
             if (item.separator !== 'hr')
@@ -564,7 +570,7 @@
                <span class=tjs-menu-focus-indicator></span>
                <svelte:component this={item.class} {...(isObject(item.props) ? item.props : {})} />
             </li>
-         {:else if item['#type'] === 'icon'}
+         {:else if item['#type'] === 'font'}
             <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
             <li class="tjs-menu-item tjs-menu-item-button"
                  on:click={(event) => onClick(event, item)}
@@ -575,7 +581,7 @@
                <i class={item.icon}></i>
                <span class=tjs-menu-item-label>{localize(item.label)}</span>
             </li>
-         {:else if item['#type'] === 'image'}
+         {:else if item['#type'] === 'img'}
             <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
             <li class="tjs-menu-item tjs-menu-item-button"
                  on:click={(event) => onClick(event, item)}
@@ -583,7 +589,7 @@
                  role=menuitem
                  tabindex=0>
                <span class=tjs-menu-focus-indicator></span>
-               <img src={item.image} alt={item.imageAlt}>
+               <img src={item.icon} alt={item.imageAlt}>
                <span class=tjs-menu-item-label>{localize(item.label)}</span>
             </li>
          {:else if item['#type'] === 'label'}
@@ -598,6 +604,17 @@
             </li>
          {:else if item['#type'] === 'separator-hr'}
             <hr>
+         {:else if item['#type'] === 'svg'}
+            <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
+            <li class="tjs-menu-item tjs-menu-item-button"
+                on:click={(event) => onClick(event, item)}
+                on:keyup={(event) => onKeyupItem(event, item)}
+                role=menuitem
+                tabindex=0>
+               <span class=tjs-menu-focus-indicator></span>
+               <svg use:inlineSvg={{ src: item.icon }}></svg>
+               <span class=tjs-menu-item-label>{localize(item.label)}</span>
+            </li>
          {/if}
       {/each}
       {#if $$slots.after}
@@ -620,6 +637,13 @@
 </nav>
 
 <style>
+   /**
+    * Allow click through any `svg` element.
+    */
+   svg {
+      pointer-events: none;
+   }
+
    .tjs-menu {
       position: absolute;
       width: max-content;
@@ -673,7 +697,7 @@
       width: var(--tjs-menu-item-icon-width, var(--tjs-default-menu-item-icon-width, 1.25em));
    }
 
-   .tjs-menu-item img {
+   .tjs-menu-item img, .tjs-menu-item svg {
       width: var(--tjs-menu-item-image-width, var(--tjs-default-menu-item-image-width, 1.25em));
       height: var(--tjs-menu-item-image-height, var(--tjs-default-menu-item-image-height, 1.25em));
    }

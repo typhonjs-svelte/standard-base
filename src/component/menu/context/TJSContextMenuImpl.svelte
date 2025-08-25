@@ -543,6 +543,7 @@
         border-radius: var(--tjs-context-menu-border-radius);
         box-shadow: var(--tjs-context-menu-box-shadow);
         color: var(--tjs-context-menu-color);
+        font-size: var(--tjs-context-menu-font-size);
         max-width: var(--tjs-context-menu-max-width, 360px);
         min-width: var(--tjs-context-menu-min-width, 20px);
 
@@ -595,6 +596,7 @@
 
     .tjs-context-menu-item-button:hover {
         color: var(--tjs-context-menu-item-highlight-color, var(--tjs-default-menu-highlight-color, var(--tjs-default-popup-highlight-color, #f0f0e0)));
+        cursor: var(--tjs-context-menu-item-cursor-hover, var(--tjs-cursor-pointer, pointer));
         text-shadow: var(--tjs-context-menu-item-text-shadow-focus-hover, var(--tjs-default-text-shadow-focus-hover, 0 0 8px red));
     }
 

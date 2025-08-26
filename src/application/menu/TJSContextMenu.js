@@ -70,6 +70,9 @@ export class TJSContextMenu
     *
     * @param {string}      [opts.id] - A custom CSS ID to add to the menu. This allows CSS style targeting.
     *
+    * @param {Function}    [opts.onClose] - A function that is invoked when the context menu is closed. Useful for any
+    *        state based changes such as CSS highlighting of context menu invoking element.
+    *
     * @param {{ [key: string]: string | null }}  [opts.styles] - Optional inline styles to apply.
     *
     * @param {number}      [opts.duration] - Transition option for duration of transition in milliseconds.
@@ -81,7 +84,7 @@ export class TJSContextMenu
     *        displaying inside.
     */
    static create({ event, items, x, y, offsetX = 2, offsetY = 2, focusDebug = false, focusEl,
-    keyCode = 'Enter', classes = [], id = '', styles, duration = 120, easing, activeWindow })
+    keyCode = 'Enter', classes = [], id = '', onClose, styles, duration = 120, easing, activeWindow })
    {
       if (TJSContextMenu.#contextMenu !== void 0) { return; }
 
@@ -123,6 +126,11 @@ export class TJSContextMenu
       if (typeof id !== 'string')
       {
          throw new TypeError(`TJSContextMenu.create error: 'id' is not a string.`);
+      }
+
+      if (onClose !== void 0 && typeof onClose !== 'function')
+      {
+         throw new TypeError(`TJSContextMenu.create error: 'onClose' is not a function.`);
       }
 
       if (!isIterable(classes))
@@ -174,7 +182,12 @@ export class TJSContextMenu
 
       // Register an event listener to remove any active context menu if closed from a menu selection or pointer
       // down event to `document.body`.
-      TJSContextMenu.#contextMenu.$on('close:contextmenu', () => { TJSContextMenu.#contextMenu = void 0; });
+      TJSContextMenu.#contextMenu.$on('close:contextmenu', () =>
+      {
+         TJSContextMenu.#contextMenu = void 0;
+
+         if (typeof onClose === 'function') { onClose(); }
+      });
    }
 
    /**

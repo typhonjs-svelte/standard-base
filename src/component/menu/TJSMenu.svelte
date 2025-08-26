@@ -627,7 +627,7 @@
       {/each}
       {#if $$slots.after}
          <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
-         <li class=tjs-menu-item
+         <li class="tjs-menu-item tjs-menu-item-button"
              on:click={(event) => onClick(event)}
              on:keyup={(event) => onKeyupItem(event)}
              role=menuitem
@@ -691,9 +691,13 @@
 
    .tjs-menu-item {
       display: flex;
+      position: relative;
+
       align-items: center;
-      line-height: var(--tjs-menu-item-line-height, var(--tjs-default-menu-item-line-height, 2em));
-      padding: var(--tjs-menu-item-padding, var(--tjs-default-menu-item-padding, 0 0.5em 0 0));
+      border: var(--tjs-menu-item-border);
+      line-height: var(--tjs-menu-item-line-height, 1em);
+      margin: var(--tjs-menu-item-margin, 0);
+      padding: var(--tjs-menu-item-padding, 0.5em);
    }
 
    /* Disable default outline for focus visible / within */
@@ -716,21 +720,30 @@
    }
 
    .tjs-menu-item-button:hover {
-      color: var(--tjs-menu-item-highlight-color, var(--tjs-default-menu-highlight-color, var(--tjs-default-popup-highlight-color, #f0f0e0)));
+      background: var(--tjs-menu-item-background-highlight);
+      border: var(--tjs-menu-item-border-highlight);
+      color: var(--tjs-menu-item-color-highlight);
       cursor: var(--tjs-menu-item-cursor-hover, var(--tjs-cursor-pointer, pointer));
-      text-shadow: var(--tjs-menu-item-text-shadow-focus-hover, var(--tjs-default-text-shadow-focus-hover, 0 0 8px red));
+      text-shadow: var(--tjs-menu-item-text-shadow-focus-hover);
    }
 
-   .tjs-menu-item-button:focus-visible {
-      color: var(--tjs-menu-item-highlight-color, var(--tjs-default-menu-highlight-color, var(--tjs-default-popup-highlight-color, #f0f0e0)));
-      text-shadow: var(--tjs-menu-item-text-shadow-focus-hover, var(--tjs-default-text-shadow-focus-hover, 0 0 8px red));
+   .tjs-menu-item-button:focus-visible, .tjs-menu-item-button:focus-within:has(:focus-visible) {
+      background: var(--tjs-menu-item-background-highlight);
+      border: var(--tjs-menu-item-border-highlight);
+      color: var(--tjs-menu-item-color-highlight);
+      text-shadow: var(--tjs-menu-item-text-shadow-focus-hover);
    }
 
    .tjs-menu-focus-indicator {
+      position: absolute;
+      left: 2px;
+      top: 10%;
+      height: 80%;
+      /*height: var(--tjs-menu-focus-indicator-height, var(--tjs-default-focus-indicator-height));*/
+
       align-self: var(--tjs-menu-focus-indicator-align-self, var(--tjs-default-focus-indicator-align-self, stretch));
       border: var(--tjs-menu-focus-indicator-border, var(--tjs-default-focus-indicator-border));
       border-radius: var(--tjs-menu-focus-indicator-border-radius, var(--tjs-default-focus-indicator-border-radius, 0.1em));
-      height: var(--tjs-menu-focus-indicator-height, var(--tjs-default-focus-indicator-height));
       width: var(--tjs-menu-focus-indicator-width, var(--tjs-default-focus-indicator-width, 0.25em));
       transition: var(--tjs-menu-focus-indicator-transition, var(--tjs-default-focus-indicator-transition));
    }
@@ -738,19 +751,12 @@
    /* Enable focus indicator for focus-within */
    /* Note: the use of `has` pseudo-selector that requires a child with :focus-visible */
    .tjs-menu-item:focus-within:has(:focus-visible) .tjs-menu-focus-indicator {
-      background: var(--tjs-menu-focus-indicator-background, var(--tjs-default-focus-indicator-background, white));
-   }
-
-   /* Fallback for browsers that don't support 'has'; any user interaction including mouse will trigger */
-   @supports not (selector(:has(*))) {
-      .tjs-menu-item:focus-within .tjs-menu-focus-indicator {
-         background: var(--tjs-menu-focus-indicator-background, var(--tjs-default-focus-indicator-background, white));
-      }
+      background: var(--tjs-menu-focus-indicator-background, currentColor);
    }
 
    /* Enable focus indicator for focus visible */
    .tjs-menu-item:focus-visible .tjs-menu-focus-indicator {
-      background: var(--tjs-menu-focus-indicator-background, var(--tjs-default-focus-indicator-background, white));
+      background: var(--tjs-menu-focus-indicator-background, currentColor);
    }
 
    .tjs-menu-item-label {

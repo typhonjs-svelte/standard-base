@@ -462,7 +462,7 @@
         {#each items as item}
             {#if item['#type'] === 'class'}
                 <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
-                <li class=tjs-context-menu-item
+                <li class="tjs-context-menu-item tjs-context-menu-item-button"
                     on:click={(event) => onClick(event, item)}
                     on:keyup={(event) => onKeyupItem(event, item)}
                     role=menuitem
@@ -546,6 +546,7 @@
         font-size: var(--tjs-context-menu-font-size);
         max-width: var(--tjs-context-menu-max-width, 360px);
         min-width: var(--tjs-context-menu-min-width, 20px);
+        padding: var(--tjs-context-menu-padding, 0);
 
         text-align: start;
     }
@@ -570,9 +571,13 @@
 
     .tjs-context-menu-item {
         display: flex;
+        position: relative;
+
         align-items: center;
-        line-height: var(--tjs-context-menu-item-line-height, var(--tjs-default-menu-item-line-height, 2em));
-        padding: var(--tjs-context-menu-item-padding, var(--tjs-default-menu-item-padding, 0 0.5em 0 0));
+        border: var(--tjs-context-menu-item-border);
+        line-height: var(--tjs-context-menu-item-line-height, 1em);
+        margin: var(--tjs-context-menu-item-margin, 0);
+        padding: var(--tjs-context-menu-item-padding, 0.5em);
     }
 
     /* Disable default outline for focus visible / within */
@@ -595,40 +600,42 @@
     }
 
     .tjs-context-menu-item-button:hover {
-        color: var(--tjs-context-menu-item-highlight-color, var(--tjs-default-menu-highlight-color, var(--tjs-default-popup-highlight-color, #f0f0e0)));
+        background: var(--tjs-context-menu-item-background-highlight);
+        border: var(--tjs-context-menu-item-border-highlight);
+        color: var(--tjs-context-menu-item-color-highlight);
         cursor: var(--tjs-context-menu-item-cursor-hover, var(--tjs-cursor-pointer, pointer));
-        text-shadow: var(--tjs-context-menu-item-text-shadow-focus-hover, var(--tjs-default-text-shadow-focus-hover, 0 0 8px red));
+        text-shadow: var(--tjs-context-menu-item-text-shadow-focus-hover);
     }
 
-    .tjs-context-menu-item-button:focus-visible {
-        color: var(--tjs-context-menu-item-highlight-color, var(--tjs-default-menu-highlight-color, var(--tjs-default-popup-highlight-color, #f0f0e0)));
-        text-shadow: var(--tjs-context-menu-item-text-shadow-focus-hover, var(--tjs-default-text-shadow-focus-hover, 0 0 8px red));
+    .tjs-context-menu-item-button:focus-visible, .tjs-context-menu-item-button:focus-within:has(:focus-visible) {
+        background: var(--tjs-context-menu-item-background-highlight);
+        border: var(--tjs-context-menu-item-border-highlight);
+        color: var(--tjs-context-menu-item-color-highlight);
+        text-shadow: var(--tjs-context-menu-item-text-shadow-focus-hover);
     }
 
     .tjs-context-menu-focus-indicator {
+        position: absolute;
+        left: 2px;
+        top: 10%;
+        height: 80%;
+        /*height: var(--tjs-context-menu-focus-indicator-height, var(--tjs-default-focus-indicator-height));*/
+
         align-self: var(--tjs-context-menu-focus-indicator-align-self, var(--tjs-default-focus-indicator-align-self, stretch));
         border: var(--tjs-context-menu-focus-indicator-border, var(--tjs-default-focus-indicator-border));
         border-radius: var(--tjs-context-menu-focus-indicator-border-radius, var(--tjs-default-focus-indicator-border-radius, 0.1em));
-        height: var(--tjs-context-menu-focus-indicator-height, var(--tjs-default-focus-indicator-height));
         width: var(--tjs-context-menu-focus-indicator-width, var(--tjs-default-focus-indicator-width, 0.25em));
         transition: var(--tjs-context-menu-focus-indicator-transition, var(--tjs-default-focus-indicator-transition));
     }
 
     .tjs-context-menu-item:focus-visible .tjs-context-menu-focus-indicator {
-        background: var(--tjs-context-menu-focus-indicator-background, var(--tjs-default-focus-indicator-background, white));
+        background: var(--tjs-context-menu-focus-indicator-background, currentColor);
     }
 
     /* Enable focus indicator for focus-within */
     /* Note: the use of `has` pseudo-selector that requires a child with :focus-visible */
     .tjs-context-menu-item:focus-within:has(:focus-visible) .tjs-context-menu-focus-indicator {
-        background: var(--tjs-context-menu-focus-indicator-background, var(--tjs-default-focus-indicator-background, white));
-    }
-
-    /* Fallback for browsers that don't support 'has'; any user interaction including mouse will trigger */
-    @supports not (selector(:has(*))) {
-        .tjs-context-menu-item:focus-within .tjs-context-menu-focus-indicator {
-            background: var(--tjs-context-menu-focus-indicator-background, var(--tjs-default-focus-indicator-background, white));
-        }
+        background: var(--tjs-context-menu-focus-indicator-background, currentColor);
     }
 
     .tjs-context-menu-item-label {

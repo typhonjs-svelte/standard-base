@@ -87,15 +87,6 @@
     * --tjs-menu-hr-margin - fallback: --tjs-default-hr-margin; default: 0 0.25em
     * --tjs-menu-hr-border-top - fallback: --tjs-default-hr-border-top; default: 1px solid #555
     * --tjs-menu-hr-border-bottom - fallback: --tjs-default-hr-border-bottom; default: 1px solid #444
-    *
-    * The following CSS variables define the keyboard / a11y focus indicator for menu items:
-    * --tjs-menu-focus-indicator-align-self - fallback: --tjs-default-focus-indicator-align-self; default: stretch
-    * --tjs-menu-focus-indicator-background - fallback: --tjs-default-focus-indicator-background; default: white
-    * --tjs-menu-focus-indicator-border - fallback: --tjs-default-focus-indicator-border; default: undefined
-    * --tjs-menu-focus-indicator-border-radius - fallback: --tjs-default-focus-indicator-border-radius; default: 0.1em
-    * --tjs-menu-focus-indicator-height - fallback: --tjs-default-focus-indicator-height; default: undefined
-    * --tjs-menu-focus-indicator-width - fallback: --tjs-default-focus-indicator-width; default: 0.25em
-    * --tjs-menu-focus-indicator-transition - fallback: --tjs-default-focus-indicator-transition
     * ```
     * @componentDocumentation
     */
@@ -119,7 +110,9 @@
       isIterable,
       isObject }                 from '#runtime/util/object';
 
-   import { TJSFocusWrap }       from '#standard/component/dom/focus';
+   import {
+      TJSFocusIndicator,
+      TJSFocusWrap }             from '#standard/component/dom/focus';
 
    /** @type {import('.').TJSMenuData} */
    export let menu = void 0;
@@ -559,7 +552,7 @@
              on:keyup={(event) => onKeyupItem(event)}
              role=menuitem
              tabindex=0>
-            <span class=tjs-menu-focus-indicator></span>
+            <TJSFocusIndicator absolute={true} />
             <slot name=before>
                {#if TJSSvelte.util.isComponent(menu?.slotBefore?.class)}
                   <svelte:component this={menu.slotBefore.class} {...(isObject(menu?.slotBefore?.props) ? menu.slotBefore.props : {})} />
@@ -575,7 +568,7 @@
                 on:keyup={(event) => onKeyupItem(event, item)}
                 role=menuitem
                 tabindex=0>
-               <span class=tjs-menu-focus-indicator></span>
+               <TJSFocusIndicator absolute={true} />
                <svelte:component this={item.class} {...(isObject(item.props) ? item.props : {})} />
             </li>
          {:else if item['#type'] === 'font'}
@@ -585,7 +578,7 @@
                  on:keyup={(event) => onKeyupItem(event, item)}
                  role=menuitem
                  tabindex=0>
-               <span class=tjs-menu-focus-indicator></span>
+               <TJSFocusIndicator absolute={true} />
                <i class={item.icon}></i>
                <span class=tjs-menu-item-label>{localize(item.label)}</span>
             </li>
@@ -596,7 +589,7 @@
                  on:keyup={(event) => onKeyupItem(event, item)}
                  role=menuitem
                  tabindex=0>
-               <span class=tjs-menu-focus-indicator></span>
+               <TJSFocusIndicator absolute={true} />
                <img src={item.icon} alt={item.imageAlt}>
                <span class=tjs-menu-item-label>{localize(item.label)}</span>
             </li>
@@ -607,7 +600,7 @@
                 on:keyup={(event) => onKeyupItem(event, item)}
                 role=menuitem
                 tabindex=0>
-               <span class=tjs-menu-focus-indicator></span>
+               <TJSFocusIndicator absolute={true} />
                <span class=tjs-menu-item-label class:has-icons={hasIcon}>{localize(item.label)}</span>
             </li>
          {:else if item['#type'] === 'separator-hr'}
@@ -619,7 +612,7 @@
                 on:keyup={(event) => onKeyupItem(event, item)}
                 role=menuitem
                 tabindex=0>
-               <span class=tjs-menu-focus-indicator></span>
+               <TJSFocusIndicator absolute={true} />
                <svg use:inlineSvg={{ src: item.icon }}></svg>
                <span class=tjs-menu-item-label>{localize(item.label)}</span>
             </li>
@@ -632,7 +625,7 @@
              on:keyup={(event) => onKeyupItem(event)}
              role=menuitem
              tabindex=0>
-            <span class=tjs-menu-focus-indicator></span>
+            <TJSFocusIndicator absolute={true} />
             <slot name=after>
                {#if TJSSvelte.util.isComponent(menu?.slotAfter?.class)}
                   <svelte:component this={menu.slotAfter.class} {...(isObject(menu?.slotAfter?.props) ? menu.slotAfter.props : {})} />
@@ -716,7 +709,7 @@
    }
 
    .tjs-menu-item-button {
-      gap: var(--tjs-menu-item-button-gap, var(--tjs-default-menu-item-button-gap, 0.25em));
+      gap: var(--tjs-menu-item-button-gap, var(--tjs-default-menu-item-button-gap, 0.5em));
    }
 
    .tjs-menu-item-button:hover {
@@ -734,29 +727,10 @@
       text-shadow: var(--tjs-menu-item-text-shadow-focus-hover);
    }
 
-   .tjs-menu-focus-indicator {
-      position: absolute;
-      left: 2px;
-      top: 10%;
-      height: 80%;
-      /*height: var(--tjs-menu-focus-indicator-height, var(--tjs-default-focus-indicator-height));*/
-
-      align-self: var(--tjs-menu-focus-indicator-align-self, var(--tjs-default-focus-indicator-align-self, stretch));
-      border: var(--tjs-menu-focus-indicator-border, var(--tjs-default-focus-indicator-border));
-      border-radius: var(--tjs-menu-focus-indicator-border-radius, var(--tjs-default-focus-indicator-border-radius, 0.1em));
-      width: var(--tjs-menu-focus-indicator-width, var(--tjs-default-focus-indicator-width, 0.25em));
-      transition: var(--tjs-menu-focus-indicator-transition, var(--tjs-default-focus-indicator-transition));
-   }
-
-   /* Enable focus indicator for focus-within */
+   /* Enable focus indicator / TJSFocusIndicator */
    /* Note: the use of `has` pseudo-selector that requires a child with :focus-visible */
-   .tjs-menu-item:focus-within:has(:focus-visible) .tjs-menu-focus-indicator {
-      background: var(--tjs-menu-focus-indicator-background, currentColor);
-   }
-
-   /* Enable focus indicator for focus visible */
-   .tjs-menu-item:focus-visible .tjs-menu-focus-indicator {
-      background: var(--tjs-menu-focus-indicator-background, currentColor);
+   .tjs-menu-item:focus-visible, .tjs-menu-item:focus-within:has(:focus-visible) {
+      --tjs-focus-indicator-background: var(--tjs-menu-item-focus-indicator-background, currentColor);
    }
 
    .tjs-menu-item-label {

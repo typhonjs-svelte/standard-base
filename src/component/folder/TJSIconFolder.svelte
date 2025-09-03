@@ -132,6 +132,7 @@
 
    import { writable }           from '#svelte/store';
 
+   import { inlineSvg }          from '#runtime/svelte/action/dom/inline-svg';
    import { toggleDetails }      from '#runtime/svelte/action/dom/properties';
    import { applyStyles }        from '#runtime/svelte/action/dom/style';
 
@@ -140,7 +141,9 @@
       subscribeIgnoreFirst }     from '#runtime/svelte/store/util';
 
    import { TJSSvelte }          from '#runtime/svelte/util';
-   import { CrossWindow }        from '#runtime/util/browser';
+   import {
+      AssetValidator,
+      CrossWindow }              from '#runtime/util/browser';
    import { localize }           from '#runtime/util/i18n';
    import { isObject }           from '#runtime/util/object';
 
@@ -265,10 +268,15 @@
    $: onContextMenu = isObject(folder) && typeof folder.onContextMenu === 'function' ? folder.onContextMenu :
     typeof onContextMenu === 'function' ? onContextMenu : void 0;
 
+   let iconType;
+
    $:
    {
       const iconData = $store ? iconOpen : iconClosed;
       currentIcon = typeof iconData !== 'string' ? void 0 : iconData;
+
+      const result = AssetValidator.parseMedia({ url: currentIcon, mediaTypes: AssetValidator.MediaTypes.img_svg });
+      iconType = result.valid ? result.elementType : 'font';
    }
 
    // For performance reasons when the folder is closed the main slot is not rendered.
@@ -479,7 +487,15 @@ changing the open state.  -->
             class:remove-focus-visible={localOptions.focusIndicator || localOptions.focusChevron}
             role=button
             tabindex={enabled ? 0 : -1}>
-      {#if currentIcon}<i bind:this={iconEl} class={currentIcon} class:focus-chevron={localOptions.focusChevron}></i>{/if}
+      {#if currentIcon}
+         {#if iconType === 'font'}
+            <i bind:this={iconEl} class={`icon ${currentIcon}`} class:focus-chevron={localOptions.focusChevron}></i>
+         {:else if iconType === 'img'}
+            <img src={currentIcon} alt="" class=icon class:focus-chevron={localOptions.focusChevron}>
+         {:else if iconType === 'svg'}
+            <svg use:inlineSvg={{ src: currentIcon }} class=icon class:focus-chevron={localOptions.focusChevron}></svg>
+         {/if}
+      {/if}
 
       {#if localOptions.focusIndicator}
          <TJSFocusIndicator />
@@ -556,18 +572,21 @@ changing the open state.  -->
       display: none;
    }
 
-   summary i {
+   .icon {
       flex-shrink: 0;
       border-radius: var(--tjs-folder-summary-chevron-border-radius, 0);
       color: var(--tjs-folder-summary-chevron-color, inherit);
       cursor: var(--tjs-cursor-pointer, pointer);
       opacity: var(--tjs-folder-summary-chevron-opacity, 1);
       margin: var(--tjs-folder-summary-chevron-margin, 0 0 0 0.25em);
+      height: var(--tjs-folder-summary-chevron-height, 1.25em);
       width: var(--tjs-folder-summary-chevron-width, 1.25em);
       transition: var(--tjs-folder-summary-chevron-transition, opacity 0.2s, transform 0.1s);
+
+      pointer-events: none;
    }
 
-   summary.disabled, summary.disabled i {
+   summary.disabled, summary.disabled .icon {
       color: var(--tjs-folder-summary-disabled-color, inherit);
       cursor: var(--tjs-folder-summary-disabled-cursor, var(--tjs-cursor-default, default));
    }
@@ -586,11 +605,11 @@ changing the open state.  -->
       --tjs-focus-indicator-background: var(--tjs-folder-summary-focus-indicator-background, currentColor);
    }
 
-   summary:focus-visible i {
+   summary:focus-visible .icon {
       opacity: var(--tjs-folder-summary-chevron-opacity-focus-visible, 1);
    }
 
-   summary:focus-visible i.focus-chevron::before {
+   summary:focus-visible .icon.focus-chevron::before {
       outline: var(--tjs-folder-summary-outline-focus-visible, var(--tjs-default-outline-focus-visible, revert));
    }
 
@@ -598,7 +617,7 @@ changing the open state.  -->
       outline: none;
    }
 
-   summary:hover i {
+   summary:hover .icon {
       opacity: var(--tjs-folder-summary-chevron-opacity-hover, 1);
    }
 

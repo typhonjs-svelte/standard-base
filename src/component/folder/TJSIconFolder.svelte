@@ -10,7 +10,7 @@
     * ----------------------------------------------------------------------------------------------------------------
     * ### Exported props
     *
-    * - `folder` ({@link TJSFolderData}): An object defining all properties of a folder including potentially data
+    * - `folder` ({@link TJSFolder.DataIcon}): An object defining all properties of a folder including potentially data
     * driven minimal Svelte configuration objects (`slotDefault`, `slotLabel`, and `slotSummaryEnd`) providing default
     * component implementations.
     *
@@ -149,7 +149,7 @@
 
    import { TJSFocusIndicator }  from '#standard/component/dom/focus';
 
-   /** @type {import('.').TJSIconFolderData} */
+   /** @type {import('./types').TJSFolder.DataIcon} */
    export let folder = void 0;
 
    /** @type {boolean} */
@@ -173,7 +173,7 @@
    /** @type {string} */
    export let keyCode = void 0;
 
-   /** @type {import('.').TJSFolderOptions} */
+   /** @type {import('./types').TJSFolder.InternalOptions} */
    export let options = void 0;
 
    /** @type {import('#runtime/svelte/store/util').MinimalWritable<boolean>} */
@@ -191,7 +191,7 @@
    /** @type {(data?: { event?: PointerEvent }) => void} */
    export let onContextMenu = void 0;
 
-   /** @type {TJSFolderOptions} */
+   /** @type {import('./types').TJSFolder.InternalOptions} */
    const localOptions = {
       chevronOnly: false,
       focusChevron: false,
@@ -304,7 +304,7 @@
     *
     * @param {boolean}  [bubbles=false] - Does the event bubble.
     *
-    * @returns {CustomEvent<object>}
+    * @returns {CustomEvent<import('./types').TJSFolder.EventData>}
     */
    function createEvent(type, bubbles = false)
    {

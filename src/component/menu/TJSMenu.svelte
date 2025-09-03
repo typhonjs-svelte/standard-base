@@ -102,7 +102,7 @@
    import { A11yHelper }         from '#runtime/util/a11y';
    import {
       AssetValidator,
-      CrossWindow}               from '#runtime/util/browser';
+      CrossWindow }              from '#runtime/util/browser';
    import { getStackingContext } from '#runtime/util/dom/layout';
    import { localize }           from '#runtime/util/i18n';
 

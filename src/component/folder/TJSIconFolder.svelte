@@ -607,8 +607,9 @@ changing the open state.  -->
       opacity: var(--tjs-folder-summary-chevron-opacity-focus-visible, 1);
    }
 
-   summary:focus-visible .icon.focus-chevron::before {
+   summary:focus-visible i.icon.focus-chevron::before, summary:focus-visible img.icon.focus-chevron, summary:focus-visible svg.icon.focus-chevron {
       outline: var(--tjs-folder-summary-outline-focus-visible, var(--tjs-default-outline-focus-visible, revert));
+      transition: var(--tjs-folder-summary-transition-focus-visible, var(--tjs-default-transition-focus-visible));
    }
 
    summary:focus-visible.remove-focus-visible {

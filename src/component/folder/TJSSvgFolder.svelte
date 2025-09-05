@@ -595,6 +595,7 @@ changing the open state.  -->
 
    summary:focus-visible svg.focus-chevron {
       outline: var(--tjs-folder-summary-outline-focus-visible, var(--tjs-default-outline-focus-visible, revert));
+      transition: var(--tjs-folder-summary-transition-focus-visible, var(--tjs-default-transition-focus-visible));
    }
 
    summary:focus-visible.remove-focus-visible {

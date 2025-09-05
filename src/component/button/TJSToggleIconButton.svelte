@@ -313,8 +313,9 @@
       border: var(--tjs-icon-button-border, var(--tjs-button-border));
       border-radius: var(--tjs-icon-button-border-radius, var(--tjs-button-border-radius, 50%));
       border-width: var(--tjs-icon-button-border-width, var(--tjs-button-border-width));
-      cursor: var(--tjs-cursor-pointer, pointer);
       clip-path: var(--tjs-icon-button-clip-path, var(--tjs-button-clip-path, none));
+      color: var(--tjs-icon-button-color, currentColor);
+      cursor: var(--tjs-cursor-pointer, pointer);
       margin: var(--tjs-icon-button-margin);
       padding: var(--tjs-icon-button-padding, 20%);
       transform-style: preserve-3d;
@@ -341,6 +342,7 @@
    button:hover {
       background: var(--tjs-icon-button-background-hover, var(--tjs-button-background-hover));
       clip-path: var(--tjs-icon-button-clip-path-hover, var(--tjs-icon-button-clip-path, var(--tjs-button-clip-path-hover, var(--tjs-button-clip-path, none))));
+      color: var(--tjs-icon-button-color-hover, currentColor);
       text-shadow: var(--tjs-icon-button-text-shadow-hover, var(--tjs-button-text-shadow-hover, var(--tjs-default-text-shadow-focus-hover)));
    }
 

@@ -17,7 +17,7 @@
    /** @type {(time: number) => number} */
    export let easingOut;
 
-   /** @type {{ icon: string, svelte: import('#runtime/svelte/util').TJSSvelte.Config.Embed, title?: string }} */
+   /** @type {{ icon: string, svelte: import('#runtime/svelte/util').TJSSvelte.Config.Embed, tooltip?: string }} */
    export let item;
 
    /** @type {'left' | 'right'} */

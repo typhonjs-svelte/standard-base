@@ -60,8 +60,8 @@
 
    export let enabled = void 0;
    export let icon = void 0;
-   export let title = void 0;
-   export let titleSelected = void 0;
+   export let tooltip = void 0;
+   export let tooltipSelected = void 0;
    export let store = void 0;
    export let styles = void 0;
    export let efx = void 0;
@@ -81,10 +81,10 @@
     typeof enabled === 'boolean' ? enabled : true;
    $: icon = isObject(button) && typeof button.icon === 'string' ? button.icon :
     typeof icon === 'string' ? icon : void 0;
-   $: title = isObject(button) && typeof button.title === 'string' ? button.title :
-    typeof title === 'string' ? title : '';
-   $: titleSelected = isObject(button) && typeof button.titleSelected === 'string' ? button.titleSelected :
-    typeof titleSelected === 'string' ? titleSelected : '';
+   $: tooltip = isObject(button) && typeof button.tooltip === 'string' ? button.tooltip :
+    typeof tooltip === 'string' ? tooltip : '';
+   $: tooltipSelected = isObject(button) && typeof button.tooltipSelected === 'string' ? button.tooltipSelected :
+    typeof tooltipSelected === 'string' ? tooltipSelected : '';
    $: store = isObject(button) && isMinimalWritableStore(button.store) ? button.store : isMinimalWritableStore(store) ?
     store : void 0;
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
@@ -111,8 +111,8 @@
 
    $: if (store && !enabled) { $store = false; }
 
-   // Chose the current title when `selected` changes; if there is no `titleSelected` fallback to `title`.
-   $: titleCurrent = selected && titleSelected !== '' ? titleSelected : title
+   // Chose the current tooltip when `selected` changes; if there is no `tooltipSelected` fallback to `tooltip`.
+   $: tooltipCurrent = selected && tooltipSelected !== '' ? tooltipSelected : tooltip
 
    // ----------------------------------------------------------------------------------------------------------------
 
@@ -259,7 +259,7 @@
       on:click
       on:contextmenu
       tabindex={enabled ? 0 : null}
-      use:popoverTooltip={title}
+      use:popoverTooltip={tooltipCurrent}
       use:efx={{ enabled }}>
       {#if icon}
          {#if iconType === 'font'}

@@ -30,6 +30,7 @@
    import { createEventDispatcher }    from 'svelte';
 
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
+   import { popoverTooltip }           from '#runtime/svelte/action/dom/tooltip';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
    import { TJSSvelte }                from '#runtime/svelte/util';
    import { localize }                 from '#runtime/util/i18n';
@@ -40,8 +41,8 @@
    export let enabled = void 0;
    export let text = void 0;
    export let comp = void 0;
-   export let title = void 0;
-   export let titleSelected = void 0;
+   export let tooltip = void 0;
+   export let tooltipSelected = void 0;
    export let store = void 0;
    export let styles = void 0;
    export let efx = void 0;
@@ -63,10 +64,10 @@
     typeof text === 'string' ? text : void 0;
    $: comp = isObject(label) && TJSSvelte.util.isComponent(label.comp) ? label.comp :
     TJSSvelte.util.isComponent(comp) ? comp : void 0;
-   $: title = isObject(label) && typeof label.title === 'string' ? label.title :
-    typeof title === 'string' ? title : '';
-   $: titleSelected = isObject(label) && typeof label.titleSelected === 'string' ? label.titleSelected :
-    typeof titleSelected === 'string' ? titleSelected : '';
+   $: tooltip = isObject(label) && typeof label.tooltip === 'string' ? label.tooltip :
+    typeof tooltip === 'string' ? tooltip : '';
+   $: tooltipSelected = isObject(label) && typeof label.tooltipSelected === 'string' ? label.tooltipSelected :
+    typeof tooltipSelected === 'string' ? tooltipSelected : '';
    $: store = isObject(label) && isMinimalWritableStore(label.store) ? label.store : isMinimalWritableStore(store) ?
     store : void 0;
    $: styles = isObject(label) && isObject(label.styles) ? label.styles :
@@ -93,8 +94,8 @@
 
    $: if (store && !enabled) { $store = false; }
 
-   // Chose the current title when `selected` changes; if there is no `titleSelected` fallback to `title`.
-   $: titleCurrent = selected && titleSelected !== '' ? titleSelected : title
+   // Chose the current tooltip when `selected` changes; if there is no `tooltipSelected` fallback to `tooltip`.
+   $: tooltipCurrent = selected && tooltipSelected !== '' ? tooltipSelected : tooltip
 
    // ----------------------------------------------------------------------------------------------------------------
 
@@ -219,8 +220,8 @@
      class:disabled={!enabled}
      on:click={onClickDiv}
      on:close:popup={onClosePopup}
-     title={localize(titleCurrent)}
      use:applyStyles={styles}
+     use:popoverTooltip={tooltipCurrent}
      on:pointerdown|stopPropagation>
    <slot name=outer />
    <span bind:this={spanEl}

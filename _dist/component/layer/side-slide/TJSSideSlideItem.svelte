@@ -3,8 +3,8 @@
       getContext,
       tick }                     from 'svelte';
 
+   import { popoverTooltip }     from '#runtime/svelte/action/dom/tooltip';
    import { TJSSvelte }          from '#runtime/svelte/util';
-   import { localize }           from '#runtime/util/i18n';
    import { A11yHelper }         from '#runtime/util/a11y';
    import { CrossWindow }        from '#runtime/util/browser';
    import { isObject }           from '#runtime/util/object';
@@ -32,7 +32,7 @@
     * @type {({
     *    icon: string | import('#runtime/svelte/util').TJSSvelte.Config.Embed,
     *    svelte: import('#runtime/svelte/util').TJSSvelte.Config.Embed,
-    *    title?: string
+    *    tooltip?: string
     * })}
     */
    export let item = void 0;
@@ -386,11 +386,11 @@
       <button bind:this={buttonEl}
               class=tjs-side-slide-layer-item
               class:locked={locked}
-              title={localize(item.title)}
               on:keyup={onKeyupButton}
               on:contextmenu={onContextmenuButton}
               on:pointerdown={onPointerdownButton}
               on:pointerenter={onPointerenterButton}
+              use:popoverTooltip={item.tooltip}
               disabled={isOtherLocked}>
          {#if TJSSvelte.config.isConfigEmbed(item.icon)}
             <svelte:component this={item.icon.class} {...(isObject(item.icon.props) ? item.icon.props : {})} />

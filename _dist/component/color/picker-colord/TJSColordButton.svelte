@@ -49,14 +49,14 @@
 
    import { colord }                from '#runtime/data/color/colord';
    import { applyStyles }           from '#runtime/svelte/action/dom/style';
-   import { localize }              from '#runtime/util/i18n';
+   import { popoverTooltip }        from '#runtime/svelte/action/dom/tooltip';
    import { isObject }              from '#runtime/util/object';
 
    export let button = void 0;
 
    export let color = void 0;
    export let enabled = void 0;
-   export let title = void 0;
+   export let tooltip = void 0;
    export let styles = void 0;
    export let efx = void 0;
    export let keyCode = void 0;
@@ -68,8 +68,8 @@
 
    $: enabled = isObject(button) && typeof button.enabled === 'boolean' ? button.enabled :
     typeof enabled === 'boolean' ? enabled : true;
-   $: title = isObject(button) && typeof button.title === 'string' ? button.title :
-    typeof title === 'string' ? title : '';
+   $: tooltip = isObject(button) && typeof button.tooltip === 'string' ? button.tooltip :
+    typeof tooltip === 'string' ? tooltip : '';
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
     isObject(styles) ? styles : void 0;
    $: efx = isObject(button) && typeof button.efx === 'function' ? button.efx :
@@ -168,7 +168,7 @@
 <div class=tjs-color-button
      class:disabled={!enabled}
      use:applyStyles={styles}
-     title={localize(title)}
+     use:popoverTooltip={tooltip}
      style:--tjs-icon-button-background={hslColor}>
     <div class=tjs-color-button-inner
          on:click={onClick}

@@ -491,9 +491,9 @@ changing the open state.  -->
          {#if iconType === 'font'}
             <i bind:this={iconEl} class={`icon ${currentIcon}`} class:focus-chevron={localOptions.focusChevron}></i>
          {:else if iconType === 'img'}
-            <img src={currentIcon} alt="" class=icon class:focus-chevron={localOptions.focusChevron}>
+            <img bind:this={iconEl} src={currentIcon} alt="" class=icon class:focus-chevron={localOptions.focusChevron}>
          {:else if iconType === 'svg'}
-            <svg use:inlineSvg={{ src: currentIcon }} class=icon class:focus-chevron={localOptions.focusChevron}></svg>
+            <svg bind:this={iconEl} use:inlineSvg={{ src: currentIcon }} class=icon class:focus-chevron={localOptions.focusChevron}></svg>
          {/if}
       {/if}
 
@@ -582,8 +582,6 @@ changing the open state.  -->
       height: var(--tjs-folder-summary-chevron-height, 1.25em);
       width: var(--tjs-folder-summary-chevron-width, 1.25em);
       transition: var(--tjs-folder-summary-chevron-transition, opacity 0.2s, transform 0.1s);
-
-      pointer-events: none;
    }
 
    summary.disabled, summary.disabled .icon {

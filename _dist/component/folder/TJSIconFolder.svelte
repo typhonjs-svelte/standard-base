@@ -10,7 +10,7 @@
     * ----------------------------------------------------------------------------------------------------------------
     * ### Exported props
     *
-    * - `folder` ({@link TJSFolderData}): An object defining all properties of a folder including potentially data
+    * - `folder` ({@link TJSFolder.DataIcon}): An object defining all properties of a folder including potentially data
     * driven minimal Svelte configuration objects (`slotDefault`, `slotLabel`, and `slotSummaryEnd`) providing default
     * component implementations.
     *
@@ -71,12 +71,13 @@
     * --tjs-folder-summary-border: none
     * --tjs-folder-summary-border-radius: 0
     * --tjs-folder-summary-border-width: initial
-    * --tjs-folder-summary-cursor: pointer
+    * --tjs-folder-summary-color: inherit
     * --tjs-folder-summary-font-size: inherit
     * --tjs-folder-summary-font-weight: bold
     * --tjs-folder-summary-font-family: inherit
     * --tjs-folder-summary-gap: 0.125em
     * --tjs-folder-summary-padding: 0.25em
+    * --tjs-folder-summary-text-shadow: none
     * --tjs-folder-summary-transition: background 0.1s
     * --tjs-folder-summary-width: fit-content; wraps content initially, set to 100% or other width measurement
     *
@@ -88,15 +89,6 @@
     * --tjs-folder-summary-box-shadow-focus-visible - fallback: --tjs-default-box-shadow-focus-visible
     * --tjs-folder-summary-outline-focus-visible - fallback: --tjs-default-outline-focus-visible; default: revert
     * --tjs-folder-summary-transition-focus-visible - fallback: --tjs-default-transition-focus-visible
-    *
-    * A keyboard focus indicator is defined by the following CSS variables:
-    * --tjs-folder-summary-focus-indicator-align-self - fallback: --tjs-default-focus-indicator-align-self; default: stretch
-    * --tjs-folder-summary-focus-indicator-background - fallback: --tjs-default-focus-indicator-background; default: white
-    * --tjs-folder-summary-focus-indicator-border - fallback: --tjs-default-focus-indicator-border; default: undefined
-    * --tjs-folder-summary-focus-indicator-border-radius - fallback: --tjs-default-focus-indicator-border-radius; default: 0.1em
-    * --tjs-folder-summary-focus-indicator-height - fallback: --tjs-default-focus-indicator-height; default: undefined
-    * --tjs-folder-summary-focus-indicator-transition - fallback: --tjs-default-focus-indicator-transition
-    * --tjs-folder-summary-focus-indicator-width - fallback: --tjs-default-focus-indicator-width; default: 0.25em
     *
     * Summary icon / chevron element (attributes follow `--tjs-folder-summary-chevron-`):
     *
@@ -136,23 +128,28 @@
     * @componentDocumentation
     */
 
-   import { onDestroy }       from 'svelte';
+   import { onDestroy }          from 'svelte';
 
-   import { writable }        from 'svelte/store';
+   import { writable }           from 'svelte/store';
 
-   import { toggleDetails }   from '#runtime/svelte/action/dom/properties';
-   import { applyStyles }     from '#runtime/svelte/action/dom/style';
+   import { inlineSvg }          from '#runtime/svelte/action/dom/inline-svg';
+   import { toggleDetails }      from '#runtime/svelte/action/dom/properties';
+   import { applyStyles }        from '#runtime/svelte/action/dom/style';
 
    import {
       isMinimalWritableStore,
-      subscribeIgnoreFirst }  from '#runtime/svelte/store/util';
+      subscribeIgnoreFirst }     from '#runtime/svelte/store/util';
 
-   import { TJSSvelte }       from '#runtime/svelte/util';
-   import { CrossWindow }     from '#runtime/util/browser';
-   import { localize }        from '#runtime/util/i18n';
-   import { isObject }        from '#runtime/util/object';
+   import { TJSSvelte }          from '#runtime/svelte/util';
+   import {
+      AssetValidator,
+      CrossWindow }              from '#runtime/util/browser';
+   import { localize }           from '#runtime/util/i18n';
+   import { isObject }           from '#runtime/util/object';
 
-   /** @type {import('.').TJSIconFolderData} */
+   import { TJSFocusIndicator }  from '#standard/component/dom/focus';
+
+   /** @type {import('./types').TJSFolder.DataIcon} */
    export let folder = void 0;
 
    /** @type {boolean} */
@@ -176,7 +173,7 @@
    /** @type {string} */
    export let keyCode = void 0;
 
-   /** @type {import('.').TJSFolderOptions} */
+   /** @type {import('./types').TJSFolder.InternalOptions} */
    export let options = void 0;
 
    /** @type {import('#runtime/svelte/store/util').MinimalWritable<boolean>} */
@@ -194,7 +191,7 @@
    /** @type {(data?: { event?: PointerEvent }) => void} */
    export let onContextMenu = void 0;
 
-   /** @type {TJSFolderOptions} */
+   /** @type {import('./types').TJSFolder.InternalOptions} */
    const localOptions = {
       chevronOnly: false,
       focusChevron: false,
@@ -271,10 +268,15 @@
    $: onContextMenu = isObject(folder) && typeof folder.onContextMenu === 'function' ? folder.onContextMenu :
     typeof onContextMenu === 'function' ? onContextMenu : void 0;
 
+   let iconType;
+
    $:
    {
       const iconData = $store ? iconOpen : iconClosed;
       currentIcon = typeof iconData !== 'string' ? void 0 : iconData;
+
+      const result = AssetValidator.parseMedia({ url: currentIcon, mediaTypes: AssetValidator.MediaTypes.img_svg });
+      iconType = result.valid ? result.elementType : 'font';
    }
 
    // For performance reasons when the folder is closed the main slot is not rendered.
@@ -302,7 +304,7 @@
     *
     * @param {boolean}  [bubbles=false] - Does the event bubble.
     *
-    * @returns {CustomEvent<object>}
+    * @returns {CustomEvent<import('./types').TJSFolder.EventData>}
     */
    function createEvent(type, bubbles = false)
    {
@@ -485,10 +487,18 @@ changing the open state.  -->
             class:remove-focus-visible={localOptions.focusIndicator || localOptions.focusChevron}
             role=button
             tabindex={enabled ? 0 : -1}>
-      {#if currentIcon}<i bind:this={iconEl} class={currentIcon} class:focus-chevron={localOptions.focusChevron}></i>{/if}
+      {#if currentIcon}
+         {#if iconType === 'font'}
+            <i bind:this={iconEl} class={`icon ${currentIcon}`} class:focus-chevron={localOptions.focusChevron}></i>
+         {:else if iconType === 'img'}
+            <img bind:this={iconEl} src={currentIcon} alt="" class=icon class:focus-chevron={localOptions.focusChevron}>
+         {:else if iconType === 'svg'}
+            <svg bind:this={iconEl} use:inlineSvg={{ src: currentIcon }} class=icon class:focus-chevron={localOptions.focusChevron}></svg>
+         {/if}
+      {/if}
 
       {#if localOptions.focusIndicator}
-         <div class=tjs-folder-focus-indicator></div>
+         <TJSFocusIndicator />
       {/if}
 
       <slot name=label>
@@ -542,7 +552,8 @@ changing the open state.  -->
       border: var(--tjs-folder-summary-border, none);
       border-radius: var(--tjs-folder-summary-border-radius, 0);
       border-width: var(--tjs-folder-summary-border-width, initial);
-      cursor: var(--tjs-folder-summary-cursor, pointer);
+      color: var(--tjs-folder-summary-color, inherit);
+      cursor: var(--tjs-cursor-pointer, pointer);
       font-size: var(--tjs-folder-summary-font-size, inherit);
       font-weight: var(--tjs-folder-summary-font-weight, bold);
       font-family: var(--tjs-folder-summary-font-family, inherit);
@@ -550,6 +561,7 @@ changing the open state.  -->
       list-style: none;
       margin: var(--tjs-folder-summary-margin, 0);
       padding: var(--tjs-folder-summary-padding, 0.25em) 0;
+      text-shadow: var(--tjs-folder-summary-text-shadow, none);
       transition: var(--tjs-folder-summary-transition, background 0.1s);
       user-select: none;
       width: var(--tjs-folder-summary-width, fit-content);
@@ -560,20 +572,21 @@ changing the open state.  -->
       display: none;
    }
 
-   summary i {
+   .icon {
       flex-shrink: 0;
       border-radius: var(--tjs-folder-summary-chevron-border-radius, 0);
       color: var(--tjs-folder-summary-chevron-color, inherit);
-      cursor: var(--tjs-folder-summary-cursor, pointer);
+      cursor: var(--tjs-cursor-pointer, pointer);
       opacity: var(--tjs-folder-summary-chevron-opacity, 1);
       margin: var(--tjs-folder-summary-chevron-margin, 0 0 0 0.25em);
+      height: var(--tjs-folder-summary-chevron-height, 1.25em);
       width: var(--tjs-folder-summary-chevron-width, 1.25em);
       transition: var(--tjs-folder-summary-chevron-transition, opacity 0.2s, transform 0.1s);
    }
 
-   summary.disabled, summary.disabled i {
+   summary.disabled, summary.disabled .icon {
       color: var(--tjs-folder-summary-disabled-color, inherit);
-      cursor: var(--tjs-folder-summary-disabled-cursor, default);
+      cursor: var(--tjs-folder-summary-disabled-cursor, var(--tjs-cursor-default, default));
    }
 
    summary:focus-visible {
@@ -586,38 +599,29 @@ changing the open state.  -->
       text-shadow: var(--tjs-folder-summary-label-text-shadow-focus-visible, var(--tjs-default-text-shadow-focus-hover, revert));
    }
 
-   summary:focus-visible .tjs-folder-focus-indicator {
-      background: var(--tjs-folder-summary-focus-indicator-background, var(--tjs-default-focus-indicator-background, white));
+   summary:focus-visible {
+      --tjs-focus-indicator-background: var(--tjs-folder-summary-focus-indicator-background, currentColor);
    }
 
-   summary:focus-visible i {
+   summary:focus-visible .icon {
       opacity: var(--tjs-folder-summary-chevron-opacity-focus-visible, 1);
    }
 
-   summary:focus-visible i.focus-chevron::before {
+   summary:focus-visible i.icon.focus-chevron::before, summary:focus-visible img.icon.focus-chevron, summary:focus-visible svg.icon.focus-chevron {
       outline: var(--tjs-folder-summary-outline-focus-visible, var(--tjs-default-outline-focus-visible, revert));
+      transition: var(--tjs-folder-summary-transition-focus-visible, var(--tjs-default-transition-focus-visible));
    }
 
    summary:focus-visible.remove-focus-visible {
       outline: none;
    }
 
-   summary:hover i {
+   summary:hover .icon {
       opacity: var(--tjs-folder-summary-chevron-opacity-hover, 1);
    }
 
-   .tjs-folder-focus-indicator {
-      align-self: var(--tjs-folder-summary-focus-indicator-align-self, var(--tjs-default-focus-indicator-align-self, stretch));
-      border: var(--tjs-folder-summary-focus-indicator-border, var(--tjs-default-focus-indicator-border));
-      border-radius: var(--tjs-folder-summary-focus-indicator-border-radius, var(--tjs-default-focus-indicator-border-radius, 0.1em));
-      flex: 0 0 var(--tjs-folder-summary-focus-indicator-width, var(--tjs-default-focus-indicator-width, 0.25em));
-      height: var(--tjs-folder-summary-focus-indicator-height, var(--tjs-default-focus-indicator-height));
-      transition: var(--tjs-folder-summary-focus-indicator-transition, var(--tjs-default-focus-indicator-transition));
-      pointer-events: none;
-   }
-
    .default-cursor {
-      cursor: default;
+      cursor: var(--tjs-cursor-default, default);
    }
 
    details[open] > summary {

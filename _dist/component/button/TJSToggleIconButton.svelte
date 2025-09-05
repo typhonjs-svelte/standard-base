@@ -18,7 +18,6 @@
     * --tjs-button-clip-path
     * --tjs-button-clip-path-focus
     * --tjs-button-clip-path-hover
-    * --tjs-button-cursor
     * --tjs-button-cursor-disabled
     * --tjs-button-diameter
     * --tjs-button-outline-focus-visible
@@ -39,8 +38,6 @@
     * --tjs-icon-button-clip-path
     * --tjs-icon-button-clip-path-focus
     * --tjs-icon-button-clip-path-hover
-    * --tjs-icon-button-cursor
-    * --tjs-icon-button-cursor-disabled
     * --tjs-icon-button-diameter
     * --tjs-icon-button-outline-focus-visible
     * --tjs-icon-button-text-shadow-focus: undefined
@@ -52,9 +49,11 @@
     */
    import { createEventDispatcher }    from 'svelte';
 
+   import { inlineSvg }                from '#runtime/svelte/action/dom/inline-svg';
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
+   import { popoverTooltip }           from '#runtime/svelte/action/dom/tooltip';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
-   import { localize }                 from '#runtime/util/i18n';
+   import { AssetValidator }           from '#runtime/util/browser';
    import { isObject }                 from '#runtime/util/object';
 
    export let button = void 0;
@@ -81,7 +80,7 @@
    $: enabled = isObject(button) && typeof button.enabled === 'boolean' ? button.enabled :
     typeof enabled === 'boolean' ? enabled : true;
    $: icon = isObject(button) && typeof button.icon === 'string' ? button.icon :
-    typeof icon === 'string' ? icon : '';
+    typeof icon === 'string' ? icon : void 0;
    $: title = isObject(button) && typeof button.title === 'string' ? button.title :
     typeof title === 'string' ? title : '';
    $: titleSelected = isObject(button) && typeof button.titleSelected === 'string' ? button.titleSelected :
@@ -114,6 +113,16 @@
 
    // Chose the current title when `selected` changes; if there is no `titleSelected` fallback to `title`.
    $: titleCurrent = selected && titleSelected !== '' ? titleSelected : title
+
+   // ----------------------------------------------------------------------------------------------------------------
+
+   let iconType;
+
+   $:
+   {
+      const result = AssetValidator.parseMedia({ url: icon, mediaTypes: AssetValidator.MediaTypes.img_svg });
+      iconType = result.valid ? result.elementType : 'font';
+   }
 
    // ----------------------------------------------------------------------------------------------------------------
 
@@ -241,7 +250,7 @@
      use:applyStyles={styles}
      role=button>
    <!-- svelte-ignore a11y-missing-attribute -->
-   <a bind:this={anchorEl}
+   <button bind:this={anchorEl}
       class:selected
       on:click={onClick}
       on:contextmenu={onContextMenuPress}
@@ -249,12 +258,19 @@
       on:keyup={onKeyup}
       on:click
       on:contextmenu
-      role=button
       tabindex={enabled ? 0 : null}
-      title={localize(titleCurrent)}
+      use:popoverTooltip={title}
       use:efx={{ enabled }}>
-      <i class={icon} class:selected></i>
-   </a>
+      {#if icon}
+         {#if iconType === 'font'}
+            <i class={`icon ${icon}`} class:selected></i>
+         {:else if iconType === 'img'}
+            <img src={icon} alt="" class=icon class:selected>
+         {:else if iconType === 'svg'}
+            <svg use:inlineSvg={{ src: icon }} class=icon class:selected></svg>
+         {/if}
+      {/if}
+   </button>
    {#if selected}
       <slot/>
    {/if}
@@ -273,59 +289,69 @@
       -webkit-tap-highlight-color: var(--tjs-default-webkit-tap-highlight-color, transparent);
    }
 
-   div.disabled a {
+   div.disabled button {
       color: #4b4a44; /* TODO replace with cssVariables default */
-      cursor: var(--tjs-icon-button-cursor-disabled, var(--tjs-button-cursor-disabled, default));
+      cursor: var(--tjs-button-cursor-disabled, var(--tjs-cursor-default, default));
    }
 
-   div.disabled a:hover {
+   div.disabled button:hover {
       background: none;
       clip-path: none;
       text-shadow: none;
    }
 
-   a {
-      pointer-events: initial;
+   button {
       display: inline-block;
+      pointer-events: initial;
+      position: relative;
+
+      width: 100%;
+      height: 100%;
+
+      appearance: var(--tjs-icon-button-appearance, none);
       background: var(--tjs-icon-button-background, var(--tjs-button-background));
       border: var(--tjs-icon-button-border, var(--tjs-button-border));
       border-radius: var(--tjs-icon-button-border-radius, var(--tjs-button-border-radius, 50%));
       border-width: var(--tjs-icon-button-border-width, var(--tjs-button-border-width));
-      cursor: var(--tjs-icon-button-cursor, var(--tjs-button-cursor, pointer));
-      position: relative;
       clip-path: var(--tjs-icon-button-clip-path, var(--tjs-button-clip-path, none));
+      color: var(--tjs-icon-button-color, currentColor);
+      cursor: var(--tjs-cursor-pointer, pointer);
+      margin: var(--tjs-icon-button-margin);
+      padding: var(--tjs-icon-button-padding, 20%);
       transform-style: preserve-3d;
-      width: 100%;
-      height: 100%;
       transition: var(--tjs-icon-button-transition, var(--tjs-button-transition, background 0.2s ease-in-out, clip-path 0.2s ease-in-out));
       text-decoration: none;
+      user-select: none;
    }
 
-   a:focus {
-      background: var(--tjs-icon-button-background-focus, var(--tjs-button-background-focus));
+   button:focus {
+      background: var(--tjs-icon-button-background-focus, none);
+      box-shadow: var(--tjs-icon-button-box-shadow-focus, none);
+      outline: var(--tjs-icon-button-outline-focus, none);
       text-shadow: var(--tjs-icon-button-text-shadow-focus, var(--tjs-button-text-shadow-focus, var(--tjs-default-text-shadow-focus-hover)));
       clip-path: var(--tjs-icon-button-clip-path-focus, var(--tjs-icon-button-clip-path, var(--tjs-button-clip-path-focus, var(--tjs-button-clip-path, none))));
    }
 
-   a:focus-visible {
+   button:focus-visible {
       background: var(--tjs-icon-button-background-focus-visible, var(--tjs-button-background-focus-visible));
       box-shadow: var(--tjs-icon-button-box-shadow-focus-visible, var(--tjs-button-box-shadow-focus-visible, var(--tjs-default-box-shadow-focus-visible)));
       outline: var(--tjs-icon-button-outline-focus-visible, var(--tjs-button-outline-focus-visible, var(--tjs-default-outline-focus-visible, revert)));
       transition: var(--tjs-icon-button-transition-focus-visible, var(--tjs-button-transition-focus-visible, var(--tjs-default-transition-focus-visible)));
    }
 
-   a:hover {
+   button:hover {
       background: var(--tjs-icon-button-background-hover, var(--tjs-button-background-hover));
       clip-path: var(--tjs-icon-button-clip-path-hover, var(--tjs-icon-button-clip-path, var(--tjs-button-clip-path-hover, var(--tjs-button-clip-path, none))));
+      color: var(--tjs-icon-button-color-hover, currentColor);
       text-shadow: var(--tjs-icon-button-text-shadow-hover, var(--tjs-button-text-shadow-hover, var(--tjs-default-text-shadow-focus-hover)));
    }
 
-   a.selected {
+   button.selected {
       background: var(--tjs-icon-button-background-selected, var(--tjs-button-background-selected));
       clip-path: var(--tjs-icon-button-clip-path-selected, var(--tjs-icon-button-clip-path, var(--tjs-button-clip-path-selected, none)));
    }
 
-   i {
+   .icon {
       display: inline-flex;
       justify-content: center;
       align-items: center;

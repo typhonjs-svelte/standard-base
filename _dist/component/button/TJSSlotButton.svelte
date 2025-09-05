@@ -3,6 +3,8 @@
     * ### CSS Variables:
     *
     * ```
+    * --tjs-button-cursor-disabled
+    *
     * --tjs-default-text-shadow-focus-hover: system default
     * --tjs-default-outline-focus-visible: undefined; global replacement for focus-visible outline.
     *
@@ -13,8 +15,6 @@
     * --tjs-slot-button-border
     * --tjs-slot-button-border-radius
     * --tjs-slot-button-box-shadow-focus-visible
-    * --tjs-slot-button-cursor
-    * --tjs-slot-button-cursor-disabled
     * --tjs-slot-button-diameter
     * --tjs-slot-button-outline-focus-visible
     * --tjs-slot-button-transition
@@ -178,14 +178,14 @@
         background: var(--tjs-slot-button-background);
         border: var(--tjs-slot-button-border, var(--tjs-input-border));
         border-radius: var(--tjs-slot-button-border-radius, var(--tjs-input-border-radius));
-        cursor: var(--tjs-slot-button-cursor, pointer);
+        cursor: var(--tjs-cursor-pointer, pointer);
         transition: var(--tjs-slot-button-transition, background 0.2s ease-in-out);
         user-select: none;
        -webkit-tap-highlight-color: var(--tjs-default-webkit-tap-highlight-color, transparent);
     }
 
     .tjs-slot-button.disabled {
-       cursor: var(--tjs-slot-button-cursor-disabled, default);
+       cursor: var(--tjs-button-cursor-disabled, var(--tjs-cursor-default, default));
        filter: var(--tjs-slot-button-filter-disabled, grayscale(100%) contrast(50%));
     }
 

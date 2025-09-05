@@ -170,13 +170,16 @@
       font-family: var(--tjs-select-font-family, var(--tjs-input-font-family, inherit));
       font-size: var(--tjs-select-font-size, var(--tjs-input-font-size, inherit));
       line-height: var(--tjs-select-line-height, var(--tjs-input-line-height, inherit));
-      outline-offset: var(--tjs-select-outline-offset, var(--tjs-input-outline-offset));
       text-align: var(--tjs-select-text-align, var(--tjs-input-text-align));
       text-overflow: var(--tjs-select-text-overflow, var(--tjs-input-text-overflow, ellipsis));
 
-      cursor: var(--tjs-select-cursor, var(--tjs-input-cursor));
+      cursor: var(--tjs-select-cursor, var(--tjs-input-cursor, var(--tjs-cursor-pointer, pointer)));
 
       transform: translateZ(1px);
+
+      outline: var(--tjs-select-outline, var(--tjs-input-outline));
+      outline-offset: var(--tjs-select-outline-offset, var(--tjs-input-outline-offset));
+      transition: var(--tjs-select-transition, var(--tjs-input-transition));
    }
 
    select option {
@@ -187,17 +190,14 @@
 
    select:disabled {
       color: var(--tjs-select-color-disabled, var(--tjs-input-color-disabled, revert));
-      cursor: var(--tjs-select-cursor-disabled, var(--tjs-input-cursor-disabled, default));
+      cursor: var(--tjs-select-cursor-disabled, var(--tjs-input-cursor-disabled, var(--tjs-cursor-default, default)));
       pointer-events: none;
    }
 
    select:focus {
       box-shadow: var(--tjs-select-box-shadow-focus, var(--tjs-input-box-shadow-focus, unset));
-   }
 
-   select:focus-visible {
-      box-shadow: var(--tjs-select-box-shadow-focus-visible, var(--tjs-input-box-shadow-focus-visible, unset));
-      outline: var(--tjs-select-outline-focus-visible, var(--tjs-input-outline-focus-visible));
-      transition: var(--tjs-select-transition-focus-visible, var(--tjs-input-transition-focus-visible));
+      outline: var(--tjs-select-outline-focus, var(--tjs-input-outline-focus));
+      outline-offset: var(--tjs-select-outline-offset-focus, var(--tjs-input-outline-offset-focus));
    }
 </style>

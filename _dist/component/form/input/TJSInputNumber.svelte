@@ -270,10 +270,13 @@
         font-family: var(--tjs-input-number-font-family, var(--tjs-input-font-family, inherit));
         font-size: var(--tjs-input-number-font-size, var(--tjs-input-font-size, inherit));
         line-height: var(--tjs-input-number-line-height, var(--tjs-input-line-height, inherit));
-        outline-offset: var(--tjs-input-number-outline-offset, var(--tjs-input-outline-offset));
         text-align: var(--tjs-input-number-text-align, var(--tjs-input-text-align));
 
-        cursor: var(--tjs-input-number-cursor, var(--tjs-input-cursor, text));
+        cursor: var(--tjs-input-number-cursor, var(--tjs-input-cursor, var(--tjs-cursor-text, text)));
+
+        outline: var(--tjs-input-text-outline, var(--tjs-input-outline));
+        outline-offset: var(--tjs-input-text-outline-offset, var(--tjs-input-outline-offset));
+        transition: var(--tjs-input-text-transition, var(--tjs-input-transition));
 
         transform: translateZ(1px);
     }
@@ -281,18 +284,15 @@
     input:disabled {
        border: var(--tjs-input-number-border-disabled, var(--tjs-input-border-disabled, none));
        color: var(--tjs-input-number-color-disabled, var(--tjs-input-color-disabled, revert));
-       cursor: var(--tjs-input-number-cursor-disabled, var(--tjs-input-cursor-disabled, default));
+       cursor: var(--tjs-input-number-cursor-disabled, var(--tjs-input-cursor-disabled, var(--tjs-cursor-default, default)));
        pointer-events: none;
     }
 
     input:focus {
         box-shadow: var(--tjs-input-number-box-shadow-focus, var(--tjs-input-box-shadow-focus, unset));
-    }
 
-    input:focus-visible {
-        box-shadow: var(--tjs-input-number-box-shadow-focus-visible, var(--tjs-input-box-shadow-focus-visible, unset));
-        outline: var(--tjs-input-number-outline-focus-visible, var(--tjs-input-outline-focus-visible));
-        transition: var(--tjs-input-number-transition-focus-visible, var(--tjs-input-transition-focus-visible));
+        outline: var(--tjs-input-text-outline-focus, var(--tjs-input-outline-focus));
+        outline-offset: var(--tjs-input-text-outline-offset-focus, var(--tjs-input-outline-offset-focus));
     }
 
     input::placeholder {

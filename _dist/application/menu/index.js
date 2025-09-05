@@ -1,7 +1,8 @@
 import { getEasingFunc } from '#runtime/svelte/easing';
 import { TJSSvelte } from '#runtime/svelte/util';
 import { A11yHelper } from '#runtime/util/a11y';
-import { CrossWindow } from '#runtime/util/browser';
+import { CrossWindow, AssetValidator } from '#runtime/util/browser';
+import { ThemeObserver } from '#runtime/util/dom/theme';
 import { isIterable, isObject } from '#runtime/util/object';
 import { TJSContextMenuImpl } from '#standard/component/menu';
 
@@ -22,6 +23,14 @@ class TJSContextMenu
    static #contextMenu = void 0;
 
    /**
+    * @hideconstructor
+    */
+   constructor()
+   {
+      throw new Error('TJSContextMenu constructor: This is a static class and should not be constructed.');
+   }
+
+   /**
     * Creates and manages a browser wide context menu. The best way to create the context menu is to pass in the source
     * DOM event as it is processed for the location of the context menu to display. Likewise, a A11yFocusSource object
     * is generated that allows focus to be returned to the source location. You may supply a default focus target as a
@@ -29,9 +38,9 @@ class TJSContextMenu
     *
     * @param {object}      opts - Optional parameters.
     *
-    * @param {string}      [opts.id] - A custom CSS ID to add to the menu. This allows CSS style targeting.
-    *
     * @param {KeyboardEvent | MouseEvent}  [opts.event] - The source MouseEvent or KeyboardEvent.
+    *
+    * @param {Iterable<TJSContextMenuItemData>} [opts.items] - Menu items to display.
     *
     * @param {number}      [opts.x] - X position override for the top / left of the menu.
     *
@@ -43,7 +52,8 @@ class TJSContextMenu
     * @param {number}      [opts.offsetY=2] - Small positive integer offset for context menu so the pointer / mouse is
     *        over the menu on display.
     *
-    * @param {Iterable<TJSContextMenuItemData>} [opts.items] - Menu items to display.
+    * @param {Iterable<string>}    [opts.classes] - Additional custom CSS classes to add to the menu. This allows CSS
+    *        style targeting.
     *
     * @param {boolean}     [opts.focusDebug] - When true the associated A11yFocusSource object will log focus target
     *        data when applied.
@@ -53,11 +63,14 @@ class TJSContextMenu
     *
     * @param {string}      [opts.keyCode='Enter'] - Key to select menu items.
     *
+    * @param {string}      [opts.id] - A custom CSS ID to add to the menu. This allows CSS style targeting.
+    *
+    * @param {Function}    [opts.onClose] - A function that is invoked when the context menu is closed. Useful for any
+    *        state based changes such as CSS highlighting of context menu invoking element.
+    *
     * @param {{ [key: string]: string | null }}  [opts.styles] - Optional inline styles to apply.
     *
-    * @param {number}      [opts.zIndex=Number.MAX_SAFE_INTEGER - 100] - Z-index for context menu.
-    *
-    * @param {number}      [opts.duration] - Transition option for duration of transition.
+    * @param {number}      [opts.duration] - Transition option for duration of transition in milliseconds.
     *
     * @param {import('#runtime/svelte/easing').EasingReference}   [opts.easing] - Transition option for ease. Either an
     *        easing function or easing function name.
@@ -65,11 +78,10 @@ class TJSContextMenu
     * @param {Window}      [opts.activeWindow=globalThis] - The active browser window that the context menu is
     *        displaying inside.
     */
-   static create({ id = '', event, x, y, items, offsetX = 2, offsetY = 2, focusDebug = false, focusEl,
-    keyCode = 'Enter', styles, zIndex = Number.MAX_SAFE_INTEGER - 100, duration = 200, easing,
-     activeWindow } = {})
+   static create({ event, items, x, y, offsetX = 2, offsetY = 2, focusDebug = false, focusEl,
+    keyCode = 'Enter', classes = [], id = '', onClose, styles, duration = 120, easing, activeWindow })
    {
-      if (this.#contextMenu !== void 0) { return; }
+      if (TJSContextMenu.#contextMenu !== void 0) { return; }
 
       if (!event && (typeof x !== 'number' || typeof y !== 'number'))
       {
@@ -84,6 +96,11 @@ class TJSContextMenu
       if (Number.isInteger(offsetY) && offsetY < 0)
       {
          throw new TypeError(`TJSContextMenu.create error: offsetY is not a positive integer.`);
+      }
+
+      if (!Number.isInteger(duration) || duration < 0)
+      {
+         throw new TypeError(`TJSContextMenu.create error: 'duration' is not a positive integer.`);
       }
 
       // Perform duck typing on event constructor name.
@@ -101,35 +118,71 @@ class TJSContextMenu
          throw new TypeError(`TJSContextMenu.create error: 'activeWindow' is not a Window.`);
       }
 
+      if (typeof id !== 'string')
+      {
+         throw new TypeError(`TJSContextMenu.create error: 'id' is not a string.`);
+      }
+
+      if (onClose !== void 0 && typeof onClose !== 'function')
+      {
+         throw new TypeError(`TJSContextMenu.create error: 'onClose' is not a function.`);
+      }
+
+      if (!isIterable(classes))
+      {
+         throw new TypeError(`TJSContextMenu.create error: 'classes' is not a list of strings.`);
+      }
+
+      const processedItems = TJSContextMenu.#processItems(items);
+
+      // No applicable menu items. Abort showing the menu.
+      if (processedItems.length === 0) { return; }
+
+      const hasIcon = processedItems.some((entry) => entry['#type'] === 'font' || entry['#type'] === 'svg');
+
       const focusSource = A11yHelper.getFocusSource({ event, x, y, focusEl, debug: focusDebug });
 
       const easingFn = getEasingFunc(easing, { default: false });
 
+      // Retrieve any additional platform theme classes depending on event target.
+      const themedClasses = ThemeObserver.nearestThemedClasses({
+         element: event?.target,
+         output: new Set(classes),
+         override: false,
+         strict: true
+      });
+
       // Create the new context menu with the last click x / y point.
-      this.#contextMenu = new TJSContextMenuImpl({
+      TJSContextMenu.#contextMenu = new TJSContextMenuImpl({
          target: activeWindow.document.body,
          intro: true,
          props: {
-            id,
             x: focusSource.x,
             y: focusSource.y,
             offsetX,
             offsetY,
-            items: this.#processItems(items),
+            hasIcon,
+            items: processedItems,
+            classes: Array.from(themedClasses),
             focusSource,
             keyCode,
+            id,
             styles,
             transitionOptions: { duration, easing: easingFn },
-            zIndex,
             activeWindow
          }
       });
 
-      this.#contextMenu.$set({ current_component: this.#contextMenu });
+      TJSContextMenu.#contextMenu.$set({ current_component: TJSContextMenu.#contextMenu });
 
       // Register an event listener to remove any active context menu if closed from a menu selection or pointer
       // down event to `document.body`.
-      this.#contextMenu.$on('close:contextmenu', () => { this.#contextMenu = void 0; });
+      TJSContextMenu.#contextMenu.$on('close:contextmenu', () =>
+      {
+         TJSContextMenu.#contextMenu = void 0;
+
+         if (typeof onClose === 'function') { onClose(); }
+      });
    }
 
    /**
@@ -160,9 +213,12 @@ class TJSContextMenu
          let type;
 
          if (TJSSvelte.util.isComponent(item.class)) { type = 'class'; }
-         else if (typeof item.icon === 'string') { type = 'icon'; }
-         else if (typeof item.image === 'string') { type = 'image'; }
-         else if (item.icon === void 0 && item.image === void 0 && typeof item.label === 'string') { type = 'label'; }
+         else if (typeof item.icon === 'string')
+         {
+            const result = AssetValidator.parseMedia({ url: item.icon, mediaTypes: AssetValidator.MediaTypes.img_svg });
+            type = result.valid ? result.elementType : 'font';
+         }
+         else if (item.icon === void 0 && typeof item.label === 'string') { type = 'label'; }
          else if (typeof item.separator === 'string')
          {
             if (item.separator !== 'hr')
@@ -185,7 +241,7 @@ class TJSContextMenu
 
 /**
  * @typedef {object} TJSContextMenuItemData Defines a menu item entry. Depending on the item data that is passed
- * into the menu you can define 4 types of items: 'icon / label', 'image / label', 'class / Svelte component', and
+ * into the menu you can define 3 types of items: 'icon / label', 'class / Svelte component', and
  * 'separator / hr'. A single callback function `onPress` is supported.
  *
  * @property {(item: TJSContextMenuItemData, object) => void} [onPress] A callback function that receives the selected
@@ -199,14 +255,9 @@ class TJSContextMenu
  *
  * @property {object} [props] An object passed on as props for any Svelte component.
  *
- *
- * @property {string} [icon] A string containing icon classes.
- *
- *
- * @property {string} [image] An image icon path.
+ * @property {string} [icon] A string containing font icon classes or an image / svg URL path to load.
  *
  * @property {string} [imageAlt] An image 'alt' text description.
- *
  *
  * @property {string} [label] A text string that is passed through localization.
  *

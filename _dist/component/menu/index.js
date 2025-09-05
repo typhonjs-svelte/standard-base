@@ -50,14 +50,9 @@ export { default as TJSContextMenuImpl }  from './context/TJSContextMenuImpl.sve
  *
  * @property {object} [props] An object passed on as props for any Svelte component.
  *
- *
- * @property {string} [icon] A string containing icon classes.
- *
- *
- * @property {string} [image] An image icon path.
+ * @property {string} [icon] A string containing font icon classes or an image / svg URL path to load.
  *
  * @property {string} [imageAlt] An image 'alt' text description.
- *
  *
  * @property {string} [label] A text string that is passed through localization.
  *

@@ -18,9 +18,9 @@ declare class TJSContextMenu {
    *
    * @param {object}      opts - Optional parameters.
    *
-   * @param {string}      [opts.id] - A custom CSS ID to add to the menu. This allows CSS style targeting.
-   *
    * @param {KeyboardEvent | MouseEvent}  [opts.event] - The source MouseEvent or KeyboardEvent.
+   *
+   * @param {Iterable<TJSContextMenuItemData>} [opts.items] - Menu items to display.
    *
    * @param {number}      [opts.x] - X position override for the top / left of the menu.
    *
@@ -32,7 +32,8 @@ declare class TJSContextMenu {
    * @param {number}      [opts.offsetY=2] - Small positive integer offset for context menu so the pointer / mouse is
    *        over the menu on display.
    *
-   * @param {Iterable<TJSContextMenuItemData>} [opts.items] - Menu items to display.
+   * @param {Iterable<string>}    [opts.classes] - Additional custom CSS classes to add to the menu. This allows CSS
+   *        style targeting.
    *
    * @param {boolean}     [opts.focusDebug] - When true the associated A11yFocusSource object will log focus target
    *        data when applied.
@@ -42,11 +43,14 @@ declare class TJSContextMenu {
    *
    * @param {string}      [opts.keyCode='Enter'] - Key to select menu items.
    *
+   * @param {string}      [opts.id] - A custom CSS ID to add to the menu. This allows CSS style targeting.
+   *
+   * @param {Function}    [opts.onClose] - A function that is invoked when the context menu is closed. Useful for any
+   *        state based changes such as CSS highlighting of context menu invoking element.
+   *
    * @param {{ [key: string]: string | null }}  [opts.styles] - Optional inline styles to apply.
    *
-   * @param {number}      [opts.zIndex=Number.MAX_SAFE_INTEGER - 100] - Z-index for context menu.
-   *
-   * @param {number}      [opts.duration] - Transition option for duration of transition.
+   * @param {number}      [opts.duration] - Transition option for duration of transition in milliseconds.
    *
    * @param {import('#runtime/svelte/easing').EasingReference}   [opts.easing] - Transition option for ease. Either an
    *        easing function or easing function name.
@@ -55,36 +59,38 @@ declare class TJSContextMenu {
    *        displaying inside.
    */
   static create({
-    id,
     event,
+    items,
     x,
     y,
-    items,
     offsetX,
     offsetY,
     focusDebug,
     focusEl,
     keyCode,
+    classes,
+    id,
+    onClose,
     styles,
-    zIndex,
     duration,
     easing,
     activeWindow,
-  }?: {
-    id?: string;
+  }: {
     event?: KeyboardEvent | MouseEvent;
+    items?: Iterable<TJSContextMenuItemData>;
     x?: number;
     y?: number;
     offsetX?: number;
     offsetY?: number;
-    items?: Iterable<TJSContextMenuItemData>;
+    classes?: Iterable<string>;
     focusDebug?: boolean;
     focusEl?: HTMLElement | string;
     keyCode?: string;
+    id?: string;
+    onClose?: Function;
     styles?: {
       [key: string]: string | null;
     };
-    zIndex?: number;
     duration?: number;
     easing?: _runtime_svelte_easing.EasingReference;
     activeWindow?: Window;
@@ -92,7 +98,7 @@ declare class TJSContextMenu {
 }
 /**
  * Defines a menu item entry. Depending on the item data that is passed
- * into the menu you can define 4 types of items: 'icon / label', 'image / label', 'class / Svelte component', and
+ * into the menu you can define 3 types of items: 'icon / label', 'class / Svelte component', and
  * 'separator / hr'. A single callback function `onPress` is supported.
  */
 type TJSContextMenuItemData = {
@@ -116,13 +122,9 @@ type TJSContextMenuItemData = {
    */
   props?: object;
   /**
-   * A string containing icon classes.
+   * A string containing font icon classes or an image / svg URL path to load.
    */
   icon?: string;
-  /**
-   * An image icon path.
-   */
-  image?: string;
   /**
    * An image 'alt' text description.
    */

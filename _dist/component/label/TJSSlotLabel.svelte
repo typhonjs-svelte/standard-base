@@ -41,10 +41,20 @@
    /** @type {boolean} */
    export let enabled = void 0;
 
+   /**
+    * Set to `true` to use the `pointer` cursor over label.
+    *
+    * @type {boolean}
+    */
+   export let isPointer = void 0;
+
    $: label = TJSSlotLabelUtil.isValid(label) ? label : void 0;
 
    $: enabled = isObject(label) && typeof label.enabled === 'boolean' ? label.enabled :
     typeof enabled === 'boolean' ? enabled : true;
+
+   $: isPointer = isObject(label) && typeof label.isPointer === 'boolean' ? label.isPointer :
+    typeof isPointer === 'boolean' ? isPointer : false;
 </script>
 
 {#if label}
@@ -52,6 +62,7 @@
    <label class=tjs-slot-label>
       {#if typeof label === 'string'}
          <span class=tjs-slot-label-span
+               class:is-pointer={isPointer}
                class:disabled={!enabled}>
             {localize(label)}
          </span>
@@ -70,6 +81,7 @@
       display: var(--tjs-slot-label-display, contents);
 
       align-items: var(--tjs-slot-label-align-items, center);
+      cursor: var(--tjs-cursor-default, default);
 
       /* Unset, but available when 'display' is changed */
       flex: var(--tjs-slot-label-flex, unset);
@@ -88,7 +100,12 @@
       white-space: var(--tjs-slot-label-span-white-space, nowrap);
    }
 
+   span.is-pointer:not(.disabled) {
+      cursor: var(--tjs-cursor-pointer, pointer);
+   }
+
    span.disabled {
+      cursor: var(--tjs-slot-label-cursor-disabled, var(--tjs-cursor-default, default));
       filter: var(--tjs-slot-label-filter-disabled, grayscale(100%) contrast(20%) brightness(120%));
    }
 </style>

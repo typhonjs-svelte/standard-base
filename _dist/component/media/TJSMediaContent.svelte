@@ -21,12 +21,13 @@
    import { getContext }      from 'svelte';
 
    import { clamp }           from '#runtime/math/util';
+   import { inlineSvg }       from '#runtime/svelte/action/dom/inline-svg';
    import { isReadableStore } from '#runtime/svelte/store/util';
-   import { CrossWindow }     from '#runtime/util/browser';
+   import {
+      AssetValidator,
+      CrossWindow }           from '#runtime/util/browser';
    import { localize }        from '#runtime/util/i18n';
    import { isObject }        from '#runtime/util/object';
-
-   import { AssetValidator }  from './AssetValidator.js';
 
    /**
     * The `url` store potentially set from a parent component like `TJSFileSlotButton`.
@@ -41,13 +42,6 @@
     * @type {import('svelte/store').Writable<string>}
     */
    const storeURLString = getContext('urlString');
-
-   /**
-    * Only process image / video assets from AssetValidator / skip audio.
-    *
-    * @type {Set<string>}
-    */
-   const mediaTypes = new Set(['img', 'video']);
 
    /**
     * @type {object}
@@ -174,7 +168,10 @@
        (isReadableStore(storeURL) ? $storeURL : void 0) ??
         (isReadableStore(storeURLString) ? $storeURLString : void 0);
 
-      const result = AssetValidator.parseMedia({ url: mediaTarget, mediaTypes });
+      const result = AssetValidator.parseMedia({
+         url: mediaTarget,
+         mediaTypes: AssetValidator.MediaTypes.img_svg_video
+      });
 
       // Validate that the result is a valid format / type otherwise fallback to `urlDefault` if provided.
       if (result?.valid)
@@ -183,7 +180,11 @@
       }
       else if (urlDefault)
       {
-         const resultDefault = AssetValidator.parseMedia({ url: urlDefault, mediaTypes });
+         const resultDefault = AssetValidator.parseMedia({
+            url: urlDefault,
+            mediaTypes: AssetValidator.MediaTypes.img_svg_video
+         });
+
          if (resultDefault?.valid)
          {
             parsed = resultDefault;
@@ -212,7 +213,9 @@
 
 <div class=tjs-media-content>
     {#key parsed}
-       {#if parsed?.elementType === 'img'}
+       {#if parsed?.elementType === 'svg'}
+          <svg use:inlineSvg={parsed.src}></svg>
+       {:else if parsed?.elementType === 'img'}
           <img src={parsed.src} alt={imgAlt} title={title} />
        {:else if parsed?.elementType === 'video'}
           <video bind:this={videoEl}
@@ -244,7 +247,7 @@
       border-radius: var(--tjs-media-content-border-radius, 0);
    }
 
-   video, img {
+   video, img, svg {
       position: relative;
       background: transparent;
       border: none;

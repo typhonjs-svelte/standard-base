@@ -50,15 +50,15 @@
 
    import { inlineSvg }             from '#runtime/svelte/action/dom/inline-svg';
    import { applyStyles }           from '#runtime/svelte/action/dom/style';
+   import { popoverTooltip }        from '#runtime/svelte/action/dom/tooltip';
    import { AssetValidator }        from '#runtime/util/browser';
-   import { localize }              from '#runtime/util/i18n';
    import { isObject }              from '#runtime/util/object';
 
    export let button = void 0;
 
    export let enabled = void 0;
    export let icon = void 0;
-   export let title = void 0;
+   export let tooltip = void 0;
    export let styles = void 0;
    export let efx = void 0;
    export let keyCode = void 0;
@@ -76,8 +76,8 @@
     typeof enabled === 'boolean' ? enabled : true;
    $: icon = isObject(button) && typeof button.icon === 'string' ? button.icon :
     typeof icon === 'string' ? icon : void 0;
-   $: title = isObject(button) && typeof button.title === 'string' ? button.title :
-    typeof title === 'string' ? title : '';
+   $: tooltip = isObject(button) && typeof button.tooltip === 'string' ? button.tooltip :
+    typeof tooltip === 'string' ? tooltip : '';
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
     isObject(styles) ? styles : void 0;
    $: efx = isObject(button) && typeof button.efx === 'function' ? button.efx :
@@ -189,7 +189,7 @@
        on:click
        on:contextmenu
        tabindex={enabled ? 0 : null}
-       title={localize(title)}
+       use:popoverTooltip={tooltip}
        use:efx={{ enabled }}>
        {#if icon}
           {#if iconType === 'font'}

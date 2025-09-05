@@ -22,6 +22,7 @@
 
    import { clamp }           from '#runtime/math/util';
    import { inlineSvg }       from '#runtime/svelte/action/dom/inline-svg';
+   import { popoverTooltip }  from '#runtime/svelte/action/dom/tooltip';
    import { isReadableStore } from '#runtime/svelte/store/util';
    import {
       AssetValidator,
@@ -70,11 +71,11 @@
    export let imgAlt = void 0;
 
    /**
-    * A title for the media element.
+    * A tooltip for the media element.
     *
     * @type {string}
     */
-   export let title = void 0;
+   export let tooltip = void 0;
 
    /**
     * Automatically start video playback; default: true
@@ -136,8 +137,8 @@
    $: videoMuted = isObject(media) && typeof media.videoMuted === 'boolean' ? media.videoMuted :
     typeof videoMuted === 'boolean' ? videoMuted : true;
 
-   $: title = isObject(media) && typeof media.title === 'string' ? media.title :
-    typeof title === 'string' ? title : void 0;
+   $: tooltip = isObject(media) && typeof media.tooltip === 'string' ? media.tooltip :
+    typeof tooltip === 'string' ? tooltip : void 0;
 
    $: {
       videoPlayOnHover = isObject(media) && typeof media.videoPlayOnHover === 'boolean' ? media.videoPlayOnHover :
@@ -214,17 +215,17 @@
 <div class=tjs-media-content>
     {#key parsed}
        {#if parsed?.elementType === 'svg'}
-          <svg use:inlineSvg={parsed.src}></svg>
+          <svg use:inlineSvg={parsed.src} use:popoverTooltip={tooltip}></svg>
        {:else if parsed?.elementType === 'img'}
-          <img src={parsed.src} alt={imgAlt} title={title} />
+          <img src={parsed.src} alt={imgAlt} use:popoverTooltip={tooltip} />
        {:else if parsed?.elementType === 'video'}
           <video bind:this={videoEl}
                  on:pointerenter={onPointerenter}
                  on:pointerleave={onPointerleave}
+                 use:popoverTooltip={tooltip}
                  autoplay={videoAutoplay}
                  loop={videoLoop}
                  muted={videoMuted}
-                 title={localize(title)}
                  tabindex=-1>  <!-- tabindex is necessary to prevent focus on Firefox -->
              <source src={parsed.src} type={`video/${parsed.extension}`}>
 

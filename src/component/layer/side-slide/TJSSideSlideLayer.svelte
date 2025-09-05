@@ -20,7 +20,7 @@
 
    /**
     * An iterable list of side slide items including icon (Font awesome string), a Svelte configuration object, and
-    * title.
+    * tooltip.
     *
     * You may provide a `condition` boolean or function that returns a boolean to hide the item. This is useful for
     * adding items / panels only visible for the GM amongst other conditional tests.
@@ -29,7 +29,7 @@
     *    condition?: boolean | (() => boolean)
     *    icon: string | import('#runtime/svelte/util').TJSSvelte.Config.Embed,
     *    svelte: import('#runtime/svelte/util').TJSSvelte.Config.Embed,
-    *    title?: string
+    *    tooltip?: string
     * }>)}
     */
    export let items = [];
@@ -184,9 +184,9 @@
              `TJSSideSlideLayer error: 'items[${cntr}].svelte' is not a Svelte configuration object.`);
          }
 
-         if (item.title !== void 0 && typeof item.title !== 'string')
+         if (item.tooltip !== void 0 && typeof item.tooltip !== 'string')
          {
-            throw new TypeError(`TJSSideSlideLayer error: 'items[${cntr}].title' is not a string.`);
+            throw new TypeError(`TJSSideSlideLayer error: 'items[${cntr}].tooltip' is not a string.`);
          }
 
          // Filter on any given condition.

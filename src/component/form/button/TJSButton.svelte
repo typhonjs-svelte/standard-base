@@ -9,6 +9,7 @@
    import { createEventDispatcher } from '#svelte';
 
    import { applyStyles }           from '#runtime/svelte/action/dom/style';
+   import { popoverTooltip }        from '#runtime/svelte/action/dom/tooltip';
    import { TJSSvelte }             from '#runtime/svelte/util';
    import { localize }              from '#runtime/util/i18n';
    import { isObject }              from '#runtime/util/object';
@@ -23,7 +24,7 @@
 
    export let label = void 0;
 
-   export let title = void 0;
+   export let tooltip = void 0;
 
    export let styles = void 0;
 
@@ -53,8 +54,8 @@
     button.label :
      (typeof label === 'string' || TJSSvelte.config.isConfigEmbed(label)) ? label : void 0;
 
-   $: title = isObject(button) && typeof button.title === 'string' ? button.title :
-    typeof title === 'string' ? title : void 0;
+   $: tooltip = isObject(button) && typeof button.tooltip === 'string' ? button.tooltip :
+    typeof tooltip === 'string' ? tooltip : void 0;
 
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
     isObject(styles) ? styles : void 0;
@@ -160,7 +161,7 @@
         on:contextmenu
         on:press
         disabled={!enabled}
-        title={localize(title)}
+        use:popoverTooltip={tooltip}
         use:applyStyles={styles}>
    <span class=tjs-form-button-efx bind:this={efxEl} use:efx={{ enabled }}>
       <span class=tjs-form-button-span>

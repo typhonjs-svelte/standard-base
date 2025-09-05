@@ -75,7 +75,7 @@
    $: enabled = isObject(button) && typeof button.enabled === 'boolean' ? button.enabled :
     typeof enabled === 'boolean' ? enabled : true;
    $: icon = isObject(button) && typeof button.icon === 'string' ? button.icon :
-    typeof icon === 'string' ? icon : '';
+    typeof icon === 'string' ? icon : void 0;
    $: title = isObject(button) && typeof button.title === 'string' ? button.title :
     typeof title === 'string' ? title : '';
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
@@ -92,6 +92,16 @@
 
    $: clickPropagate = isObject(button) && typeof button.clickPropagate === 'boolean' ? button.clickPropagate :
     typeof clickPropagate === 'boolean' ? clickPropagate : false;
+
+   // ----------------------------------------------------------------------------------------------------------------
+
+   let iconType;
+
+   $:
+   {
+      const result = AssetValidator.parseMedia({ url: icon, mediaTypes: AssetValidator.MediaTypes.img_svg });
+      iconType = result.valid ? result.elementType : 'font';
+   }
 
    // ----------------------------------------------------------------------------------------------------------------
 
@@ -181,7 +191,15 @@
        tabindex={enabled ? 0 : null}
        title={localize(title)}
        use:efx={{ enabled }}>
-        <i class={icon}></i>
+       {#if icon}
+          {#if iconType === 'font'}
+             <i class={`icon ${icon}`}></i>
+          {:else if iconType === 'img'}
+             <img src={icon} alt="" class=icon>
+          {:else if iconType === 'svg'}
+             <svg use:inlineSvg={{ src: icon }} class=icon></svg>
+          {/if}
+       {/if}
     </button>
 </div>
 
@@ -210,8 +228,12 @@
     }
 
     button {
-        pointer-events: initial;
         display: inline-block;
+        pointer-events: initial;
+        position: relative;
+
+        width: 100%;
+        height: 100%;
 
         appearance: var(--tjs-icon-button-appearance, none);
         background: var(--tjs-icon-button-background, var(--tjs-button-background));
@@ -219,11 +241,10 @@
         border-radius: var(--tjs-icon-button-border-radius, var(--tjs-button-border-radius, 50%));
         border-width: var(--tjs-icon-button-border-width, var(--tjs-button-border-width));
         cursor: var(--tjs-cursor-pointer, pointer);
-        position: relative;
         clip-path: var(--tjs-icon-button-clip-path, var(--tjs-button-clip-path, none));
+        margin: var(--tjs-icon-button-margin);
+        padding: var(--tjs-icon-button-padding, 20%);
         transform-style: preserve-3d;
-        width: 100%;
-        height: 100%;
         transition: var(--tjs-icon-button-transition, var(--tjs-button-transition, background 0.2s ease-in-out, clip-path 0.2s ease-in-out));
         text-decoration: none;
         user-select: none;
@@ -250,7 +271,7 @@
         text-shadow: var(--tjs-icon-button-text-shadow-hover, var(--tjs-button-text-shadow-hover, var(--tjs-default-text-shadow-focus-hover)));
     }
 
-    i {
+    .icon {
         display: inline-flex;
         justify-content: center;
         align-items: center;

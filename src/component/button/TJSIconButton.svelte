@@ -48,7 +48,9 @@
     */
    import { createEventDispatcher } from '#svelte';
 
+   import { inlineSvg }             from '#runtime/svelte/action/dom/inline-svg';
    import { applyStyles }           from '#runtime/svelte/action/dom/style';
+   import { AssetValidator }        from '#runtime/util/browser';
    import { localize }              from '#runtime/util/i18n';
    import { isObject }              from '#runtime/util/object';
 
@@ -170,19 +172,17 @@
 <div class=tjs-icon-button
      class:disabled={!enabled}
      use:applyStyles={styles}>
-    <!-- svelte-ignore a11y-missing-attribute -->
-    <a on:click={onClick}
+    <button on:click={onClick}
        on:contextmenu={onContextMenuPress}
        on:keydown={onKeydown}
        on:keyup={onKeyup}
        on:click
        on:contextmenu
-       role=button
        tabindex={enabled ? 0 : null}
        title={localize(title)}
        use:efx={{ enabled }}>
         <i class={icon}></i>
-    </a>
+    </button>
 </div>
 
 <style>
@@ -198,20 +198,22 @@
         -webkit-tap-highlight-color: var(--tjs-default-webkit-tap-highlight-color, transparent);
     }
 
-    div.disabled a {
+    div.disabled button {
        color: #4b4a44; /* TODO replace with cssVariables default */
        cursor: var(--tjs-button-cursor-disabled, var(--tjs-cursor-default, default));
     }
 
-    div.disabled a:hover {
+    div.disabled button:hover {
        background: none;
        clip-path: none;
        text-shadow: none;
     }
 
-    a {
+    button {
         pointer-events: initial;
         display: inline-block;
+
+        appearance: var(--tjs-icon-button-appearance, none);
         background: var(--tjs-icon-button-background, var(--tjs-button-background));
         border: var(--tjs-icon-button-border, var(--tjs-button-border));
         border-radius: var(--tjs-icon-button-border-radius, var(--tjs-button-border-radius, 50%));
@@ -227,20 +229,22 @@
         user-select: none;
     }
 
-    a:focus {
-        background: var(--tjs-icon-button-background-focus, var(--tjs-button-background-focus));
+    button:focus {
+        background: var(--tjs-icon-button-background-focus, none);
+        box-shadow: var(--tjs-icon-button-box-shadow-focus, none);
+        outline: var(--tjs-icon-button-outline-focus, none);
         text-shadow: var(--tjs-icon-button-text-shadow-focus, var(--tjs-button-text-shadow-focus, var(--tjs-default-text-shadow-focus-hover)));
         clip-path: var(--tjs-icon-button-clip-path-focus, var(--tjs-icon-button-clip-path, var(--tjs-button-clip-path-focus, var(--tjs-button-clip-path, none))));
     }
 
-    a:focus-visible {
+    button:focus-visible {
         background: var(--tjs-icon-button-background-focus-visible, var(--tjs-button-background-focus-visible));
         box-shadow: var(--tjs-icon-button-box-shadow-focus-visible, var(--tjs-button-box-shadow-focus-visible, var(--tjs-default-box-shadow-focus-visible)));
         outline: var(--tjs-icon-button-outline-focus-visible, var(--tjs-button-outline-focus-visible, var(--tjs-default-outline-focus-visible, revert)));
         transition: var(--tjs-icon-button-transition-focus-visible, var(--tjs-button-transition-focus-visible, var(--tjs-default-transition-focus-visible)));
     }
 
-    a:hover {
+    button:hover {
         background: var(--tjs-icon-button-background-hover, var(--tjs-button-background-hover));
         clip-path: var(--tjs-icon-button-clip-path-hover, var(--tjs-icon-button-clip-path, var(--tjs-button-clip-path-hover, var(--tjs-button-clip-path, none))));
         text-shadow: var(--tjs-icon-button-text-shadow-hover, var(--tjs-button-text-shadow-hover, var(--tjs-default-text-shadow-focus-hover)));

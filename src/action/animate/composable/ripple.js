@@ -77,7 +77,7 @@ export function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = 
             top = e.clientY ? `${e.clientY - (elementRect.top + radius)}px` : '0';
          }
 
-         const span = document.createElement('span');
+         const span = CrossWindow.getDocument(element).createElement('span');
 
          span.style.position = 'absolute';
          span.style.width = `${diameter}px`;
@@ -92,24 +92,39 @@ export function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = 
 
          element.prepend(span);
 
-         const animation = span.animate([
-            {  // from
-               transform: 'scale(.7)',
-               opacity: 0.5,
-               filter: 'blur(2px)'
-            },
-            {  // to
-               transform: 'scale(4)',
-               opacity: 0,
-               filter: 'blur(5px)'
-            }
-         ],
-         duration);
-
-         animation.onfinish = () =>
+         try
          {
-            if (span && span.isConnected) { span.remove(); }
-         };
+            // Always use main realm / window for animation even when cross-realm.
+
+            const effect = new window.KeyframeEffect(span,
+               [
+                  {  // from
+                     transform: 'scale(.7)',
+                     opacity: 0.5,
+                     filter: 'blur(2px)'
+                  },
+                  {  // to
+                     transform: 'scale(4)',
+                     opacity: 0,
+                     filter: 'blur(5px)'
+                  }
+               ],
+               duration
+            );
+
+            const animation = new window.Animation(effect);
+
+            animation.onfinish = () =>
+            {
+               if (span) { span.remove(); }
+            };
+
+            animation.play();
+         }
+         catch
+         {
+            if (span) { span.remove(); }
+         }
       }
 
       /**

@@ -62,26 +62,40 @@ export function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration 
 
          for (const span of activeSpans)
          {
-            const animation = span.animate(
-             [
-                {  // from
-                   transform: 'scale(3)',
-                   opacity: 0.3,
-                },
-                {  // to
-                   transform: 'scale(.7)',
-                   opacity: 0.0,
-                }
-             ],
-             {
-                duration,
-                fill: 'forwards'
-             });
-
-            animation.onfinish = () =>
+            try
             {
-               if (span.isConnected) { span.remove(); }
-            };
+               // Always use main realm / window for animation even when cross-realm.
+
+               const effect = new window.KeyframeEffect(span,
+                  [
+                     {  // from
+                        transform: 'scale(3)',
+                        opacity: 0.3,
+                     },
+                     {  // to
+                        transform: 'scale(.7)',
+                        opacity: 0.0,
+                     }
+                  ],
+                  {
+                     duration,
+                     fill: 'forwards'
+                  }
+               );
+
+               const animation = new window.Animation(effect);
+
+               animation.onfinish = () =>
+               {
+                  if (span) { span.remove(); }
+               };
+
+               animation.play();
+            }
+            catch
+            {
+               if (span) { span.remove(); }
+            }
          }
 
          // Remove all active spans as they are now animating out.
@@ -112,7 +126,7 @@ export function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration 
          const left = `${actualX - (elementRect.left + radius)}px`;
          const top = `${actualY - (elementRect.top + radius)}px`;
 
-         const span = document.createElement('span');
+         const span = CrossWindow.getDocument(element).createElement('span');
 
          span.style.position = 'absolute';
          span.style.width = `${diameter}px`;
@@ -129,22 +143,36 @@ export function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration 
 
          element.prepend(span);
 
-         activeSpans.push(span);
-
-         span.animate([
-            {  // from
-               transform: 'scale(.7)',
-               opacity: 0.5,
-            },
-            {  // to
-               transform: 'scale(3)',
-               opacity: 0.3,
-            }
-         ],
+         try
          {
-            duration,
-            fill: 'forwards'
-         });
+            // Always use main realm / window for animation even when cross-realm.
+
+            const effect = new window.KeyframeEffect(span,
+               [
+                  {  // from
+                     transform: 'scale(.7)',
+                     opacity: 0.5,
+                  },
+                  {  // to
+                     transform: 'scale(3)',
+                     opacity: 0.3,
+                  }
+               ],
+               {
+                  duration,
+                  fill: 'forwards'
+               }
+            );
+
+            const animation = new window.Animation(effect);
+            animation.play();
+
+            activeSpans.push(span);
+         }
+         catch
+         {
+            if (span) { span.remove(); }
+         }
 
          // Reset stored pointer position.
          clientX = clientY = -1;

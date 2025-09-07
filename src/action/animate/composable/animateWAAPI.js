@@ -62,8 +62,18 @@ export function animateWAAPI({ debounce, enabled = true, duration = 600, event =
             }
          }
 
-         animation = element.animate(keyframes, isObject(keyframeOptions) ? keyframeOptions : duration);
-         animation.onfinish = animationFinished;
+         try
+         {
+            // Always use main realm / window for animation even when cross-realm.
+
+            const effect = new window.KeyframeEffect(element, keyframes, isObject(keyframeOptions) ? keyframeOptions :
+             duration);
+
+            animation = new window.Animation(effect);
+            animation.onfinish = animationFinished;
+            animation.play();
+         }
+         catch { animation = void 0; }
       }
 
       /**

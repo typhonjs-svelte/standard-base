@@ -1,6 +1,7 @@
-import { A11yHelper }   from '#runtime/util/a11y';
-import { CrossWindow }  from '#runtime/util/browser';
-import { isObject }     from '#runtime/util/object';
+import { A11yHelper }         from '#runtime/util/a11y';
+import { CrossWindow }        from '#runtime/util/browser';
+import { isObject }           from '#runtime/util/object';
+import { nextAnimationFrame } from '#runtime/util/animate';
 
 /**
  * Defines the classic Material Design ripple effect as an action that is attached to an elements focus and blur events.
@@ -43,6 +44,20 @@ export function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration 
       const targetEl = typeof selector === 'string' ? element.querySelector(selector) :
        A11yHelper.isFocusTarget(element.firstChild) ? element.firstChild : element;
 
+      /**
+       * Holds any reference to targetEl active window when focused.
+       *
+       * @type {Window}
+       */
+      let activeWindow = void 0;
+
+      /**
+       * True when `targetEl` is the activeElement when Window blurs.
+       *
+       * @type {boolean}
+       */
+      let windowBlurActiveFocus = false;
+
       let clientX = -1;
       let clientY = -1;
 
@@ -52,13 +67,13 @@ export function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration 
       /**
        * WAAPI ripple animation on blur.
        */
-      function blurRipple()
+      function blurRipple(event, force = false)
       {
          if (!enabled) { return; }
 
          // When clicking outside the browser window or to another tab `document.activeElement` remains
          // the same despite blur being invoked; IE the target element.
-         if (activeSpans.length === 0 || targetEl === CrossWindow.getActiveElement(targetEl)) { return; }
+         if (!force && (activeSpans.length === 0 || targetEl === CrossWindow.getActiveElement(targetEl))) { return; }
 
          for (const span of activeSpans)
          {
@@ -100,13 +115,43 @@ export function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration 
 
          // Remove all active spans as they are now animating out.
          activeSpans.length = 0;
+
+         // Sanity to clean up event listener despite it being `once`.
+         activeWindow?.removeEventListener?.('blur', blurRippleForced);
+         activeWindow = void 0;
+      }
+
+      /**
+       * Invoked by window blur event to force blur ripple when active window loses focus.
+       */
+      function blurRippleForced(event)
+      {
+         // If targetEl is the active element when Window blurs keep track of this state to defer focus when the Window
+         // regains focus.
+         if (CrossWindow.isActiveElement(targetEl)) { windowBlurActiveFocus = true; }
+
+         // Force blur
+         blurRipple(event, true);
       }
 
       /**
        * WAAPI ripple animation on focus.
        */
-      function focusRipple()
+      async function focusRipple()
       {
+         // If the window was blurred and regains focus a 2 rAF delay occurs to recheck if `targetEl` is the active
+         // element. This handles the case when the exiting active element receives automatic focus despite another
+         // element being activated when the browser window is focused again ensuring that the proper actual active
+         // element receives the focus animation.
+         if (windowBlurActiveFocus)
+         {
+            windowBlurActiveFocus = false;
+
+            await nextAnimationFrame(2);
+
+            if (!CrossWindow.isActiveElement(targetEl)) { return; }
+         }
+
          if (!enabled) { return; }
 
          // If already focused and the span exists do not create another ripple effect.
@@ -168,6 +213,10 @@ export function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration 
             animation.play();
 
             activeSpans.push(span);
+
+            // Forced blur ripple when current window is blurred.
+            activeWindow = targetEl.ownerDocument.defaultView;
+            activeWindow.addEventListener('blur', blurRippleForced, { once: true });
          }
          catch
          {
@@ -219,6 +268,9 @@ export function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration 
             targetEl.removeEventListener('pointerdown', onPointerDown);
             targetEl.removeEventListener('blur', blurRipple);
             targetEl.removeEventListener('focus', focusRipple);
+
+            activeWindow?.removeEventListener?.('blur', blurRippleForced);
+            activeWindow = void 0;
          }
       };
    };

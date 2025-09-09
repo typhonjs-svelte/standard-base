@@ -189,7 +189,7 @@
        on:click
        on:contextmenu
        tabindex={enabled ? 0 : null}
-       use:popoverTooltip={tooltip}
+       use:popoverTooltip={{ tooltip }}
        use:efx={{ enabled }}>
        {#if icon}
           {#if iconType === 'font'}

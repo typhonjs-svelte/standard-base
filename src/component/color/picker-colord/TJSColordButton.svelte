@@ -168,7 +168,7 @@
 <div class=tjs-color-button
      class:disabled={!enabled}
      use:applyStyles={styles}
-     use:popoverTooltip={tooltip}
+     use:popoverTooltip={{ tooltip }}
      style:--tjs-icon-button-background={hslColor}>
     <div class=tjs-color-button-inner
          on:click={onClick}

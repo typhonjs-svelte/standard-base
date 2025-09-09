@@ -215,14 +215,14 @@
 <div class=tjs-media-content>
     {#key parsed}
        {#if parsed?.elementType === 'svg'}
-          <svg use:inlineSvg={parsed.src} use:popoverTooltip={tooltip}></svg>
+          <svg use:inlineSvg={parsed.src} use:popoverTooltip={{ tooltip }}></svg>
        {:else if parsed?.elementType === 'img'}
-          <img src={parsed.src} alt={imgAlt} use:popoverTooltip={tooltip} />
+          <img src={parsed.src} alt={imgAlt} use:popoverTooltip={{ tooltip }} />
        {:else if parsed?.elementType === 'video'}
           <video bind:this={videoEl}
                  on:pointerenter={onPointerenter}
                  on:pointerleave={onPointerleave}
-                 use:popoverTooltip={tooltip}
+                 use:popoverTooltip={{ tooltip }}
                  autoplay={videoAutoplay}
                  loop={videoLoop}
                  muted={videoMuted}

@@ -161,7 +161,7 @@
         on:contextmenu
         on:press
         disabled={!enabled}
-        use:popoverTooltip={tooltip}
+        use:popoverTooltip={{ tooltip }}
         use:applyStyles={styles}>
    <span class=tjs-form-button-efx bind:this={efxEl} use:efx={{ enabled }}>
       <span class=tjs-form-button-span>

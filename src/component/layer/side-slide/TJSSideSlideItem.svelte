@@ -390,7 +390,7 @@
               on:contextmenu={onContextmenuButton}
               on:pointerdown={onPointerdownButton}
               on:pointerenter={onPointerenterButton}
-              use:popoverTooltip={item.tooltip}
+              use:popoverTooltip={{ tooltip: item.tooltip }}
               disabled={isOtherLocked}>
          {#if TJSSvelte.config.isConfigEmbed(item.icon)}
             <svelte:component this={item.icon.class} {...(isObject(item.icon.props) ? item.icon.props : {})} />

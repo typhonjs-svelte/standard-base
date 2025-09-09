@@ -221,7 +221,7 @@
      on:click={onClickDiv}
      on:close:popup={onClosePopup}
      use:applyStyles={styles}
-     use:popoverTooltip={tooltipCurrent}
+     use:popoverTooltip={{ tooltip: tooltipCurrent }}
      on:pointerdown|stopPropagation>
    <slot name=outer />
    <span bind:this={spanEl}

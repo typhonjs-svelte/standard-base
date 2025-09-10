@@ -229,7 +229,9 @@
       /*border-width: var(--tjs-form-button-border-width, var(--tjs-button-border-width));*/
 
       cursor: var(--tjs-cursor-pointer, pointer);
+
       height: var(--tjs-form-button-height, var(--tjs-input-height, inherit));
+      min-width: var(--tjs-form-button-height, var(--tjs-input-height, 100%));
       width: var(--tjs-form-button-width, 100%);
 
       padding: 0;

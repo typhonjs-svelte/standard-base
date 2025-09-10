@@ -8,9 +8,11 @@
 
    import { createEventDispatcher } from '#svelte';
 
+   import { inlineSvg }             from '#runtime/svelte/action/dom/inline-svg';
    import { applyStyles }           from '#runtime/svelte/action/dom/style';
    import { popoverTooltip }        from '#runtime/svelte/action/dom/tooltip';
    import { TJSSvelte }             from '#runtime/svelte/util';
+   import { AssetValidator }        from '#runtime/util/browser';
    import { localize }              from '#runtime/util/i18n';
    import { isObject }              from '#runtime/util/object';
 
@@ -74,6 +76,16 @@
 
    $: clickPropagate = isObject(button) && typeof button.clickPropagate === 'boolean' ? button.clickPropagate :
     typeof clickPropagate === 'boolean' ? clickPropagate : false;
+
+   // ----------------------------------------------------------------------------------------------------------------
+
+   let iconType;
+
+   $:
+   {
+      const result = AssetValidator.parseMedia({ url: icon, mediaTypes: AssetValidator.MediaTypes.img_svg });
+      iconType = result.valid ? result.elementType : 'font';
+   }
 
    // ----------------------------------------------------------------------------------------------------------------
 
@@ -165,7 +177,15 @@
         use:applyStyles={styles}>
    <span class=tjs-form-button-efx bind:this={efxEl} use:efx={{ enabled }}>
       <span class=tjs-form-button-span>
-         {#if icon}<i class={icon}></i>{/if}
+         {#if icon}
+            {#if iconType === 'font'}
+               <i class={`icon ${icon}`}></i>
+            {:else if iconType === 'img'}
+               <img src={icon} alt="" class=icon>
+            {:else if iconType === 'svg'}
+               <svg use:inlineSvg={{ src: icon }} class=icon></svg>
+            {/if}
+         {/if}
 
          {#if $$slots.default}
             <slot />
@@ -243,7 +263,13 @@
       text-shadow: var(--tjs-form-button-text-shadow-focus-visible, var(--tjs-default-text-shadow-focus-hover, inherit));
    }
 
-   i {
-      margin: unset;
+   .icon {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+
+      /* Set icon height and max-width based on input height - 2x padding */
+      height: calc(var(--tjs-input-height) - (var(--tjs-form-button-padding, 6px) * 2));
+      max-width: calc(var(--tjs-input-height) - (var(--tjs-form-button-padding, 6px) * 2));
    }
 </style>

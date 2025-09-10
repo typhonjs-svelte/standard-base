@@ -183,9 +183,9 @@
    }
 
    select option {
-      /* TODO: cssVariables v2; add defaults */
-      background: var(--tjs-select-option-background, var(--tjs-default-popup-background, #23221d));
-      color: var(--tjs-select-option-color, var(--tjs-default-popup-primary-color, #b5b3a4));
+      background: var(--tjs-select-option-background, var(--tjs-select-background, var(--tjs-input-background)));
+      color: var(--tjs-select-option-color, inherit);
+      font-family: var(--tjs-select-option-font-family, inherit);
    }
 
    select:disabled {

@@ -235,8 +235,8 @@
       width: var(--tjs-form-button-width, 100%);
 
       padding: 0;
-
       user-select: none;
+      transition: var(--tjs-form-button-transition);
       -webkit-tap-highlight-color: var(--tjs-default-webkit-tap-highlight-color, transparent);
    }
 
@@ -254,7 +254,6 @@
    button:hover {
       box-shadow: var(--tjs-form-button-box-shadow-hover, var(--tjs-default-box-shadow-hover));
       outline: var(--tjs-form-button-outline-hover, var(--tjs-default-outline-hover, revert));
-      transition: var(--tjs-form-button-transition-hover, var(--tjs-default-transition-hover));
       text-shadow: var(--tjs-form-button-text-shadow-hover, var(--tjs-default-text-shadow-hover, inherit));
    }
 

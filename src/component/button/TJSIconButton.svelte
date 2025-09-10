@@ -228,7 +228,7 @@
     }
 
     button {
-        display: inline-block;
+        display: inline-flex;
         pointer-events: initial;
         position: relative;
 

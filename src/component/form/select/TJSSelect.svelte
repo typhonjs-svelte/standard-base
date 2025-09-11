@@ -182,6 +182,11 @@
       transition: var(--tjs-select-transition, var(--tjs-input-transition));
    }
 
+   /* Special case for Firefox. When no `efx` are applied set select background so that options are styled correct. */
+   select:not(.has-efx) {
+      background: var(--tjs-select-background, var(--tjs-input-background));
+   }
+
    select option {
       background: var(--tjs-select-option-background, var(--tjs-select-background, var(--tjs-input-background)));
       color: var(--tjs-select-option-color, inherit);

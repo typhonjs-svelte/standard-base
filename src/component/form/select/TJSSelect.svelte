@@ -201,7 +201,7 @@
 
    select:focus {
       box-shadow: var(--tjs-select-box-shadow-focus, var(--tjs-input-box-shadow-focus, unset));
-
+      color: var(--tjs-select-color-focus, var(--tjs-input-color-focus, inherit));
       outline: var(--tjs-select-outline-focus, var(--tjs-input-outline-focus));
       outline-offset: var(--tjs-select-outline-offset-focus, var(--tjs-input-outline-offset-focus));
    }

@@ -290,7 +290,7 @@
 
     input:focus {
         box-shadow: var(--tjs-input-number-box-shadow-focus, var(--tjs-input-box-shadow-focus, unset));
-
+        color: var(--tjs-input-number-color-focus, var(--tjs-input-color-focus, inherit));
         outline: var(--tjs-input-text-outline-focus, var(--tjs-input-outline-focus));
         outline-offset: var(--tjs-input-text-outline-offset-focus, var(--tjs-input-outline-offset-focus));
     }

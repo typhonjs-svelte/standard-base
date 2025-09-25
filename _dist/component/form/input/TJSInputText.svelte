@@ -241,12 +241,6 @@
         margin: var(--tjs-input-text-margin, var(--tjs-input-margin));
         height: var(--tjs-input-text-height, var(--tjs-input-height));
         width: var(--tjs-input-text-width, var(--tjs-input-width));
-
-       /*outline: var(--tjs-input-text-outline, var(--tjs-input-outline));*/
-       /*outline-offset: var(--tjs-input-text-outline-offset, var(--tjs-input-outline-offset));*/
-       /*transition: var(--tjs-input-text-transition, var(--tjs-input-transition));*/
-
-        /*outline: var(--tjs-input-text-outline, var(--tjs-input-outline));*/
     }
 
     .is-value-invalid {
@@ -295,7 +289,7 @@
 
     input:focus {
         box-shadow: var(--tjs-input-text-box-shadow-focus, var(--tjs-input-box-shadow-focus, unset));
-
+        color: var(--tjs-input-text-color-focus, var(--tjs-input-color-focus, inherit));
         outline: var(--tjs-input-text-outline-focus, var(--tjs-input-outline-focus));
         outline-offset: var(--tjs-input-text-outline-offset-focus, var(--tjs-input-outline-offset-focus));
     }

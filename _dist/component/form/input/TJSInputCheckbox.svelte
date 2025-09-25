@@ -130,6 +130,7 @@
        cursor: var(--tjs-input-checkbox-cursor, var(--tjs-input-cursor, var(--tjs-cursor-pointer, pointer)));
 
        transform: translateZ(1px);
+       transition: var(--tjs-input-checkbox-transition);
     }
 
     input:disabled {
@@ -159,6 +160,5 @@
     input:hover {
        box-shadow: var(--tjs-input-checkbox-box-shadow-hover, var(--tjs-default-box-shadow-hover));
        outline: var(--tjs-input-checkbox-outline-hover, var(--tjs-default-outline-hover, revert));
-       transition: var(--tjs-input-checkbox-transition-hover, var(--tjs-default-transition-hover));
     }
 </style>

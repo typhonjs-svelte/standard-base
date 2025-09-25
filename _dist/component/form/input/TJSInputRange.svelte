@@ -290,6 +290,7 @@
 
     input:focus {
        box-shadow: var(--tjs-input-range-box-shadow-focus, var(--tjs-input-box-shadow-focus, unset));
+       color: var(--tjs-input-range-color-focus, var(--tjs-input-color-focus, inherit));
     }
 
     input:focus::-webkit-slider-runnable-track {

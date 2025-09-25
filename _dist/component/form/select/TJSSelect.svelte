@@ -182,10 +182,15 @@
       transition: var(--tjs-select-transition, var(--tjs-input-transition));
    }
 
+   /* Special case for Firefox. When no `efx` are applied set select background so that options are styled correct. */
+   select:not(.has-efx) {
+      background: var(--tjs-select-background, var(--tjs-input-background));
+   }
+
    select option {
-      /* TODO: cssVariables v2; add defaults */
-      background: var(--tjs-select-option-background, var(--tjs-default-popup-background, #23221d));
-      color: var(--tjs-select-option-color, var(--tjs-default-popup-primary-color, #b5b3a4));
+      background: var(--tjs-select-option-background, var(--tjs-select-background, var(--tjs-input-background)));
+      color: var(--tjs-select-option-color, inherit);
+      font-family: var(--tjs-select-option-font-family, inherit);
    }
 
    select:disabled {
@@ -196,7 +201,7 @@
 
    select:focus {
       box-shadow: var(--tjs-select-box-shadow-focus, var(--tjs-input-box-shadow-focus, unset));
-
+      color: var(--tjs-select-color-focus, var(--tjs-input-color-focus, inherit));
       outline: var(--tjs-select-outline-focus, var(--tjs-input-outline-focus));
       outline-offset: var(--tjs-select-outline-offset-focus, var(--tjs-input-outline-offset-focus));
    }

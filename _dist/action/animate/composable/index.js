@@ -2,6 +2,7 @@ import { Timing } from '#runtime/util';
 import { isObject } from '#runtime/util/object';
 import { CrossWindow } from '#runtime/util/browser';
 import { A11yHelper } from '#runtime/util/a11y';
+import { nextAnimationFrame } from '#runtime/util/animate';
 
 /**
  * Defines a higher order function returning an action that triggers WAAPI / `Element.animate` animations from
@@ -64,8 +65,18 @@ function animateWAAPI({ debounce, enabled = true, duration = 600, event = 'click
             }
          }
 
-         animation = element.animate(keyframes, isObject(keyframeOptions) ? keyframeOptions : duration);
-         animation.onfinish = animationFinished;
+         try
+         {
+            // Always use main realm / window for animation even when cross-realm.
+
+            const effect = new window.KeyframeEffect(element, keyframes, isObject(keyframeOptions) ? keyframeOptions :
+             duration);
+
+            animation = new window.Animation(effect);
+            animation.onfinish = animationFinished;
+            animation.play();
+         }
+         catch { animation = void 0; }
       }
 
       /**
@@ -240,7 +251,7 @@ function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = false, 
             top = e.clientY ? `${e.clientY - (elementRect.top + radius)}px` : '0';
          }
 
-         const span = document.createElement('span');
+         const span = CrossWindow.getDocument(element).createElement('span');
 
          span.style.position = 'absolute';
          span.style.width = `${diameter}px`;
@@ -255,24 +266,39 @@ function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = false, 
 
          element.prepend(span);
 
-         const animation = span.animate([
-            {  // from
-               transform: 'scale(.7)',
-               opacity: 0.5,
-               filter: 'blur(2px)'
-            },
-            {  // to
-               transform: 'scale(4)',
-               opacity: 0,
-               filter: 'blur(5px)'
-            }
-         ],
-         duration);
-
-         animation.onfinish = () =>
+         try
          {
-            if (span && span.isConnected) { span.remove(); }
-         };
+            // Always use main realm / window for animation even when cross-realm.
+
+            const effect = new window.KeyframeEffect(span,
+               [
+                  {  // from
+                     transform: 'scale(.7)',
+                     opacity: 0.5,
+                     filter: 'blur(2px)'
+                  },
+                  {  // to
+                     transform: 'scale(4)',
+                     opacity: 0,
+                     filter: 'blur(5px)'
+                  }
+               ],
+               duration
+            );
+
+            const animation = new window.Animation(effect);
+
+            animation.onfinish = () =>
+            {
+               if (span) { span.remove(); }
+            };
+
+            animation.play();
+         }
+         catch
+         {
+            if (span) { span.remove(); }
+         }
       }
 
       /**
@@ -406,6 +432,20 @@ function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration = 300, 
       const targetEl = typeof selector === 'string' ? element.querySelector(selector) :
        A11yHelper.isFocusTarget(element.firstChild) ? element.firstChild : element;
 
+      /**
+       * Holds any reference to targetEl active window when focused.
+       *
+       * @type {Window}
+       */
+      let activeWindow = void 0;
+
+      /**
+       * True when `targetEl` is the activeElement when Window blurs.
+       *
+       * @type {boolean}
+       */
+      let windowBlurActiveFocus = false;
+
       let clientX = -1;
       let clientY = -1;
 
@@ -415,47 +455,91 @@ function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration = 300, 
       /**
        * WAAPI ripple animation on blur.
        */
-      function blurRipple()
+      function blurRipple(event, force = false)
       {
          if (!enabled) { return; }
 
          // When clicking outside the browser window or to another tab `document.activeElement` remains
          // the same despite blur being invoked; IE the target element.
-         if (activeSpans.length === 0 || targetEl === CrossWindow.getActiveElement(targetEl)) { return; }
+         if (!force && (activeSpans.length === 0 || targetEl === CrossWindow.getActiveElement(targetEl))) { return; }
 
          for (const span of activeSpans)
          {
-            const animation = span.animate(
-             [
-                {  // from
-                   transform: 'scale(3)',
-                   opacity: 0.3,
-                },
-                {  // to
-                   transform: 'scale(.7)',
-                   opacity: 0.0,
-                }
-             ],
-             {
-                duration,
-                fill: 'forwards'
-             });
-
-            animation.onfinish = () =>
+            try
             {
-               if (span.isConnected) { span.remove(); }
-            };
+               // Always use main realm / window for animation even when cross-realm.
+
+               const effect = new window.KeyframeEffect(span,
+                  [
+                     {  // from
+                        transform: 'scale(3)',
+                        opacity: 0.3,
+                     },
+                     {  // to
+                        transform: 'scale(.7)',
+                        opacity: 0.0,
+                     }
+                  ],
+                  {
+                     duration,
+                     fill: 'forwards'
+                  }
+               );
+
+               const animation = new window.Animation(effect);
+
+               animation.onfinish = () =>
+               {
+                  if (span) { span.remove(); }
+               };
+
+               animation.play();
+            }
+            catch
+            {
+               if (span) { span.remove(); }
+            }
          }
 
          // Remove all active spans as they are now animating out.
          activeSpans.length = 0;
+
+         // Sanity to clean up event listener despite it being `once`.
+         activeWindow?.removeEventListener?.('blur', blurRippleForced);
+         activeWindow = void 0;
+      }
+
+      /**
+       * Invoked by window blur event to force blur ripple when active window loses focus.
+       */
+      function blurRippleForced(event)
+      {
+         // If targetEl is the active element when Window blurs keep track of this state to defer focus when the Window
+         // regains focus.
+         if (CrossWindow.isActiveElement(targetEl)) { windowBlurActiveFocus = true; }
+
+         // Force blur
+         blurRipple(event, true);
       }
 
       /**
        * WAAPI ripple animation on focus.
        */
-      function focusRipple()
+      async function focusRipple()
       {
+         // If the window was blurred and regains focus a 2 rAF delay occurs to recheck if `targetEl` is the active
+         // element. This handles the case when the exiting active element receives automatic focus despite another
+         // element being activated when the browser window is focused again ensuring that the proper actual active
+         // element receives the focus animation.
+         if (windowBlurActiveFocus)
+         {
+            windowBlurActiveFocus = false;
+
+            await nextAnimationFrame(2);
+
+            if (!CrossWindow.isActiveElement(targetEl)) { return; }
+         }
+
          if (!enabled) { return; }
 
          // If already focused and the span exists do not create another ripple effect.
@@ -475,7 +559,7 @@ function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration = 300, 
          const left = `${actualX - (elementRect.left + radius)}px`;
          const top = `${actualY - (elementRect.top + radius)}px`;
 
-         const span = document.createElement('span');
+         const span = CrossWindow.getDocument(element).createElement('span');
 
          span.style.position = 'absolute';
          span.style.width = `${diameter}px`;
@@ -492,22 +576,40 @@ function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration = 300, 
 
          element.prepend(span);
 
-         activeSpans.push(span);
-
-         span.animate([
-            {  // from
-               transform: 'scale(.7)',
-               opacity: 0.5,
-            },
-            {  // to
-               transform: 'scale(3)',
-               opacity: 0.3,
-            }
-         ],
+         try
          {
-            duration,
-            fill: 'forwards'
-         });
+            // Always use main realm / window for animation even when cross-realm.
+
+            const effect = new window.KeyframeEffect(span,
+               [
+                  {  // from
+                     transform: 'scale(.7)',
+                     opacity: 0.5,
+                  },
+                  {  // to
+                     transform: 'scale(3)',
+                     opacity: 0.3,
+                  }
+               ],
+               {
+                  duration,
+                  fill: 'forwards'
+               }
+            );
+
+            const animation = new window.Animation(effect);
+            animation.play();
+
+            activeSpans.push(span);
+
+            // Forced blur ripple when current window is blurred.
+            activeWindow = targetEl.ownerDocument.defaultView;
+            activeWindow.addEventListener('blur', blurRippleForced, { once: true });
+         }
+         catch
+         {
+            if (span) { span.remove(); }
+         }
 
          // Reset stored pointer position.
          clientX = clientY = -1;
@@ -554,6 +656,9 @@ function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration = 300, 
             targetEl.removeEventListener('pointerdown', onPointerDown);
             targetEl.removeEventListener('blur', blurRipple);
             targetEl.removeEventListener('focus', focusRipple);
+
+            activeWindow?.removeEventListener?.('blur', blurRippleForced);
+            activeWindow = void 0;
          }
       };
    };

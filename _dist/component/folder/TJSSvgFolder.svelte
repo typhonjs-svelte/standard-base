@@ -519,6 +519,12 @@ changing the open state.  -->
       padding-left: var(--tjs-folder-details-padding-left, 0.4em); /* Set for children folders to increase indent */
    }
 
+   /**
+    * Dev note: Be aware of the `::details-content` pseudo-selector change to `block`. The explicit `.contents` div does
+    * use `flex` by default.
+    * https://issues.chromium.org/issues/379214835#comment6
+    */
+
    summary {
       display: flex;
       position: relative;

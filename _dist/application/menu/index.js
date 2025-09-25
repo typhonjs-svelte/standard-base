@@ -145,7 +145,7 @@ class TJSContextMenu
       const easingFn = getEasingFunc(easing, { default: false });
 
       // Retrieve any additional platform theme classes depending on event target.
-      const themedClasses = ThemeObserver.nearestThemedClasses({
+      const themedClasses = ThemeObserver.nearestThemedTokens({
          element: event?.target,
          output: new Set(classes),
          override: false,

@@ -189,7 +189,7 @@
        on:click
        on:contextmenu
        tabindex={enabled ? 0 : null}
-       use:popoverTooltip={tooltip}
+       use:popoverTooltip={{ tooltip }}
        use:efx={{ enabled }}>
        {#if icon}
           {#if iconType === 'font'}
@@ -228,7 +228,7 @@
     }
 
     button {
-        display: inline-block;
+        display: inline-flex;
         pointer-events: initial;
         position: relative;
 

@@ -121,9 +121,10 @@
 
 <style>
    .tjs-scroll-container {
-      display: var(--tjs-scroll-container-display);
-      flex-direction: var(--tjs-scroll-container-flex-direction);
-      gap: var(--tjs-scroll-container-gap);
+      display: var(--tjs-scroll-container-display, flex);
+      flex: var(--tjs-scroll-container-flex, 1);
+      flex-direction: var(--tjs-scroll-container-flex-direction, column);
+      gap: var(--tjs-scroll-container-gap, 0.5rem);
 
       overflow: var(--tjs-scroll-container-overflow, auto);
 

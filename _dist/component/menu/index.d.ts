@@ -1,7 +1,130 @@
-import * as _runtime_util_a11y from '#runtime/util/a11y';
 import * as _runtime_svelte_easing from '#runtime/svelte/easing';
+import { EasingReference } from '#runtime/svelte/easing';
+import { TJSSvelte } from '#runtime/svelte/util';
+import * as _runtime_util_a11y from '#runtime/util/a11y';
+import { A11yFocusSource } from '#runtime/util/a11y';
 import * as svelte from 'svelte';
 import { SvelteComponent } from 'svelte';
+
+/**
+ * Defines all menu and menu item data.
+ */
+declare namespace TJSMenuData {
+  /**
+   * Defines the data configuration object for context and popover menus.
+   */
+  interface Menu {
+    /**
+     * The data driven menu items.
+     */
+    items?: Iterable<Items>;
+    /**
+     * Optional X / Y offsets for the menu display.
+     */
+    offset?: {
+      x?: number;
+      y?: number;
+    };
+    /**
+     * A minimal Svelte config defining a menu item component
+     * after the main data driven menu items.
+     */
+    slotAfter?: TJSSvelte.Config.Embed;
+    /**
+     * A minimal Svelte config defining a menu item component
+     * before the main data driven menu items.
+     */
+    slotBefore?: TJSSvelte.Config.Embed;
+    /**
+     * A minimal Svelte config defining the default content
+     * component replacing the data driven menu items.
+     */
+    slotDefault?: TJSSvelte.Config.Embed;
+    /**
+     * Styles to be applied inline.
+     */
+    styles?: {
+      [key: string]: string | null;
+    };
+    /**
+     * @privateRemarks
+     * Currently unused; for any future action effects.
+     *
+     * @hidden
+     */
+    efx?: Function;
+    /**
+     * The key code to activate menu items.
+     */
+    keyCode?: string;
+    /**
+     * Custom transition options for duration and easing function reference. The default easing function is
+     * `quintOut`.
+     */
+    transitionOptions?: {
+      duration: number;
+      easing: EasingReference;
+    };
+  }
+  /**
+   * All menu item type variations.
+   */
+  type Items = Item.Label | Item.Separator | Item.Svelte;
+  /**
+   * Defines the variations of menu item data.
+   */
+  namespace Item {
+    /**
+     * Common menu item data.
+     */
+    interface Common<Item> {
+      /**
+       * If a boolean and false or a function that invoked returns a falsy value this item is not added.
+       */
+      condition?: boolean | (() => boolean);
+      /**
+       * A callback function to invoke; The object contains the item menu item data and an A11yFocusSource object
+       * to potentially pass to a new application.
+       */
+      onPress?: (data?: { event?: KeyboardEvent | PointerEvent; item?: Item; focusSource?: A11yFocusSource }) => void;
+    }
+    /**
+     * Defines a standard menu item with label & potentially an icon.
+     */
+    interface Label extends Common<Label> {
+      /**
+       * A text string that is passed through localization.
+       */
+      label: string;
+      /**
+       * A string containing font icon classes or an image / svg URL path to load.
+       */
+      icon?: string;
+      /**
+       * An image 'alt' text description for image icons.
+       */
+      imageAlt?: string;
+    }
+    /**
+     * Defines a separator between items.
+     */
+    interface Separator extends Common<Separator> {
+      /**
+       * A menu item separator; only 'hr' supported.
+       */
+      separator: 'hr';
+    }
+    /**
+     * Defines an item that is a Svelte component.
+     */
+    interface Svelte extends Common<Svelte> {
+      /**
+       * An embedded Svelte configuration object.
+       */
+      svelte: TJSSvelte.Config.Embed;
+    }
+  }
+}
 
 /**
  * TJSMenu provides a menu component that can be slotted into toggle components like TJSToggleIconButton and
@@ -16,12 +139,12 @@ import { SvelteComponent } from 'svelte';
  * ----------------------------------------------------------------------------------------------------------------
  * Exported props include:
  *
- * - `menu` ({@link TJSMenuData}): An object defining all properties of a menu including potentially data driven
+ * - `menu` ({@link TJSMenuData.Menu}): An object defining all properties of a menu including potentially data driven
  * minimal Svelte configuration objects (`slotAfter`, `slotBefore`, and `slotDefault`) providing default
  * component implementations.
  *
  * Or in lieu of passing the folder object you can assign these props directly:
- * - `items`: An iterable list of {@link TJSMenuItemData}; defines data driven menu items.
+ * - `items`: An iterable list of {@link TJSMenuData.Items}; defines data driven menu items.
  *
  * - `offset`: Optional X / Y offsets for the menu display.
  *
@@ -103,18 +226,18 @@ declare namespace TjsMenu {
     offset?: { x?: number; y?: number };
     /** @type {string} */
     keyCode?: string;
-    /** @type {import('.').TJSMenuData} */
-    menu?: TJSMenuData;
+    /** @type {import('./types').TJSMenuData.Menu} */
+    menu?: TJSMenuData.Menu;
     /** @type {HTMLElement | string} */
     focusEl?: HTMLElement | string;
-    /** @type {Iterable<import('.').TJSMenuItemData>} */
-    items?: Iterable<TJSMenuItemData>;
     /** @type {{ [key: string]: string | null }} */
     styles?: { [key: string]: string | null };
     /** @type {Function} */
     efx?: Function;
     /** @type {{ duration: number, easing: Function }} */
     transitionOptions?: { duration: number; easing: Function };
+    /** @type {Iterable<import('./types').TJSMenuData.Items>} */
+    items?: Iterable<TJSMenuData.Items>;
   };
   /** Events type alias for {@link TjsMenu | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };
@@ -134,11 +257,11 @@ declare namespace TjsMenu {
  * TJSContextMenu does not support default or named slots.
  *
  * ### Exported props
- * - `menu` ({@link TJSMenuData}): An object defining all properties of a menu.
+ * - `menu` ({@link TJSMenuData.Menu}): An object defining all properties of a menu.
  *
  * Or in lieu of passing the folder object you can assign these props directly:
  *
- * - `items`: An iterable list of {@link TJSContextMenuItemData}; defines data driven menu items.
+ * - `items`: An iterable list of {@link TJSMenuData.Items}; defines data driven menu items.
  *
  * - `styles`: Styles to be applied inline via `applyStyles` action.
  *
@@ -219,11 +342,16 @@ declare namespace TjsContextMenuImpl {
     id?: string;
     x?: number;
     y?: number;
-    items?: any[];
     /** @type {{ [key: string]: string | null }} */
     styles?: { [key: string]: string | null };
     /** @type {{ duration: number, easing: import('#runtime/svelte/easing').EasingFunction }} */
     transitionOptions?: { duration: number; easing: _runtime_svelte_easing.EasingFunction };
+    /** @type {import('#runtime/util/a11y').A11yFocusSource} */
+    focusSource?: _runtime_util_a11y.A11yFocusSource;
+    /**
+     * @type {import('../types').TJSMenuData.Items[]}
+     */
+    items?: TJSMenuData.Items[];
     offsetX?: number;
     offsetY?: number;
     /** @type {string[]} */
@@ -234,8 +362,6 @@ declare namespace TjsContextMenuImpl {
      * @type {boolean}
      */
     hasIcon?: boolean;
-    /** @type {import('#runtime/util/a11y').A11yFocusSource} */
-    focusSource?: _runtime_util_a11y.A11yFocusSource;
     /**
      * @type {Window} The active window the context menu is displaying inside.
      */
@@ -256,104 +382,4 @@ declare namespace TjsContextMenuImpl {
   export type Slots = {};
 }
 
-type TJSMenuData = {
-  /**
-   * The data driven menu items.
-   */
-  items?: Iterable<TJSMenuItemData>;
-  /**
-   * Optional X / Y offsets for the menu display.
-   */
-  offset?: {
-    x?: number;
-    y?: number;
-  };
-  /**
-   * A minimal Svelte config defining a menu item component
-   * after the main data driven menu items.
-   */
-  slotAfter?: {
-    class: Function;
-    props?: object;
-  };
-  /**
-   * A minimal Svelte config defining a menu item component
-   * before the main data driven menu items.
-   */
-  slotBefore?: {
-    class: Function;
-    props?: object;
-  };
-  /**
-   * A minimal Svelte config defining the default content
-   * component replacing the data driven menu items.
-   */
-  slotDefault?: {
-    class: Function;
-    props?: object;
-  };
-  /**
-   * Styles to be applied inline.
-   */
-  styles?: {
-    [key: string]: string | null;
-  };
-  /**
-   * Currently unused; for any future action effects.
-   */
-  efx?: Function;
-  /**
-   * The key code to activate menu items.
-   */
-  keyCode?: string;
-  /**
-   * Custom transition options for duration and easing
-   * function reference. The default easing function is `quintOut`.
-   */
-  transitionOptions?: {
-    duration: number;
-    easing: _runtime_svelte_easing.EasingReference;
-  };
-};
-type TJSMenuItemData = {
-  /**
-   * A callback function to invoke; The object contains the item menu item data and an A11yFocusSource object
-   * to potentially pass to a new application.
-   */
-  onPress?: (data?: {
-    event?: KeyboardEvent | PointerEvent;
-    item?: TJSMenuItemData;
-    focusSource?: _runtime_util_a11y.A11yFocusSource;
-  }) => any;
-  /**
-   * If a boolean and false or a function that invoked returns a falsy value
-   * this item is not added.
-   */
-  condition?: boolean | Function;
-  /**
-   * A Svelte component class.
-   */
-  class?: Function;
-  /**
-   * An object passed on as props for any Svelte component.
-   */
-  props?: object;
-  /**
-   * A string containing font icon classes or an image / svg URL path to load.
-   */
-  icon?: string;
-  /**
-   * An image 'alt' text description.
-   */
-  imageAlt?: string;
-  /**
-   * A text string that is passed through localization.
-   */
-  label?: string;
-  /**
-   * A menu item separator; only 'hr' supported.
-   */
-  separator?: 'hr';
-};
-
-export { TjsContextMenuImpl as TJSContextMenuImpl, TjsMenu as TJSMenu, type TJSMenuData, type TJSMenuItemData };
+export { TjsContextMenuImpl as TJSContextMenuImpl, TjsMenu as TJSMenu, TJSMenuData };

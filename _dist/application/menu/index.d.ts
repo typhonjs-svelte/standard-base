@@ -1,4 +1,5 @@
 import * as _runtime_svelte_easing from '#runtime/svelte/easing';
+import * as _standard_component_menu from '#standard/component/menu';
 
 /**
  * Provides and manages browser window wide context menu functionality. The best way to create a context menu is to
@@ -12,15 +13,16 @@ import * as _runtime_svelte_easing from '#runtime/svelte/easing';
 declare class TJSContextMenu {
   /**
    * Creates and manages a browser wide context menu. The best way to create the context menu is to pass in the source
-   * DOM event as it is processed for the location of the context menu to display. Likewise, a A11yFocusSource object
+   * DOM event as it is processed for the location of the context menu to display. Likewise, an A11yFocusSource object
    * is generated that allows focus to be returned to the source location. You may supply a default focus target as a
    * fallback via `focusEl`.
    *
    * @param {object}      opts - Optional parameters.
    *
-   * @param {KeyboardEvent | MouseEvent}  [opts.event] - The source MouseEvent or KeyboardEvent.
+   * @param {KeyboardEvent | MouseEvent}  [opts.event] - The source MouseEvent or KeyboardEvent. It is highly
+   *        recommended to pass the originating DOM event for automatic configuration.
    *
-   * @param {Iterable<TJSContextMenuItemData>} [opts.items] - Menu items to display.
+   * @param {Iterable<import('#standard/component/menu').TJSMenuData.Items>} [opts.items] - Menu items to display.
    *
    * @param {number}      [opts.x] - X position override for the top / left of the menu.
    *
@@ -55,8 +57,8 @@ declare class TJSContextMenu {
    * @param {import('#runtime/svelte/easing').EasingReference}   [opts.easing] - Transition option for ease. Either an
    *        easing function or easing function name.
    *
-   * @param {Window}      [opts.activeWindow=globalThis] - The active browser window that the context menu is
-   *        displaying inside.
+   * @param {Window}      [opts.activeWindow] - The active browser window that the context menu is displaying inside.
+   *        When you pass an `event` this is determined automatically.
    */
   static create({
     event,
@@ -77,7 +79,7 @@ declare class TJSContextMenu {
     activeWindow,
   }: {
     event?: KeyboardEvent | MouseEvent;
-    items?: Iterable<TJSContextMenuItemData>;
+    items?: Iterable<_standard_component_menu.TJSMenuData.Items>;
     x?: number;
     y?: number;
     offsetX?: number;
@@ -96,47 +98,5 @@ declare class TJSContextMenu {
     activeWindow?: Window;
   }): void;
 }
-/**
- * Defines a menu item entry. Depending on the item data that is passed
- * into the menu you can define 3 types of items: 'icon / label', 'class / Svelte component', and
- * 'separator / hr'. A single callback function `onPress` is supported.
- */
-type TJSContextMenuItemData = {
-  /**
-   * A callback function that receives the selected
-   * item data and an object containing the A11yFocusSource data that can be passed to any Application / particularly
-   * modal dialogs returning focus when closed.
-   */
-  onPress?: (item: TJSContextMenuItemData, object: any) => void;
-  /**
-   * If a boolean and false or a function that invoked returns a falsy
-   * value this item is not added.
-   */
-  condition?: boolean | (() => boolean);
-  /**
-   * A Svelte component class.
-   */
-  class?: Function;
-  /**
-   * An object passed on as props for any Svelte component.
-   */
-  props?: object;
-  /**
-   * A string containing font icon classes or an image / svg URL path to load.
-   */
-  icon?: string;
-  /**
-   * An image 'alt' text description.
-   */
-  imageAlt?: string;
-  /**
-   * A text string that is passed through localization.
-   */
-  label?: string;
-  /**
-   * A menu item separator; only 'hr' supported.
-   */
-  separator?: 'hr';
-};
 
-export { TJSContextMenu, type TJSContextMenuItemData };
+export { TJSContextMenu };

@@ -12,12 +12,12 @@
     * ----------------------------------------------------------------------------------------------------------------
     * Exported props include:
     *
-    * - `menu` ({@link TJSMenuData}): An object defining all properties of a menu including potentially data driven
+    * - `menu` ({@link TJSMenuData.Menu}): An object defining all properties of a menu including potentially data driven
     * minimal Svelte configuration objects (`slotAfter`, `slotBefore`, and `slotDefault`) providing default
     * component implementations.
     *
     * Or in lieu of passing the folder object you can assign these props directly:
-    * - `items`: An iterable list of {@link TJSMenuItemData}; defines data driven menu items.
+    * - `items`: An iterable list of {@link TJSMenuData.Items}; defines data driven menu items.
     *
     * - `offset`: Optional X / Y offsets for the menu display.
     *
@@ -114,10 +114,10 @@
       TJSFocusIndicator,
       TJSFocusWrap }             from '#standard/component/dom/focus';
 
-   /** @type {import('.').TJSMenuData} */
+   /** @type {import('./types').TJSMenuData.Menu} */
    export let menu = void 0;
 
-   /** @type {Iterable<import('.').TJSMenuItemData>} */
+   /** @type {Iterable<import('./types').TJSMenuData.Items>} */
    export let items = void 0;
 
    /** @type {HTMLElement | string} */
@@ -151,7 +151,7 @@
     */
    let activeWindow
 
-   /** @type {Iterable<import('./index').TJSMenuItemData>} */
+   /** @type {Iterable<import('./types').TJSMenuData.Items>} */
    let allItems;
 
    /**
@@ -182,7 +182,7 @@
 
          let type;
 
-         if (TJSSvelte.util.isComponent(item.class)) { type = 'class'; }
+         if (TJSSvelte.config.isConfigEmbed(item.svelte)) { type = 'class'; }
          else if (typeof item.icon === 'string')
          {
             const result = AssetValidator.parseMedia({ url: item.icon, mediaTypes: AssetValidator.MediaTypes.img_svg });
@@ -324,7 +324,7 @@
     *
     * @param {HTMLElement} node - nav element.
     *
-    * @returns {object} Transition object.
+    * @returns {import('svelte/transition').TransitionConfig} Transition object.
     */
    function animate(node)
    {
@@ -367,7 +367,7 @@
     *
     * @param {PointerEvent}    event - PointerEvent.
     *
-    * @param {import('./index').TJSMenuItemData} [item] - Menu item data.
+    * @param {import('./types').TJSMenuData.Items} [item] - Menu item data.
     */
    function onClick(event, item)
    {
@@ -488,7 +488,7 @@
     *
     * @param {KeyboardEvent}     event - KeyboardEvent.
     *
-    * @param {import('./index').TJSMenuItemData}   [item] - Menu item data.
+    * @param {import('./types').TJSMenuData.Items}   [item] - Menu item data.
     */
    function onKeyupItem(event, item)
    {
@@ -569,7 +569,7 @@
                 role=menuitem
                 tabindex=0>
                <TJSFocusIndicator absolute={true} />
-               <svelte:component this={item.class} {...(isObject(item.props) ? item.props : {})} />
+               <svelte:component this={item.svelte.class} {...(isObject(item.svelte.props) ? item.svelte.props : {})} />
             </li>
          {:else if item['#type'] === 'font'}
             <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->

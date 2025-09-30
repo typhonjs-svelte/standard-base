@@ -1,5 +1,5 @@
 import * as svelte_store from 'svelte/store';
-import * as svelte from 'svelte';
+import * as _runtime_svelte_util from '#runtime/svelte/util';
 import { SvelteComponent } from 'svelte';
 
 /**
@@ -37,15 +37,10 @@ declare namespace TjsScrollContainer {
 
 type TJSScrollContainerData = {
   /**
-   * A svelte component class used as the content component when
-   * there is no slotted component defined.
+   * A svelte component configuration object
+   * used as the content component when there is no slotted component defined.
    */
-  class?: svelte.SvelteComponent;
-  /**
-   * An object to apply to any data defined Svelte component when there is no slotted
-   * component defined.
-   */
-  props?: object;
+  svelte?: _runtime_svelte_util.TJSSvelte.Config.Embed;
   /**
    * A Svelte store that serializes the scroll top
    * position of the scrollable container.

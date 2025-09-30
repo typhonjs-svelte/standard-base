@@ -11,11 +11,11 @@
     * TJSContextMenu does not support default or named slots.
     *
     * ### Exported props
-    * - `menu` ({@link TJSMenuData}): An object defining all properties of a menu.
+    * - `menu` ({@link TJSMenuData.Menu}): An object defining all properties of a menu.
     *
     * Or in lieu of passing the folder object you can assign these props directly:
     *
-    * - `items`: An iterable list of {@link TJSContextMenuItemData}; defines data driven menu items.
+    * - `items`: An iterable list of {@link TJSMenuData.Items}; defines data driven menu items.
     *
     * - `styles`: Styles to be applied inline via `applyStyles` action.
     *
@@ -119,6 +119,9 @@
     */
    export let hasIcon = false;
 
+   /**
+    * @type {import('../types').TJSMenuData.Items[]}
+    */
    export let items = [];
 
    /** @type {{ [key: string]: string | null }} */
@@ -213,7 +216,7 @@
     *
     * @param {HTMLElement} node - nav element.
     *
-    * @returns {object} Transition object.
+    * @returns {import('svelte/transition').TransitionConfig} Transition object.
     */
    function animate(node)
    {
@@ -244,7 +247,7 @@
     *
     * @param {PointerEvent} event - PointerEvent.
     *
-    * @param {object} item - Function to invoke on click.
+    * @param {import('../types').TJSMenuData.Items} item - Function to invoke on click.
     */
    function onClick(event, item)
    {
@@ -392,7 +395,7 @@
     *
     * @param {KeyboardEvent}     event - KeyboardEvent.
     *
-    * @param {import('./index').TJSMenuItemData}   item - Menu item data.
+    * @param {import('./types').TJSMenuData.Items}   item - Menu item data.
     */
    function onKeyupItem(event, item)
    {
@@ -461,7 +464,7 @@
                     role=menuitem
                     tabindex=0>
                     <TJSFocusIndicator absolute={true} />
-                    <svelte:component this={item.class} {...(isObject(item.props) ? item.props : {})} />
+                    <svelte:component this={item.svelte.class} {...(isObject(item.svelte.props) ? item.svelte.props : {})} />
                 </li>
             {:else if item['#type'] === 'font'}
                 <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->

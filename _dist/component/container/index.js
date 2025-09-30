@@ -3,11 +3,8 @@ export { default as TJSScrollContainer } from './TJSScrollContainer.svelte';
 /**
  * @typedef {object} TJSScrollContainerData
  *
- * @property {import('svelte').SvelteComponent} [class] A svelte component class used as the content component when
- * there is no slotted component defined.
- *
- * @property {object} [props] An object to apply to any data defined Svelte component when there is no slotted
- * component defined.
+ * @property {import('#runtime/svelte/util').TJSSvelte.Config.Embed} [svelte] A svelte component configuration object
+ * used as the content component when there is no slotted component defined.
  *
  * @property {import('svelte/store').Writable<number>} [scrollTop] A Svelte store that serializes the scroll top
  * position of the scrollable container.

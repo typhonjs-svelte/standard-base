@@ -256,8 +256,6 @@
       activeWindow?.removeEventListener('blur', onWindowBlur);
    });
 
-   let activeWindowTest;
-
    onMount(() =>
    {
       // Store active window.

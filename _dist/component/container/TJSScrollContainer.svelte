@@ -22,11 +22,17 @@
    /** @type {import('.').TJSScrollContainerData} */
    export let container = void 0;
 
+   /** @type {boolean} */
+   export let focusable = void 0;
+
    /** @type {import('svelte/store').Writable<number>} */
    export let scrollTop = void 0;
 
    /** @type {{ [key: string]: string | null }} */
    export let styles = void 0;
+
+   $: focusable = isObject(container) && typeof container.focusable === 'boolean' ? container.focusable :
+    typeof focusable === 'boolean' ? focusable : false;
 
    $: scrollTop = isObject(container) && isObject(container.scrollTop) ? container.scrollTop :
     isObject(scrollTop) ? scrollTop : writable(0);
@@ -49,6 +55,12 @@
    {
       switch (event.code)
       {
+         case 'ArrowDown':
+         case 'ArrowLeft':
+         case 'ArrowRight':
+         case 'ArrowUp':
+         case 'End':
+         case 'Home':
          case 'PageDown':
          case 'PageUp':
          {
@@ -74,6 +86,12 @@
    {
       switch (event.code)
       {
+         case 'ArrowDown':
+         case 'ArrowLeft':
+         case 'ArrowRight':
+         case 'ArrowUp':
+         case 'End':
+         case 'Home':
          case 'PageDown':
          case 'PageUp':
          {
@@ -102,6 +120,7 @@
    }
 </script>
 
+<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div class=tjs-scroll-container
      bind:this={containerEl}
      on:keydown={onKeydown}
@@ -110,7 +129,7 @@
      use:applyScrolltop={scrollTop}
      use:applyStyles={styles}
      role=presentation
-     tabindex=-1
+     tabindex={focusable ? 0 : -1}
 >
    <slot>
       {#if svelte}

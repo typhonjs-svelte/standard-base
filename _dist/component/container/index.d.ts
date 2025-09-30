@@ -1,5 +1,5 @@
-import * as svelte_store from 'svelte/store';
 import * as _runtime_svelte_util from '#runtime/svelte/util';
+import * as svelte_store from 'svelte/store';
 import { SvelteComponent } from 'svelte';
 
 /**
@@ -26,6 +26,8 @@ declare namespace TjsScrollContainer {
     container?: TJSScrollContainerData;
     /** @type {import('svelte/store').Writable<number>} */
     scrollTop?: svelte_store.Writable<number>;
+    /** @type {boolean} */
+    focusable?: boolean;
     /** @type {{ [key: string]: string | null }} */
     styles?: { [key: string]: string | null };
   };
@@ -37,10 +39,9 @@ declare namespace TjsScrollContainer {
 
 type TJSScrollContainerData = {
   /**
-   * A svelte component configuration object
-   * used as the content component when there is no slotted component defined.
+   * When true, the scroll container is keyboard navigation focusable.
    */
-  svelte?: _runtime_svelte_util.TJSSvelte.Config.Embed;
+  focusable?: boolean;
   /**
    * A Svelte store that serializes the scroll top
    * position of the scrollable container.
@@ -52,6 +53,11 @@ type TJSScrollContainerData = {
   styles?: {
     [key: string]: string | null;
   };
+  /**
+   * A svelte component configuration object
+   * used as the content component when there is no slotted component defined.
+   */
+  svelte?: _runtime_svelte_util.TJSSvelte.Config.Embed;
 };
 
 export { TjsScrollContainer as TJSScrollContainer, type TJSScrollContainerData };

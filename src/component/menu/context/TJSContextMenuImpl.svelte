@@ -142,6 +142,11 @@
    export let activeWindow = globalThis;
 
    /**
+    * @type {boolean} Automatically apply any focus source on menu item press.
+    */
+   export let onPressApplyFocus = false;
+
+   /**
     * This component. Set externally removing dependence on `current_component`.
     *
     * @type {import('svelte').SvelteComponent}
@@ -254,6 +259,13 @@
       if (typeof item?.onPress === 'function')
       {
          item.onPress({ event, item, focusSource });
+
+         // Potentially apply focus source automatically.
+         if (onPressApplyFocus)
+         {
+            A11yHelper.applyFocusSource(focusSource)
+            focusSource = void 0;
+         }
       }
       else
       {
@@ -414,6 +426,13 @@
          if (typeof item?.onPress === 'function')
          {
             item.onPress({ event, item, focusSource });
+
+            // Potentially apply focus source automatically.
+            if (onPressApplyFocus)
+            {
+               A11yHelper.applyFocusSource(focusSource)
+               focusSource = void 0;
+            }
          }
          else
          {

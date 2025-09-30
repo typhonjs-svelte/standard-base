@@ -74,6 +74,9 @@ export class TJSContextMenu
     * @param {Function}    [opts.onClose] - A function that is invoked when the context menu is closed. Useful for any
     *        state based changes such as CSS highlighting of context menu invoking element.
     *
+    * @param {boolean}     [opts.onPressApplyFocus=false] When true, any focus source derived from the associated
+    *        `event` or defined `focusEl` is applied automatically in response to menu item presses.
+    *
     * @param {{ [key: string]: string | null }}  [opts.styles] - Optional inline styles to apply.
     *
     * @param {number}      [opts.duration] - Transition option for duration of transition in milliseconds.
@@ -85,7 +88,8 @@ export class TJSContextMenu
     *        When you pass an `event` this is determined automatically.
     */
    static create({ event, items, x, y, offsetX = 2, offsetY = 2, focusDebug = false, focusEl,
-    keyCode = 'Enter', classes = [], id = '', onClose, styles, duration = 120, easing, activeWindow })
+    keyCode = 'Enter', classes = [], id = '', onClose, onPressApplyFocus = false, styles, duration = 120, easing,
+     activeWindow })
    {
       if (TJSContextMenu.#contextMenu !== void 0) { return; }
 
@@ -134,6 +138,11 @@ export class TJSContextMenu
          throw new TypeError(`TJSContextMenu.create error: 'onClose' is not a function.`);
       }
 
+      if (typeof onPressApplyFocus !== 'boolean')
+      {
+         throw new TypeError(`TJSContextMenu.create error: 'onPressApplyFocus' is not a boolean.`);
+      }
+
       if (!isIterable(classes))
       {
          throw new TypeError(`TJSContextMenu.create error: 'classes' is not a list of strings.`);
@@ -175,7 +184,8 @@ export class TJSContextMenu
             id,
             styles,
             transitionOptions: { duration, easing: easingFn },
-            activeWindow
+            activeWindow,
+            onPressApplyFocus
          }
       });
 

@@ -50,6 +50,9 @@ declare class TJSContextMenu {
    * @param {Function}    [opts.onClose] - A function that is invoked when the context menu is closed. Useful for any
    *        state based changes such as CSS highlighting of context menu invoking element.
    *
+   * @param {boolean}     [opts.onPressApplyFocus=false] When true, any focus source derived from the associated
+   *        `event` or defined `focusEl` is applied automatically in response to menu item presses.
+   *
    * @param {{ [key: string]: string | null }}  [opts.styles] - Optional inline styles to apply.
    *
    * @param {number}      [opts.duration] - Transition option for duration of transition in milliseconds.
@@ -73,6 +76,7 @@ declare class TJSContextMenu {
     classes,
     id,
     onClose,
+    onPressApplyFocus,
     styles,
     duration,
     easing,
@@ -90,6 +94,7 @@ declare class TJSContextMenu {
     keyCode?: string;
     id?: string;
     onClose?: Function;
+    onPressApplyFocus?: boolean;
     styles?: {
       [key: string]: string | null;
     };

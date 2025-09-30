@@ -58,6 +58,15 @@ declare namespace TJSMenuData {
      */
     keyCode?: string;
     /**
+     * A specific HTMLElement or selector string as the default focus target.
+     */
+    focusEl?: HTMLElement | string;
+    /**
+     * When true, any focus source derived from the associated `event` or defined `focusEl` is applied
+     * automatically in response to menu item presses.
+     */
+    onPressApplyFocus?: boolean;
+    /**
      * Custom transition options for duration and easing function reference. The default easing function is
      * `quintOut`.
      */
@@ -234,6 +243,8 @@ declare namespace TjsMenu {
     styles?: { [key: string]: string | null };
     /** @type {Function} */
     efx?: Function;
+    /** @type {boolean} */
+    onPressApplyFocus?: boolean;
     /** @type {{ duration: number, easing: Function }} */
     transitionOptions?: { duration: number; easing: Function };
     /** @type {Iterable<import('./types').TJSMenuData.Items>} */
@@ -344,6 +355,10 @@ declare namespace TjsContextMenuImpl {
     y?: number;
     /** @type {{ [key: string]: string | null }} */
     styles?: { [key: string]: string | null };
+    /**
+     * @type {boolean} Automatically apply any focus source on menu item press.
+     */
+    onPressApplyFocus?: boolean;
     /** @type {{ duration: number, easing: import('#runtime/svelte/easing').EasingFunction }} */
     transitionOptions?: { duration: number; easing: _runtime_svelte_easing.EasingFunction };
     /** @type {import('#runtime/util/a11y').A11yFocusSource} */

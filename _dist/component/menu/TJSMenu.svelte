@@ -135,6 +135,9 @@
    /** @type {string} */
    export let keyCode = void 0;
 
+   /** @type {boolean} */
+   export let onPressApplyFocus = false;
+
    /** @type {{ duration: number, easing: Function }} */
    export let transitionOptions = void 0;
 
@@ -224,6 +227,9 @@
 
    $: keyCode = isObject(menu) && typeof menu.keyCode === 'string' ? menu.keyCode :
     typeof keyCode === 'string' ? keyCode : 'Enter';
+
+   $: onPressApplyFocus = isObject(menu) && typeof menu.onPressApplyFocus === 'boolean' ? menu.onPressApplyFocus :
+    typeof onPressApplyFocus === 'boolean' ? onPressApplyFocus : false;
 
    $: transitionOptions = isObject(menu) && isObject(menu.transitionOptions) ? menu.transitionOptions :
     isObject(transitionOptions) ? transitionOptions : { duration: 120, easing: 'quintOut' };
@@ -369,7 +375,17 @@
     */
    function onClick(event, item)
    {
-      if (typeof item?.onPress === 'function') { item.onPress({ event, item, focusSource }); }
+      if (typeof item?.onPress === 'function')
+      {
+         item.onPress({ event, item, focusSource });
+
+         // Potentially apply focus source automatically.
+         if (onPressApplyFocus)
+         {
+            A11yHelper.applyFocusSource(focusSource)
+            focusSource = void 0;
+         }
+      }
 
       if (!closed)
       {
@@ -492,7 +508,17 @@
    {
       if (event.code === keyCode)
       {
-         if (typeof item?.onPress === 'function') { item.onPress({ event, item, focusSource }); }
+         if (typeof item?.onPress === 'function')
+         {
+            item.onPress({ event, item, focusSource });
+
+            // Potentially apply focus source automatically.
+            if (onPressApplyFocus)
+            {
+               A11yHelper.applyFocusSource(focusSource)
+               focusSource = void 0;
+            }
+         }
 
          if (!closed)
          {

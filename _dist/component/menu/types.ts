@@ -64,6 +64,17 @@ declare namespace TJSMenuData
       keyCode?: string;
 
       /**
+       * A specific HTMLElement or selector string as the default focus target.
+       */
+      focusEl?: HTMLElement | string;
+
+      /**
+       * When true, any focus source derived from the associated `event` or defined `focusEl` is applied
+       * automatically in response to menu item presses.
+       */
+      onPressApplyFocus?: boolean;
+
+      /**
        * Custom transition options for duration and easing function reference. The default easing function is
        * `quintOut`.
        */

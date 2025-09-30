@@ -15,9 +15,8 @@
 
    import { applyScrolltop }  from '#runtime/svelte/action/dom/properties';
    import { applyStyles }     from '#runtime/svelte/action/dom/style';
-   import { CrossWindow }     from '#runtime/util/browser';
    import { TJSSvelte }       from '#runtime/svelte/util';
-
+   import { CrossWindow }     from '#runtime/util/browser';
    import { isObject }        from '#runtime/util/object';
 
    /** @type {import('.').TJSScrollContainerData} */
@@ -35,8 +34,7 @@
    $: styles = isObject(container) && isObject(container.styles) ? container.styles :
     isObject(styles) ? styles : void 0;
 
-   $: child = isObject(container) && TJSSvelte.util.isComponent(container.class) ? container.class : void 0;
-   $: props = isObject(container) && isObject(container.props) ? container.props : {};
+   $: svelte = isObject(container) && TJSSvelte.config.isConfigEmbed(container.svelte) ? container.svelte : void 0;
 
    /** @type {HTMLElement} */
    let containerEl;
@@ -115,8 +113,8 @@
      tabindex=-1
 >
    <slot>
-      {#if child}
-         <svelte:component this={child} {...props} />
+      {#if svelte}
+         <svelte:component this={svelte.class} {...(isObject(svelte.props) ? svelte.props : {})} />
       {/if}
    </slot>
 </div>

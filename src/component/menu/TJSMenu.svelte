@@ -260,6 +260,7 @@
       activeWindow?.document.body.removeEventListener('pointerdown', onClose);
       activeWindow?.document.body.removeEventListener('wheel', onClose);
       activeWindow?.removeEventListener('blur', onWindowBlur);
+      activeWindow?.removeEventListener('resize', onWindowBlur);
    });
 
    onMount(() =>
@@ -271,6 +272,7 @@
       activeWindow.document.body.addEventListener('pointerdown', onClose);
       activeWindow.document.body.addEventListener('wheel', onClose);
       activeWindow.addEventListener('blur', onWindowBlur);
+      activeWindow.addEventListener('resize', onWindowBlur);
 
       /** @type {HTMLElement} */
       const activeEl = activeWindow.document.activeElement;

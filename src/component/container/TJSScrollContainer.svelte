@@ -175,6 +175,8 @@
       /* For Firefox */
       scrollbar-width: var(--tjs-scroll-container-scrollbar-width, thin);
       scrollbar-color: var(--tjs-scroll-container-scrollbar-color, inherit);
+
+      transition: var(--tjs-scroll-container-transition, all ease-in-out 0.2s);
    }
 
    .tjs-scroll-container:focus-visible {

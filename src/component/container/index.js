@@ -3,7 +3,10 @@ export { default as TJSScrollContainer } from './TJSScrollContainer.svelte';
 /**
  * @typedef {object} TJSScrollContainerData
  *
- * @property {boolean} [focusable=false] When true, the scroll container is keyboard navigation focusable.
+ * @property {boolean} [allowTabFocus=false] When true, the scroll container is keyboard navigation focusable.
+ *
+ * @property {import('svelte/store').Writable<number>} [scrollLeft] A Svelte store that serializes the scroll left
+ * position of the scrollable container.
  *
  * @property {import('svelte/store').Writable<number>} [scrollTop] A Svelte store that serializes the scroll top
  * position of the scrollable container.

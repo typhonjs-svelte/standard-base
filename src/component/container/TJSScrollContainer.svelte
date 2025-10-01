@@ -11,19 +11,21 @@
     * @componentDocumentation
     */
 
-   import { writable }        from '#svelte/store';
-
-   import { applyScrolltop }  from '#runtime/svelte/action/dom/properties';
-   import { applyStyles }     from '#runtime/svelte/action/dom/style';
-   import { TJSSvelte }       from '#runtime/svelte/util';
-   import { CrossWindow }     from '#runtime/util/browser';
-   import { isObject }        from '#runtime/util/object';
+   import { applyScroll }              from '#runtime/svelte/action/dom/properties';
+   import { applyStyles }              from '#runtime/svelte/action/dom/style';
+   import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
+   import { TJSSvelte }                from '#runtime/svelte/util';
+   import { CrossWindow }              from '#runtime/util/browser';
+   import { isObject }                 from '#runtime/util/object';
 
    /** @type {import('.').TJSScrollContainerData} */
    export let container = void 0;
 
    /** @type {boolean} */
-   export let focusable = void 0;
+   export let allowTabFocus = void 0;
+
+   /** @type {import('svelte/store').Writable<number>} */
+   export let scrollLeft = void 0;
 
    /** @type {import('svelte/store').Writable<number>} */
    export let scrollTop = void 0;
@@ -31,11 +33,14 @@
    /** @type {{ [key: string]: string | null }} */
    export let styles = void 0;
 
-   $: focusable = isObject(container) && typeof container.focusable === 'boolean' ? container.focusable :
-    typeof focusable === 'boolean' ? focusable : false;
+   $: allowTabFocus = isObject(container) && typeof container.allowTabFocus === 'boolean' ? container.allowTabFocus :
+    typeof allowTabFocus === 'boolean' ? allowTabFocus : false;
 
-   $: scrollTop = isObject(container) && isObject(container.scrollTop) ? container.scrollTop :
-    isObject(scrollTop) ? scrollTop : writable(0);
+   $: scrollLeft = isObject(container) && isMinimalWritableStore(container.scrollLeft) ? container.scrollLeft :
+    isMinimalWritableStore(scrollLeft) ? scrollLeft : void 0;
+
+   $: scrollTop = isObject(container) && isMinimalWritableStore(container.scrollTop) ? container.scrollTop :
+    isMinimalWritableStore(scrollTop) ? scrollTop : void 0;
 
    $: styles = isObject(container) && isObject(container.styles) ? container.styles :
     isObject(styles) ? styles : void 0;
@@ -65,7 +70,7 @@
          case 'PageUp':
          {
             const activeEl = CrossWindow.getActiveElement(event);
-            if (activeEl === containerEl || containerEl.contains(event))
+            if (activeEl === containerEl || containerEl.contains(activeEl))
             {
                // Stop propagation against any global key handlers when focus is inside the container.
                event.stopPropagation();
@@ -126,10 +131,10 @@
      on:keydown={onKeydown}
      on:keyup={onKeyup}
      on:wheel={onWheel}
-     use:applyScrolltop={scrollTop}
+     use:applyScroll={{ scrollLeft, scrollTop }}
      use:applyStyles={styles}
      role=presentation
-     tabindex={focusable ? 0 : -1}
+     tabindex={allowTabFocus ? 0 : -1}
 >
    <slot>
       {#if svelte}
@@ -146,6 +151,7 @@
       gap: var(--tjs-scroll-container-gap, 0.5rem);
 
       overflow: var(--tjs-scroll-container-overflow, auto);
+      overscroll-behavior: var(--tjs-scroll-container-overscroll-behavior, contain);
 
       /* For Firefox */
       scrollbar-width: var(--tjs-scroll-container-scrollbar-width, thin);

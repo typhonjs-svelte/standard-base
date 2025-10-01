@@ -587,7 +587,7 @@
       {#each allItems as item}
          {#if item['#type'] === 'class'}
             <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
-            <li class=tjs-menu-item
+            <li class="tjs-menu-item tjs-menu-item-button"
                 on:click={(event) => onClick(event, item)}
                 on:keyup={(event) => onKeyupItem(event, item)}
                 role=menuitem

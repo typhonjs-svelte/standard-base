@@ -150,6 +150,10 @@
       flex-direction: var(--tjs-scroll-container-flex-direction, column);
       gap: var(--tjs-scroll-container-gap, 0.5rem);
 
+      background: var(--tjs-scroll-container-background);
+      border: var(--tjs-scroll-container-border);
+      border-radius: var(--tjs-scroll-container-border-radius);
+
       overflow: var(--tjs-scroll-container-overflow, auto);
       overscroll-behavior: var(--tjs-scroll-container-overscroll-behavior, contain);
 
@@ -159,6 +163,7 @@
    }
 
    .tjs-scroll-container:focus-visible {
-      outline: var(--tjs-scroll-container-outline-focus-visible, var(--tjs-default-a11y-outline-focus-visible, 2px solid transparent));
+      outline: var(--tjs-scroll-container-outline-focus-visible, 2px solid transparent);
+      box-shadow: var(--tjs-scroll-container-box-shadow-focus-visible);
    }
 </style>

@@ -5,6 +5,9 @@ export { default as TJSScrollContainer } from './TJSScrollContainer.svelte';
  *
  * @property {boolean} [allowTabFocus=false] When true, the scroll container is keyboard navigation focusable.
  *
+ * @property {(data: { event: KeyboardEvent | PointerEvent }) => void} [onContextMenu] Callback to handle context menu
+ *           presses.
+ *
  * @property {import('svelte/store').Writable<number>} [scrollLeft] A Svelte store that serializes the scroll left
  * position of the scrollable container.
  *

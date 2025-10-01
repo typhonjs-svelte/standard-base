@@ -24,6 +24,8 @@
    /** @type {boolean} */
    export let allowTabFocus = void 0;
 
+   export let onContextMenu = void 0;
+
    /** @type {import('svelte/store').Writable<number>} */
    export let scrollLeft = void 0;
 
@@ -35,6 +37,9 @@
 
    $: allowTabFocus = isObject(container) && typeof container.allowTabFocus === 'boolean' ? container.allowTabFocus :
     typeof allowTabFocus === 'boolean' ? allowTabFocus : false;
+
+   $: onContextMenu = isObject(container) && typeof container.onContextMenu === 'function' ? container.onContextMenu :
+    typeof onContextMenu === 'function' ? onContextMenu : void 0;
 
    $: scrollLeft = isObject(container) && isMinimalWritableStore(container.scrollLeft) ? container.scrollLeft :
     isMinimalWritableStore(scrollLeft) ? scrollLeft : void 0;
@@ -49,6 +54,16 @@
 
    /** @type {HTMLElement} */
    let containerEl;
+
+   /**
+    * Handle context menu callback.
+    *
+    * @param {PointerEvent | KeyboardEvent}   event -
+    */
+   function onContextMenuPress(event)
+   {
+      if (typeof onContextMenu === 'function') { onContextMenu({ event }); }
+   }
 
    /**
     * Stops propagation against any global key handlers when focus is inside the container for page up / down key
@@ -125,17 +140,17 @@
    }
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-<div class=tjs-scroll-container
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions a11y-no-noninteractive-tabindex -->
+<div class="tjs-scroll-container tjs-a11y-focusable"
      bind:this={containerEl}
+     on:contextmenu={onContextMenuPress}
      on:keydown={onKeydown}
      on:keyup={onKeyup}
      on:wheel={onWheel}
      use:applyScroll={{ scrollLeft, scrollTop }}
      use:applyStyles={styles}
-     role=presentation
-     tabindex={allowTabFocus ? 0 : -1}
->
+     role=region
+     tabindex={allowTabFocus ? 0 : -1}>
    <slot>
       {#if svelte}
          <svelte:component this={svelte.class} {...(isObject(svelte.props) ? svelte.props : {})} />

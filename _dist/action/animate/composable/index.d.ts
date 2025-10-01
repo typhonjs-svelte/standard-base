@@ -18,7 +18,7 @@ declare namespace ComposableActionOptions {
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/animate
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Keyframe_Formats
    */
-  type AnimateWAAPI = {
+  interface AnimateWAAPI {
     /**
      * Add a debounce to incoming events in milliseconds. Consider using the `exclusive` strategy.
      */
@@ -48,25 +48,25 @@ declare namespace ComposableActionOptions {
      * animation if one is currently running. Default value: `cancel`.
      */
     strategy?: 'cancel' | 'exclusive';
-  };
+  }
   /**
    * Defines the options for the {@link ripple} action.
    */
-  type Ripple = {
+  interface Ripple {
     /**
      * Is the animation enabled. Default value: `true`.
      */
     enabled?: boolean;
-  };
+  }
   /**
    * Defines the options for the {@link rippleFocus} action.
    */
-  type RippleFocus = {
+  interface RippleFocus {
     /**
      * Is the animation enabled. Default value: `true`.
      */
     enabled?: boolean;
-  };
+  }
 }
 
 /**

@@ -25,9 +25,12 @@ declare namespace TjsScrollContainer {
     /** @type {import('.').TJSScrollContainerData} */
     container?: TJSScrollContainerData;
     /** @type {import('svelte/store').Writable<number>} */
+    scrollLeft?: svelte_store.Writable<number>;
+    /** @type {import('svelte/store').Writable<number>} */
     scrollTop?: svelte_store.Writable<number>;
     /** @type {boolean} */
-    focusable?: boolean;
+    allowTabFocus?: boolean;
+    onContextMenu?: any;
     /** @type {{ [key: string]: string | null }} */
     styles?: { [key: string]: string | null };
   };
@@ -41,7 +44,17 @@ type TJSScrollContainerData = {
   /**
    * When true, the scroll container is keyboard navigation focusable.
    */
-  focusable?: boolean;
+  allowTabFocus?: boolean;
+  /**
+   * Callback to handle context menu
+   * presses.
+   */
+  onContextMenu?: (data: { event: KeyboardEvent | PointerEvent }) => void;
+  /**
+   * A Svelte store that serializes the scroll left
+   * position of the scrollable container.
+   */
+  scrollLeft?: svelte_store.Writable<number>;
   /**
    * A Svelte store that serializes the scroll top
    * position of the scrollable container.

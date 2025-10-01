@@ -5,7 +5,7 @@ import type { A11yFocusSource }  from '#runtime/util/a11y';
 /**
  * Defines all menu and menu item data.
  */
-declare namespace TJSMenuData
+namespace TJSMenuData
 {
    /**
     * Defines the data configuration object for context and popover menus.

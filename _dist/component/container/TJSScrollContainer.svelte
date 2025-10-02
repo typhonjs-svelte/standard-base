@@ -163,18 +163,22 @@
       display: var(--tjs-scroll-container-display, flex);
       flex: var(--tjs-scroll-container-flex, 1);
       flex-direction: var(--tjs-scroll-container-flex-direction, column);
+      flex-wrap: var(--tjs-scroll-container-flex-wrap, nowrap);
       gap: var(--tjs-scroll-container-gap, 0.5rem);
 
       background: var(--tjs-scroll-container-background);
       border: var(--tjs-scroll-container-border);
       border-radius: var(--tjs-scroll-container-border-radius);
 
+      margin: var(--tjs-scroll-container-margin, 0);
+      padding: var(--tjs-scroll-container-padding, 0);
+
       overflow: var(--tjs-scroll-container-overflow, auto);
       overscroll-behavior: var(--tjs-scroll-container-overscroll-behavior, contain);
 
-      /* For Firefox */
-      scrollbar-width: var(--tjs-scroll-container-scrollbar-width, thin);
+      scrollbar-gutter: var(--tjs-scroll-container-scrollbar-gutter, stable);
       scrollbar-color: var(--tjs-scroll-container-scrollbar-color, inherit);
+      scrollbar-width: var(--tjs-scroll-container-scrollbar-width, thin);
 
       transition: var(--tjs-scroll-container-transition, all ease-in-out 0.2s);
    }

@@ -67,7 +67,7 @@
         height: 100%;
         background: var(--_tjs-color-picker-current-color-hsla);
 
-        border: var(--tjs-color-picker-input-border, var(--tjs-input-border, 1px solid gray));
+        border: var(--tjs-color-picker-input-border, var(--tjs-input-border));
         border-radius: var(--tjs-color-picker-input-border-radius, var(--tjs-input-border-radius, 0.25em));
     }
 </style>

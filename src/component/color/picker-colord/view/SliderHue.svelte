@@ -223,7 +223,7 @@
         content: '';
         inset: 0;
 
-        border: var(--tjs-input-number-border, var(--tjs-input-border));
+        border: var(--tjs-color-picker-component-border, var(--tjs-component-border));
         border-radius: var(--tjs-color-picker-slider-border-radius, max(4px, 2.5cqw));
 
         z-index: 0;

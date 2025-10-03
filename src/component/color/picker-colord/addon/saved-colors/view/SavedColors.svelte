@@ -32,7 +32,7 @@
         display: grid;
         border-top: 1px solid gray;
 
-        --tjs-icon-button-border: var(--tjs-input-number-border, var(--tjs-input-border));
+        --tjs-icon-button-border: var(--tjs-component-border);
         --tjs-icon-button-border-radius: 0.25em;
         --tjs-icon-button-border-width: 1px;
     }

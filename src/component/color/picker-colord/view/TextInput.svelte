@@ -117,6 +117,8 @@
 
     /* Child text input components */
     .input-container {
+       --tjs-input-padding: 0 0.15rem;
+
        display: flex;
        flex: 1;
     }

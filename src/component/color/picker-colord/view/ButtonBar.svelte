@@ -101,7 +101,7 @@
         display: flex;
         flex: 1;
 
-        background: var(--tjs-color-picker-overlay-background, rgba(0, 0, 0, 0.1));
+        background: var(--tjs-color-picker-overlay-background, var(--tjs-component-overlay-background));
         border: var(--tjs-color-picker-component-border, var(--tjs-component-border));
         border-radius: 0.25em;
 

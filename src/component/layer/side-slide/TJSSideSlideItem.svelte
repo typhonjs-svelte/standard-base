@@ -140,6 +140,8 @@
     */
    function onContextmenuButton(event)
    {
+      if (event.defaultPrevented) { return; }
+
       event.preventDefault();
       event.stopPropagation();
 
@@ -172,6 +174,8 @@
     */
    function onKeydownContainer(event)
    {
+      if (event.defaultPrevented) { return; }
+
       switch (event.code)
       {
          case 'Escape':
@@ -233,6 +237,8 @@
     */
    function onKeyupContainer(event)
    {
+      if (event.defaultPrevented) { return; }
+
       if (event.code === 'Escape')
       {
          // When opened and focus is inside the host panel the first `<Escape>` key press will focus the button
@@ -254,6 +260,8 @@
     */
    function onKeyupButton(event)
    {
+      if (event.defaultPrevented) { return; }
+
       switch (event.code)
       {
          case 'Escape':
@@ -285,6 +293,8 @@
     */
    function onPointerdownButton(event)
    {
+      if (event.defaultPrevented) { return; }
+
       const isMouse = event.pointerType === 'mouse';
 
       if (isMouse && event.button !== 0) { return; }
@@ -299,6 +309,8 @@
     */
    function onPointerdownContainer(event)
    {
+      if (event.defaultPrevented) { return; }
+
       if (event.pointerType === 'mouse' && event.button !== 0) { return; }
 
       if (opened)
@@ -318,6 +330,8 @@
     */
    function onPointerenterButton(event)
    {
+      if (event.defaultPrevented) { return; }
+
       // Ignore if not mouse or `clickToOpen` is true ignoring pointer entered.
       if (event.pointerType !== 'mouse' || clickToOpen || isAnyLocked) { return; }
 
@@ -333,6 +347,8 @@
     */
    function onPointerleaveContainer(event)
    {
+      if (event.defaultPrevented) { return; }
+
       // Ignore if not mouse or `clickToOpen` is true ignoring pointer leave.
       if (event.pointerType !== 'mouse' || clickToOpen || isAnyLocked) { return; }
 
@@ -387,8 +403,8 @@
       <TJSSideSlideItemHost bind:hostEl {duration} {item} {easingIn} {easingOut} {side} />
    {/if}
 
-   <!-- The button capture div prevents pointer events from propagating when the button is disabled -->
-   <div class=button-capture on:pointerdown={(event) => { if (isOtherLocked) { event.stopPropagation(); event.preventDefault(); } }}>
+   <!-- The button capture div prevents button pointer events from activating when the button is disabled -->
+   <div class=button-capture on:pointerdown={(event) => { if (isOtherLocked) { event.preventDefault(); } }}>
       <button bind:this={buttonEl}
               class=tjs-side-slide-layer-item
               class:locked={locked}
@@ -460,7 +476,6 @@
    }
 
    .tjs-side-slide-layer-item:disabled {
-      pointer-events: none;
       cursor: default;
    }
 

@@ -106,6 +106,18 @@ declare namespace TjsSideSlideLayer {
      */
     styles?: { [key: string]: string | null };
     /**
+     * When true, tooltips are enabled.
+     *
+     * @type {boolean}
+     */
+    tooltips?: boolean;
+    /**
+     * Tooltip direction
+     *
+     * @type {string}
+     */
+    tooltipDirection?: string;
+    /**
      * When `top` is defined as a number and `topUnit` is defined then it is used to create the top style. This
      * facilitates creating a UI for editing side slide layer via a range input and separately storing the unit type.
      *

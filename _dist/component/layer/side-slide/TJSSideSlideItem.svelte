@@ -40,6 +40,12 @@
    /** @type {'left' | 'right'} */
    export let side = void 0;
 
+   /** @type {boolean} */
+   export let tooltips = true;
+
+   /** @type {string} */
+   export let tooltipDirection = void 0;
+
    // Provides a store for all items to share that is updated when an item is locked. When `clickToOpen` is false an
    // item can be locked w/ contextmenu click or key activation.
    const storeLocked = getContext('#side-slide-layer-item-locked');
@@ -390,7 +396,7 @@
               on:contextmenu={onContextmenuButton}
               on:pointerdown={onPointerdownButton}
               on:pointerenter={onPointerenterButton}
-              use:popoverTooltip={{ tooltip: item.tooltip }}
+              use:popoverTooltip={tooltips ? { tooltip: item.tooltip, direction: tooltipDirection } : {}}
               disabled={isOtherLocked}>
          {#if TJSSvelte.config.isConfigEmbed(item.icon)}
             <svelte:component this={item.icon.class} {...(isObject(item.icon.props) ? item.icon.props : {})} />

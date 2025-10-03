@@ -98,6 +98,20 @@
    export let styles = void 0;
 
    /**
+    * When true, tooltips are enabled.
+    *
+    * @type {boolean}
+    */
+   export let tooltips = true;
+
+   /**
+    * Tooltip direction
+    *
+    * @type {string}
+    */
+   export let tooltipDirection = void 0;
+
+   /**
     * A valid CSS value for the `top` positioning attribute for the top of the side slide layer.
     *
     * When top is a number it will be treated as pixels unless `topUnit` is defined.
@@ -237,7 +251,7 @@
 <section class={`tjs-side-slide-layer${isIterable(classes) ? ` ${Array.from(classes).join(' ')}` : ''}`}
          use:applyStyles={allStyles}>
    {#each filteredItems as item (item.icon)}
-      <TJSSideSlideItem {item} {allowLocking} {clickToOpen} {duration} easingIn={actualEasingIn} easingOut={actualEasingOut} {side} />
+      <TJSSideSlideItem {item} {allowLocking} {clickToOpen} {duration} easingIn={actualEasingIn} easingOut={actualEasingOut} {side} {tooltips} {tooltipDirection} />
    {/each}
 </section>
 

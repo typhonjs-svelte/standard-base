@@ -101,11 +101,11 @@
         display: flex;
         flex: 1;
 
-        background: var(--tjs-color-picker-overlay-background, rgba(0, 0, 0, 0.1));
-        border: var(--tjs-input-number-border, var(--tjs-input-border));
+        background: var(--tjs-color-picker-overlay-background, var(--tjs-component-overlay-background));
+        border: var(--tjs-color-picker-component-border, var(--tjs-component-border));
         border-radius: 0.25em;
 
-        --tjs-icon-button-border: var(--tjs-input-border);
+        --tjs-icon-button-border: var(--tjs-color-picker-component-border, var(--tjs-component-border));
         --tjs-icon-button-border-width: 2px;
     }
 

@@ -243,6 +243,8 @@
         clip-path: var(--tjs-icon-button-clip-path, var(--tjs-button-clip-path, none));
         color: var(--tjs-icon-button-color, currentColor);
         cursor: var(--tjs-cursor-pointer, pointer);
+        font-family: var(--tjs-icon-button-font-family, var(--tjs-button-font-family));
+        font-size: var(--tjs-icon-button-font-size, var(--tjs-button-font-size, inherit));
         margin: var(--tjs-icon-button-margin);
         padding: var(--tjs-icon-button-padding, 20%);
         transform-style: preserve-3d;

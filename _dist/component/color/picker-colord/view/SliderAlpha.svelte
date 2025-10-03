@@ -202,7 +202,7 @@
         inset: 0;
         background: linear-gradient(#00000000, var(--_tjs-color-picker-current-color-hsl));
 
-        border: var(--tjs-input-number-border, var(--tjs-input-border));
+        border: var(--tjs-color-picker-component-border, var(--tjs-component-border));
         border-radius: var(--tjs-color-picker-slider-border-radius, max(4px, 2.5cqw));
 
         z-index: 0;

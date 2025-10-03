@@ -40,8 +40,8 @@
         --tjs-folder-summary-padding: 0;
         --tjs-folder-summary-width: 100%;
 
-        background: var(--tjs-color-picker-overlay-background, rgba(0, 0, 0, 0.1));
-        border: var(--tjs-color-picker-overlay-border, var(--tjs-input-border, 2px solid rgba(0, 0, 0, 0.75)));
+        background: var(--tjs-color-picker-overlay-background, var(--tjs-component-overlay-background));
+        border: var(--tjs-color-picker-component-border, var(--tjs-component-border));
         border-radius: 0.25em;
     }
 

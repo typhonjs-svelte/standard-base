@@ -207,9 +207,9 @@
     div {
         pointer-events: none;
         display: block;
-        flex: 0 0 var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2em));
-        height: var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2em));
-        width: var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2em));
+        flex: 0 0 var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2.5em));
+        height: var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2.5em));
+        width: var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2.5em));
         align-self: center;
         text-align: center;
         user-select: none;

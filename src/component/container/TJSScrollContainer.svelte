@@ -24,12 +24,16 @@
    /** @type {boolean} */
    export let allowTabFocus = void 0;
 
+   /** @type {boolean} */
+   export let keyPropagate = void 0;
+
+   /** @type {(data: { event: KeyboardEvent | PointerEvent }) => void} */
    export let onContextMenu = void 0;
 
-   /** @type {import('svelte/store').Writable<number>} */
+   /** @type {import('#runtime/svelte/store/util').MinimalWritable<number>} */
    export let scrollLeft = void 0;
 
-   /** @type {import('svelte/store').Writable<number>} */
+   /** @type {import('#runtime/svelte/store/util').MinimalWritable<number>} */
    export let scrollTop = void 0;
 
    /** @type {{ [key: string]: string | null }} */
@@ -37,6 +41,9 @@
 
    $: allowTabFocus = isObject(container) && typeof container.allowTabFocus === 'boolean' ? container.allowTabFocus :
     typeof allowTabFocus === 'boolean' ? allowTabFocus : false;
+
+   $: keyPropagate = isObject(container) && typeof container.keyPropagate === 'boolean' ? container.keyPropagate :
+    typeof keyPropagate === 'boolean' ? keyPropagate : false;
 
    $: onContextMenu = isObject(container) && typeof container.onContextMenu === 'function' ? container.onContextMenu :
     typeof onContextMenu === 'function' ? onContextMenu : void 0;
@@ -62,7 +69,12 @@
     */
    function onContextMenuPress(event)
    {
-      if (typeof onContextMenu === 'function') { onContextMenu({ event }); }
+      if (typeof onContextMenu === 'function')
+      {
+         onContextMenu({ event });
+
+         event.preventDefault();
+      }
    }
 
    /**
@@ -73,6 +85,8 @@
     */
    function onKeydown(event)
    {
+      if (keyPropagate) { return; }
+
       switch (event.code)
       {
          case 'ArrowDown':
@@ -83,13 +97,10 @@
          case 'Home':
          case 'PageDown':
          case 'PageUp':
+         case 'Space':
          {
             const activeEl = CrossWindow.getActiveElement(event);
-            if (activeEl === containerEl || containerEl.contains(activeEl))
-            {
-               // Stop propagation against any global key handlers when focus is inside the container.
-               event.stopPropagation();
-            }
+            if (activeEl === containerEl || containerEl.contains(activeEl)) { event.stopPropagation(); }
 
             break;
          }
@@ -104,6 +115,8 @@
     */
    function onKeyup(event)
    {
+      if (keyPropagate) { return; }
+
       switch (event.code)
       {
          case 'ArrowDown':
@@ -114,12 +127,10 @@
          case 'Home':
          case 'PageDown':
          case 'PageUp':
+         case 'Space':
          {
             const activeEl = CrossWindow.getActiveElement(event);
-            if (activeEl === containerEl || containerEl.contains(activeEl))
-            {
-               event.stopPropagation();
-            }
+            if (activeEl === containerEl || containerEl.contains(activeEl)) { event.stopPropagation(); }
 
             break;
          }
@@ -180,7 +191,7 @@
       scrollbar-color: var(--tjs-scroll-container-scrollbar-color, inherit);
       scrollbar-width: var(--tjs-scroll-container-scrollbar-width, thin);
 
-      transition: var(--tjs-scroll-container-transition, all ease-in-out 0.25s);
+      transition: var(--tjs-scroll-container-transition, box-shadow ease-in-out 0.25s);
    }
 
    .tjs-scroll-container:focus-visible {

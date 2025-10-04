@@ -180,11 +180,15 @@
       scrollbar-color: var(--tjs-scroll-container-scrollbar-color, inherit);
       scrollbar-width: var(--tjs-scroll-container-scrollbar-width, thin);
 
-      transition: var(--tjs-scroll-container-transition, all ease-in-out 0.2s);
+      transition: var(--tjs-scroll-container-transition, all ease-in-out 0.25s);
    }
 
    .tjs-scroll-container:focus-visible {
       outline: var(--tjs-scroll-container-outline-focus-visible, 2px solid transparent);
+      transition: none;
+   }
+
+   .tjs-scroll-container[tabindex="0"]:focus-visible {
       box-shadow: var(--tjs-scroll-container-box-shadow-focus-visible);
    }
 </style>

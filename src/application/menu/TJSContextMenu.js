@@ -46,7 +46,10 @@ export class TJSContextMenu
     * @param {KeyboardEvent | MouseEvent}  [opts.event] - The source MouseEvent or KeyboardEvent. It is highly
     *        recommended to pass the originating DOM event for automatic configuration.
     *
-    * @param {Iterable<import('#standard/component/menu').TJSMenuData.Items>} [opts.items] - Menu items to display.
+    * @param {(
+    *    Iterable<import('#standard/component/menu').TJSMenuData.Items> |
+    *    (() => Iterable<import('#standard/component/menu').TJSMenuData.Items>)
+    * )} [opts.items] - Menu items list of function returning a menu item list to display.
     *
     * @param {number}      [opts.x] - X position override for the top / left of the menu.
     *
@@ -204,20 +207,36 @@ export class TJSContextMenu
    /**
     * Processes menu item data for conditions and evaluating the type of menu item.
     *
-    * @param {Iterable<import('#standard/component/menu').TJSMenuData.Items>} items - Menu item data.
+    * @param {(
+    *    Iterable<import('#standard/component/menu').TJSMenuData.Items> |
+    *    (() => Iterable<import('#standard/component/menu').TJSMenuData.Items>)
+    * )} items - Menu item data of function returning items.
     *
     * @returns {object[]} Processed menu items.
     */
    static #processItems(items)
    {
-      if (!isIterable(items)) { throw new TypeError(`TJSContextMenu error: 'items' is not an iterable list.`); }
+      let itemList;
 
-      const tempList = items;
+      if (typeof items === 'function')
+      {
+         itemList = items();
+
+         if (!isIterable(itemList))
+         {
+            throw new TypeError(`TJSContextMenu error: 'items' function did not return an iterable list.`);
+         }
+      }
+      else
+      {
+         itemList = isIterable(items) ? items : [];
+      }
+
       const tempItems = [];
 
       let cntr = -1;
 
-      for (const item of tempList)
+      for (const item of itemList)
       {
          cntr++;
          if (!isObject(item)) { throw new TypeError(`TJSContextMenu error: 'item[${cntr}]' is not an object.`); }

@@ -117,7 +117,7 @@
    /** @type {import('./types').TJSMenuData.Menu} */
    export let menu = void 0;
 
-   /** @type {Iterable<import('./types').TJSMenuData.Items>} */
+   /** @type {Iterable<import('./types').TJSMenuData.Items> | (() => Iterable<import('./types').TJSMenuData.Items>)} */
    export let items = void 0;
 
    /** @type {HTMLElement | string} */
@@ -165,8 +165,25 @@
    let hasIcon = false;
 
    $: {
-      const tempList = isObject(menu) && isIterable(menu.items) ? menu.items :
-       isIterable(items) ? items : [];
+      const itemFn = isObject(menu) && typeof menu.items === 'function' ? menu.items :
+       typeof items === 'function' ? items : void 0;
+
+      let itemList;
+
+      if (itemFn)
+      {
+         itemList = itemFn();
+
+         if (!isIterable(itemList))
+         {
+            throw new TypeError(`TJSMenu error: 'items' function did not return an iterable list.`);
+         }
+      }
+      else
+      {
+          itemList = isObject(menu) && isIterable(menu.items) ? menu.items :
+           isIterable(items) ? items : [];
+      }
 
       hasIcon = false;
 
@@ -174,7 +191,7 @@
 
       let cntr = -1;
 
-      for (const item of tempList)
+      for (const item of itemList)
       {
          cntr++;
          if (!isObject(item)) { throw new TypeError(`TJSMenu error: 'item[${cntr}]' is not an object.`); }

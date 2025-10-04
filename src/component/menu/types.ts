@@ -13,9 +13,9 @@ namespace TJSMenuData
    export interface Menu
    {
       /**
-       * The data driven menu items.
+       * The data driven menu item list or a function that returns a menu item list.
        */
-      items?: Iterable<Items>;
+      items?: Iterable<Items> | (() => Iterable<Items>);
 
       /**
        * Optional X / Y offsets for the menu display.
@@ -156,7 +156,7 @@ namespace TJSMenuData
          /**
           * A menu item separator; only 'hr' supported.
           */
-         separator: 'hr';
+         separator: string;
 
          /**
           * Exclusivity guard: present only on other variants. Do not provide.

@@ -783,6 +783,6 @@
    }
 
    .tjs-menu-item-label.has-icons {
-      padding-left: calc(var(--tjs-menu-item-icon-width, 1.25em) + var(--tjs-menu-item-button-gap, 0.25em));
+      padding-left: calc(var(--tjs-menu-item-icon-width, 1.25em) + var(--tjs-menu-item-button-gap, 0.5em));
    }
 </style>

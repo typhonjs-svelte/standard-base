@@ -184,10 +184,10 @@
    onMount(() =>
    {
       // To support cases when the active window may be a popped out browser unregister directly.
-      // activeWindow.document.body.addEventListener('pointerdown', onClose);
-      // activeWindow.document.body.addEventListener('wheel', onCloseWheel);
-      // activeWindow.addEventListener('blur', onWindowBlur);
-      // activeWindow.addEventListener('resize', onWindowBlur);
+      activeWindow.document.body.addEventListener('pointerdown', onClose);
+      activeWindow.document.body.addEventListener('wheel', onCloseWheel);
+      activeWindow.addEventListener('blur', onWindowBlur);
+      activeWindow.addEventListener('resize', onWindowBlur);
 
       const keyboardFocus = focusSource?.source === 'keyboard';
 

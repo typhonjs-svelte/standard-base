@@ -175,11 +175,13 @@
       flex: var(--tjs-scroll-container-flex, 1);
       flex-direction: var(--tjs-scroll-container-flex-direction, column);
       flex-wrap: var(--tjs-scroll-container-flex-wrap, nowrap);
-      gap: var(--tjs-scroll-container-gap, 0.5rem);
+      gap: var(--tjs-scroll-container-gap, 0);
 
       background: var(--tjs-scroll-container-background);
       border: var(--tjs-scroll-container-border);
       border-radius: var(--tjs-scroll-container-border-radius);
+      box-shadow: var(--tjs-scroll-container-box-shadow);
+      color: var(--tjs-scroll-container-color, inherit);
 
       margin: var(--tjs-scroll-container-margin, 0);
       padding: var(--tjs-scroll-container-padding, 0);
@@ -191,15 +193,24 @@
       scrollbar-color: var(--tjs-scroll-container-scrollbar-color, inherit);
       scrollbar-width: var(--tjs-scroll-container-scrollbar-width, thin);
 
-      transition: var(--tjs-scroll-container-transition, box-shadow ease-in-out 0.25s);
+      transition: var(--tjs-scroll-container-transition);
+   }
+
+   .tjs-scroll-container:focus {
+      background: var(--tjs-scroll-container-background-focus, var(--tjs-scroll-container-background));
+      border: var(--tjs-scroll-container-border-focus, var(--tjs-scroll-container-border));
+      border-radius: var(--tjs-scroll-container-border-radius-focus, var(--tjs-scroll-container-border-radius));
+      box-shadow: var(--tjs-scroll-container-box-shadow-focus, var(--tjs-scroll-container-box-shadow));
    }
 
    .tjs-scroll-container:focus-visible {
       outline: var(--tjs-scroll-container-outline-focus-visible, 2px solid transparent);
-      transition: none;
    }
 
    .tjs-scroll-container[tabindex="0"]:focus-visible {
-      box-shadow: var(--tjs-scroll-container-box-shadow-focus-visible);
+      background: var(--tjs-scroll-container-background-focus-visible, var(--tjs-scroll-container-background));
+      border: var(--tjs-scroll-container-border-focus-visible, var(--tjs-scroll-container-border));
+      border-radius: var(--tjs-scroll-container-border-radius-focus-visible, var(--tjs-scroll-container-border-radius));
+      box-shadow: var(--tjs-scroll-container-box-shadow-focus-visible, var(--tjs-scroll-container-box-shadow));
    }
 </style>

@@ -156,7 +156,7 @@
    {
       if (!enabled) { return; }
 
-      if (typeof onContextMenu === 'function') { onContextMenu({ event }); }
+      if (typeof onContextMenu === 'function') { onContextMenu({ event, selected }); }
 
       if (!clickPropagate)
       {

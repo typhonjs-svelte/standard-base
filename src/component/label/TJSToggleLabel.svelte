@@ -65,8 +65,8 @@
    $: text = isObject(label) && typeof label.text === 'string' ? label.text :
     typeof text === 'string' ? text : void 0;
 
-   $: comp = isObject(label) && TJSSvelte.util.isComponent(label.comp) ? label.comp :
-    TJSSvelte.util.isComponent(comp) ? comp : void 0;
+   $: comp = isObject(label) && TJSSvelte.config.isConfigEmbed(label.comp) ? label.comp :
+    TJSSvelte.config.isConfigEmbed(comp) ? comp : void 0;
 
    $: tooltip = isObject(label) && typeof label.tooltip === 'string' ? label.tooltip :
     typeof tooltip === 'string' ? tooltip : '';

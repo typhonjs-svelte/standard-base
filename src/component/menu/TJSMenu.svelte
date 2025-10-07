@@ -583,7 +583,7 @@
    <ol class=tjs-menu-items role=menu>
       <!-- TJSMenu supports hosting a slot for menu content -->
       <slot>
-         {#if TJSSvelte.util.isComponent(menu?.slotDefault?.class)}
+         {#if TJSSvelte.config.isConfigEmbed(menu?.slotDefault)}
             <svelte:component this={menu.slotDefault.class} {...(isObject(menu?.slotDefault?.props) ? menu.slotDefault.props : {})} />
          {/if}
       </slot>
@@ -597,7 +597,7 @@
              tabindex=0>
             <TJSFocusIndicator absolute={true} />
             <slot name=before>
-               {#if TJSSvelte.util.isComponent(menu?.slotBefore?.class)}
+               {#if TJSSvelte.config.isConfigEmbed(menu?.slotBefore)}
                   <svelte:component this={menu.slotBefore.class} {...(isObject(menu?.slotBefore?.props) ? menu.slotBefore.props : {})} />
                {/if}
             </slot>
@@ -670,7 +670,7 @@
              tabindex=0>
             <TJSFocusIndicator absolute={true} />
             <slot name=after>
-               {#if TJSSvelte.util.isComponent(menu?.slotAfter?.class)}
+               {#if TJSSvelte.config.isConfigEmbed(menu?.slotAfter)}
                   <svelte:component this={menu.slotAfter.class} {...(isObject(menu?.slotAfter?.props) ? menu.slotAfter.props : {})} />
                {/if}
             </slot>

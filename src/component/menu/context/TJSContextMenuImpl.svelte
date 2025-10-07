@@ -187,8 +187,8 @@
    onDestroy(() =>
    {
       // To support cases when the active window may be a popped out browser register directly.
-      activeWindow.document.body.removeEventListener('pointerdown', onClose);
-      activeWindow.document.body.removeEventListener('wheel', onCloseWheel);
+      activeWindow.document.body.removeEventListener('pointerdown', onClose, true);
+      activeWindow.document.body.removeEventListener('wheel', onCloseWheel, true);
       activeWindow.removeEventListener('blur', onWindowBlur);
       activeWindow.removeEventListener('resize', onWindowBlur);
    });
@@ -196,8 +196,8 @@
    onMount(() =>
    {
       // To support cases when the active window may be a popped out browser unregister directly.
-      activeWindow.document.body.addEventListener('pointerdown', onClose);
-      activeWindow.document.body.addEventListener('wheel', onCloseWheel);
+      activeWindow.document.body.addEventListener('pointerdown', onClose, true);
+      activeWindow.document.body.addEventListener('wheel', onCloseWheel, true);
       activeWindow.addEventListener('blur', onWindowBlur);
       activeWindow.addEventListener('resize', onWindowBlur);
 
@@ -309,7 +309,7 @@
    function onClose(event, isWheel = false)
    {
       // Early out if the pointer down is inside the menu element.
-      if (event.target === menuEl || menuEl.contains(event.target)) { return; }
+      if (event.target === menuEl || menuEl?.contains(event.target)) { return; }
 
       // Early out if the event page X / Y is the same as this context menu.
       if (!isWheel && Math.floor(event.pageX) === x && Math.floor(event.pageY) === y) { return; }

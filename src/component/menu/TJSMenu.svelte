@@ -274,8 +274,8 @@
    onDestroy(() =>
    {
       // To support cases when the active window may be a popped out browser register directly.
-      activeWindow?.document.body.removeEventListener('pointerdown', onClose);
-      activeWindow?.document.body.removeEventListener('wheel', onClose);
+      activeWindow?.document.body.removeEventListener('pointerdown', onClose, true);
+      activeWindow?.document.body.removeEventListener('wheel', onClose, true);
       activeWindow?.removeEventListener('blur', onWindowBlur);
       activeWindow?.removeEventListener('resize', onWindowBlur);
    });
@@ -286,8 +286,8 @@
       activeWindow = CrossWindow.getWindow(menuEl);
 
       // To support cases when the active window may be a popped out browser unregister directly.
-      activeWindow.document.body.addEventListener('pointerdown', onClose);
-      activeWindow.document.body.addEventListener('wheel', onClose);
+      activeWindow.document.body.addEventListener('pointerdown', onClose, true);
+      activeWindow.document.body.addEventListener('wheel', onClose, true);
       activeWindow.addEventListener('blur', onWindowBlur);
       activeWindow.addEventListener('resize', onWindowBlur);
 
@@ -423,15 +423,15 @@
    async function onClose(event)
    {
       // Early out if the pointer down is inside the menu element.
-      if (event.target === menuEl || menuEl.contains(event.target)) { return; }
+      if (event.target === menuEl || menuEl?.contains(event.target)) { return; }
 
-      if (event.target === menuEl.parentElement || menuEl.parentElement.contains(event.target)) { return; }
+      if (event.target === menuEl?.parentElement || menuEl?.parentElement.contains(event.target)) { return; }
 
       if (!closed)
       {
          closed = true;
 
-         menuEl.dispatchEvent(new CustomEvent('close:popup', {
+         menuEl?.dispatchEvent(new CustomEvent('close:popup', {
             bubbles: true,
             cancelable: true,
             detail: { target: event.target }
@@ -506,7 +506,7 @@
             if (!closed)
             {
                closed = true;
-               menuEl.dispatchEvent(new CustomEvent('close:popup',
+               menuEl?.dispatchEvent(new CustomEvent('close:popup',
                 { bubbles: true, cancelable: true, detail: { keyboardFocus: hasKeyboardFocus } }));
             }
 
@@ -546,7 +546,7 @@
             event.preventDefault();
             event.stopPropagation();
 
-            menuEl.dispatchEvent(new CustomEvent('close:popup',
+            menuEl?.dispatchEvent(new CustomEvent('close:popup',
              { bubbles: true, cancelable: true, detail: { keyboardFocus: hasKeyboardFocus } }));
          }
       }
@@ -560,7 +560,7 @@
       if (!closed)
       {
          closed = true;
-         menuEl.dispatchEvent(new CustomEvent('close:popup', { bubbles: true, cancelable: true }));
+         menuEl?.dispatchEvent(new CustomEvent('close:popup', { bubbles: true, cancelable: true }));
       }
    }
 </script>

@@ -245,6 +245,9 @@
         width: 100%;
         height: 100%;
 
+        min-height: unset;
+        min-width: unset;
+
         appearance: var(--tjs-icon-button-appearance, none);
         background: var(--tjs-icon-button-background, var(--tjs-button-background));
         border: var(--tjs-icon-button-border, var(--tjs-button-border));

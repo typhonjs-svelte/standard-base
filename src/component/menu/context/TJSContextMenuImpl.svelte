@@ -147,6 +147,18 @@
    export let onPressApplyFocus = false;
 
    /**
+    * @type {number} Subtracted when menu is adjusted upwards and configured by the `alignBottom` option in
+    *       `TJSContextMenu`.
+    */
+   export let targetElHeight = 0;
+
+   /**
+    * @type {number} Added when menu is adjusted leftward and configured by the `alignBottom` option in
+    *       `TJSContextMenu`.
+    */
+   export let targetElWidth = 0;
+
+   /**
     * This component. Set externally removing dependence on `current_component`.
     *
     * @type {import('svelte').SvelteComponent}
@@ -236,8 +248,11 @@
       const expandLeft = (x + node.clientWidth) > browserClientWidth;
       const expandUp = (y + node.clientHeight) > browserClientHeight;
 
-      const adjustedX = expandLeft ? Math.min(x + offsetX, browserClientWidth) : Math.max(x - offsetX, 0);
-      const adjustedY = expandUp ? Math.min(y + offsetY, browserClientHeight) : Math.max(y - offsetY, 0);
+      const adjustedX = expandLeft ? Math.min(x + offsetX + targetElWidth, browserClientWidth) :
+       Math.max(x - offsetX, 0);
+
+      const adjustedY = expandUp ? Math.min(y + offsetY - targetElHeight, browserClientHeight) :
+       Math.max(y - offsetY, 0);
 
       node.style.top = expandUp ? null : `${adjustedY}px`;
       node.style.bottom = expandUp ? `${browserClientHeight - adjustedY}px` : null;

@@ -27,7 +27,6 @@
    import {
       AssetValidator,
       CrossWindow }           from '#runtime/util/browser';
-   import { localize }        from '#runtime/util/i18n';
    import { isObject }        from '#runtime/util/object';
 
    /**
@@ -76,6 +75,13 @@
     * @type {string}
     */
    export let tooltip = void 0;
+
+   /**
+    * The tooltip direction for the media element.
+    *
+    * @type {string}
+    */
+   export let tooltipDirection = void 0;
 
    /**
     * Automatically start video playback; default: true
@@ -139,6 +145,9 @@
 
    $: tooltip = isObject(media) && typeof media.tooltip === 'string' ? media.tooltip :
     typeof tooltip === 'string' ? tooltip : void 0;
+
+   $: tooltipDirection = isObject(media) && typeof media.tooltipDirection === 'string' ? media.tooltipDirection :
+    typeof tooltipDirection === 'string' ? tooltipDirection : void 0;
 
    $: {
       videoPlayOnHover = isObject(media) && typeof media.videoPlayOnHover === 'boolean' ? media.videoPlayOnHover :
@@ -222,7 +231,7 @@
           <video bind:this={videoEl}
                  on:pointerenter={onPointerenter}
                  on:pointerleave={onPointerleave}
-                 use:popoverTooltip={{ tooltip }}
+                 use:popoverTooltip={{ tooltip, direction: tooltipDirection }}
                  autoplay={videoAutoplay}
                  loop={videoLoop}
                  muted={videoMuted}

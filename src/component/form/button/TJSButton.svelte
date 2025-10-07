@@ -28,6 +28,8 @@
 
    export let tooltip = void 0;
 
+   export let tooltipDirection = void 0;
+
    export let styles = void 0;
 
    export let keyCode = void 0;
@@ -58,6 +60,9 @@
 
    $: tooltip = isObject(button) && typeof button.tooltip === 'string' ? button.tooltip :
     typeof tooltip === 'string' ? tooltip : void 0;
+
+   $: tooltipDirection = isObject(button) && typeof button.tooltipDirection === 'string' ? button.tooltipDirection :
+    typeof tooltipDirection === 'string' ? tooltipDirection : void 0;
 
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
     isObject(styles) ? styles : void 0;
@@ -173,7 +178,7 @@
         on:contextmenu
         on:press
         disabled={!enabled}
-        use:popoverTooltip={{ tooltip }}
+        use:popoverTooltip={{ tooltip, direction: tooltipDirection }}
         use:applyStyles={styles}>
    <span class=tjs-form-button-efx bind:this={efxEl} use:efx={{ enabled }}>
       <span class=tjs-form-button-span>

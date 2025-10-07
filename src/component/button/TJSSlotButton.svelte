@@ -25,12 +25,15 @@
    import { createEventDispatcher } from '#svelte';
 
    import { applyStyles }           from '#runtime/svelte/action/dom/style';
+   import { popoverTooltip }        from '#runtime/svelte/action/dom/tooltip';
    import { isObject }              from '#runtime/util/object';
 
    export let button = void 0;
 
    export let enabled = void 0;
    export let styles = void 0;
+   export let tooltip = void 0;
+   export let tooltipDirection = void 0;
    export let efx = void 0;
    export let keyCode = void 0;
    export let onPress = void 0;
@@ -47,15 +50,25 @@
 
    $: enabled = isObject(button) && typeof button.enabled === 'boolean' ? button.enabled :
     typeof enabled === 'boolean' ? enabled : true;
+
+   $: tooltip = isObject(button) && typeof button.tooltip === 'string' ? button.tooltip :
+    typeof tooltip === 'string' ? tooltip : '';
+
+   $: tooltipDirection = isObject(button) && typeof button.tooltipDirection === 'string' ? button.tooltipDirection :
+    typeof tooltipDirection === 'string' ? tooltipDirection : void 0;
+
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
     isObject(styles) ? styles : void 0;
+
    $: efx = isObject(button) && typeof button.efx === 'function' ? button.efx :
     typeof efx === 'function' ? efx : s_EFX_DEFAULT;
+
    $: keyCode = isObject(button) && typeof button.keyCode === 'string' ? button.keyCode :
     typeof keyCode === 'string' ? keyCode : 'Enter';
 
    $: onPress = isObject(button) && typeof button.onPress === 'function' ? button.onPress :
     typeof onPress === 'function' ? onPress : void 0;
+
    $: onContextMenu = isObject(button) && typeof button.onContextMenu === 'function' ? button.onContextMenu :
     typeof onContextMenu === 'function' ? onContextMenu : void 0;
 
@@ -159,7 +172,8 @@
      on:contextmenu
      role=button
      tabindex={enabled ? 0 : null}
-     use:applyStyles={styles}>
+     use:applyStyles={styles}
+     use:popoverTooltip={{ tooltip, direction: tooltipDirection }}>
    <slot />
    {#if efx !== s_EFX_DEFAULT && enabled}
       <div bind:this={efxEl}

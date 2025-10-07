@@ -42,6 +42,7 @@
    export let text = void 0;
    export let comp = void 0;
    export let tooltip = void 0;
+   export let tooltipDirection = void 0;
    export let tooltipSelected = void 0;
    export let store = void 0;
    export let styles = void 0;
@@ -60,27 +61,40 @@
 
    $: enabled = isObject(label) && typeof label.enabled === 'boolean' ? label.enabled :
     typeof enabled === 'boolean' ? enabled : true;
+
    $: text = isObject(label) && typeof label.text === 'string' ? label.text :
     typeof text === 'string' ? text : void 0;
+
    $: comp = isObject(label) && TJSSvelte.util.isComponent(label.comp) ? label.comp :
     TJSSvelte.util.isComponent(comp) ? comp : void 0;
+
    $: tooltip = isObject(label) && typeof label.tooltip === 'string' ? label.tooltip :
     typeof tooltip === 'string' ? tooltip : '';
+
+   $: tooltipDirection = isObject(button) && typeof button.tooltipDirection === 'string' ? button.tooltipDirection :
+    typeof tooltipDirection === 'string' ? tooltipDirection : void 0;
+
    $: tooltipSelected = isObject(label) && typeof label.tooltipSelected === 'string' ? label.tooltipSelected :
     typeof tooltipSelected === 'string' ? tooltipSelected : '';
+
    $: store = isObject(label) && isMinimalWritableStore(label.store) ? label.store : isMinimalWritableStore(store) ?
     store : void 0;
+
    $: styles = isObject(label) && isObject(label.styles) ? label.styles :
     isObject(styles) ? styles : void 0;
+
    $: efx = isObject(label) && typeof label.efx === 'function' ? label.efx :
     typeof efx === 'function' ? efx : s_EFX_DEFAULT;
+
    $: keyCode = isObject(label) && typeof label.keyCode === 'string' ? label.keyCode :
     typeof keyCode === 'string' ? keyCode : 'Enter';
 
    $: onPress = isObject(label) && typeof label.onPress === 'function' ? label.onPress :
     typeof onPress === 'function' ? onPress : void 0;
+
    $: onClose = isObject(label) && typeof label.onClose === 'function' ? label.onClose :
     typeof onClose === 'function' ? onClose : void 0;
+
    $: onContextMenu = isObject(label) && typeof label.onContextMenu === 'function' ? label.onContextMenu :
     typeof onContextMenu === 'function' ? onContextMenu : void 0;
 
@@ -221,7 +235,7 @@
      on:click={onClickDiv}
      on:close:popup={onClosePopup}
      use:applyStyles={styles}
-     use:popoverTooltip={{ tooltip: tooltipCurrent }}
+     use:popoverTooltip={{ tooltip: tooltipCurrent, direction: tooltipDirection }}
      on:pointerdown|stopPropagation>
    <slot name=outer />
    <span bind:this={spanEl}

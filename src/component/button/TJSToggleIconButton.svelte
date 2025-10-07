@@ -61,6 +61,7 @@
    export let enabled = void 0;
    export let icon = void 0;
    export let tooltip = void 0;
+   export let tooltipDirection = void 0;
    export let tooltipSelected = void 0;
    export let store = void 0;
    export let styles = void 0;
@@ -79,25 +80,37 @@
 
    $: enabled = isObject(button) && typeof button.enabled === 'boolean' ? button.enabled :
     typeof enabled === 'boolean' ? enabled : true;
+
    $: icon = isObject(button) && typeof button.icon === 'string' ? button.icon :
     typeof icon === 'string' ? icon : void 0;
+
    $: tooltip = isObject(button) && typeof button.tooltip === 'string' ? button.tooltip :
     typeof tooltip === 'string' ? tooltip : '';
+
+   $: tooltipDirection = isObject(button) && typeof button.tooltipDirection === 'string' ? button.tooltipDirection :
+    typeof tooltipDirection === 'string' ? tooltipDirection : void 0;
+
    $: tooltipSelected = isObject(button) && typeof button.tooltipSelected === 'string' ? button.tooltipSelected :
     typeof tooltipSelected === 'string' ? tooltipSelected : '';
+
    $: store = isObject(button) && isMinimalWritableStore(button.store) ? button.store : isMinimalWritableStore(store) ?
     store : void 0;
+
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
     isObject(styles) ? styles : void 0;
+
    $: efx = isObject(button) && typeof button.efx === 'function' ? button.efx :
     typeof efx === 'function' ? efx : s_EFX_DEFAULT;
+
    $: keyCode = isObject(button) && typeof button.keyCode === 'string' ? button.keyCode :
     typeof keyCode === 'string' ? keyCode : 'Enter';
 
    $: onPress = isObject(button) && typeof button.onPress === 'function' ? button.onPress :
     typeof onPress === 'function' ? onPress : void 0;
+
    $: onClose = isObject(button) && typeof button.onClose === 'function' ? button.onClose :
     typeof onClose === 'function' ? onClose : void 0;
+
    $: onContextMenu = isObject(button) && typeof button.onContextMenu === 'function' ? button.onContextMenu :
     typeof onContextMenu === 'function' ? onContextMenu : void 0;
 
@@ -259,7 +272,7 @@
       on:click
       on:contextmenu
       tabindex={enabled ? 0 : null}
-      use:popoverTooltip={{ tooltip: tooltipCurrent }}
+      use:popoverTooltip={{ tooltip: tooltipCurrent, direction: tooltipDirection }}
       use:efx={{ enabled }}>
       {#if icon}
          {#if iconType === 'font'}

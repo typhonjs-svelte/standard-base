@@ -148,6 +148,15 @@
    {
       if (!enabled) { return; }
 
+      // Ignore click events from `button` element coming from the keyboard.
+      if (event.detail === 0)
+      {
+         event.preventDefault();
+         event.stopImmediatePropagation();
+
+         return;
+      }
+
       selected = !selected;
       if (store) { store.set(selected); }
 

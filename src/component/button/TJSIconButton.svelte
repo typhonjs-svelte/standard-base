@@ -124,6 +124,15 @@
    {
       if (!enabled) { return; }
 
+      // Ignore click events from `button` element coming from the keyboard.
+      if (event.detail === 0)
+      {
+         event.preventDefault();
+         event.stopImmediatePropagation();
+
+         return;
+      }
+
       if (typeof onPress === 'function') { onPress({ event }); }
 
       dispatch('press', { event });

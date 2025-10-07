@@ -99,6 +99,15 @@
     */
    function onClick(event)
    {
+      // Ignore click events from `button` element coming from the keyboard.
+      if (event.detail === 0)
+      {
+         event.preventDefault();
+         event.stopImmediatePropagation();
+
+         return;
+      }
+
       if (typeof onPress === 'function') { onPress({ event }); }
 
       dispatch('press', { event });
@@ -239,6 +248,8 @@
       height: var(--tjs-form-button-height, var(--tjs-input-height, inherit));
       min-width: var(--tjs-form-button-height, var(--tjs-input-height, 100%));
       width: var(--tjs-form-button-width, 100%);
+
+      min-height: unset;
 
       padding: 0;
       user-select: none;

@@ -117,7 +117,7 @@
    $: clickPropagate = isObject(button) && typeof button.clickPropagate === 'boolean' ? button.clickPropagate :
     typeof clickPropagate === 'boolean' ? clickPropagate : false;
 
-   let anchorEl;
+   let buttonEl;
    let selected = false;
 
    $: if (store) { selected = $store; }
@@ -215,9 +215,9 @@
       if (typeof onClose === 'function') { onClose({ event, selected }); }
 
       // The close event was triggered from a key press, so focus the anchor element / button.
-      if (typeof event?.detail?.keyboardFocus === 'boolean' && event.detail.keyboardFocus && anchorEl?.isConnected)
+      if (typeof event?.detail?.keyboardFocus === 'boolean' && event.detail.keyboardFocus && buttonEl?.isConnected)
       {
-         anchorEl.focus();
+         buttonEl.focus();
 
          event.stopPropagation();
          event.preventDefault();
@@ -272,7 +272,7 @@
      use:applyStyles={styles}
      role=button>
    <!-- svelte-ignore a11y-missing-attribute -->
-   <button bind:this={anchorEl}
+   <button bind:this={buttonEl}
       class:selected
       on:click={onClick}
       on:contextmenu={onContextMenuPress}
@@ -294,7 +294,7 @@
       {/if}
    </button>
    {#if selected}
-      <slot/>
+      <slot />
    {/if}
 </div>
 

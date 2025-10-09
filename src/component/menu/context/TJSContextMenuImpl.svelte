@@ -142,11 +142,6 @@
    export let activeWindow = globalThis;
 
    /**
-    * @type {boolean} Automatically apply any focus source on menu item press.
-    */
-   export let onPressApplyFocus = false;
-
-   /**
     * @type {number} Subtracted when menu is adjusted upwards and configured by the `alignBottom` option in
     *       `TJSContextMenu`.
     */
@@ -191,6 +186,8 @@
       activeWindow.document.body.removeEventListener('wheel', onCloseWheel, true);
       activeWindow.removeEventListener('blur', onWindowBlur);
       activeWindow.removeEventListener('resize', onWindowBlur);
+
+      focusSource = void 0;
    });
 
    onMount(() =>
@@ -264,6 +261,36 @@
    }
 
    /**
+    * Handles item `onPress` invocation and applying immediate focus automatically if a `truthy` result is not
+    * returned as a result from the `onPress` callback signaling a focus continuation.
+    *
+    * @param {KeyboardEvent | PointerEvent}  event - Originating event.
+    *
+    * @param {import('../types').TJSMenuData.Menu.Item}  item - Target menu item.
+    */
+   function handleOnPress(event, item)
+   {
+      if (!event) { return; }
+
+      if (typeof item?.onPress === 'function')
+      {
+         Promise.resolve(item.onPress({ event, item, focusSource })).then((result) =>
+         {
+            // Coerce result to boolean.
+            const focusDeferred = !!result;
+
+            // Potentially apply focus source automatically if no deferral signaled.
+            if (!focusDeferred) { A11yHelper.applyFocusSource(focusSource); }
+         });
+      }
+      else
+      {
+         // Apply focus immediately.
+         A11yHelper.applyFocusSource(focusSource);
+      }
+   }
+
+   /**
     * Invokes a function on click of a menu item then fires the `close` event and automatically runs the outro
     * transition and destroys the component.
     *
@@ -273,22 +300,7 @@
     */
    function onClick(event, item)
    {
-      if (typeof item?.onPress === 'function')
-      {
-         item.onPress({ event, item, focusSource });
-
-         // Potentially apply focus source automatically.
-         if (onPressApplyFocus)
-         {
-            A11yHelper.applyFocusSource(focusSource)
-            focusSource = void 0;
-         }
-      }
-      else
-      {
-         A11yHelper.applyFocusSource(focusSource)
-         focusSource = void 0;
-      }
+      handleOnPress(event, item);
 
       if (!closed)
       {
@@ -402,18 +414,20 @@
 
             if (!closed)
             {
-               closed = true;
-               dispatch('close:contextmenu');
-               TJSSvelte.util.outroAndDestroy(current_component);
+               let localFocusSource = focusSource;
 
                // Note: Due to the differences between browsers a small delay is added before applying any previous
                // focus source. Browsers like Firefox will trigger a `contextmenu` event in response to the keyboard
                // `ContextMenu` event and this will be received by any previous focus source which is not desired.
                setTimeout(() =>
                {
-                  A11yHelper.applyFocusSource(focusSource)
-                  focusSource = void 0;
+                  A11yHelper.applyFocusSource(localFocusSource);
+                  localFocusSource = void 0;
                }, 50);
+
+               closed = true;
+               dispatch('close:contextmenu');
+               TJSSvelte.util.outroAndDestroy(current_component);
             }
             break;
       }
@@ -430,6 +444,8 @@
    {
       if (event.code === keyCode)
       {
+         handleOnPress(event, item);
+
          if (!closed)
          {
             closed = true;
@@ -438,23 +454,6 @@
 
             event.preventDefault();
             event.stopPropagation();
-         }
-
-         if (typeof item?.onPress === 'function')
-         {
-            item.onPress({ event, item, focusSource });
-
-            // Potentially apply focus source automatically.
-            if (onPressApplyFocus)
-            {
-               A11yHelper.applyFocusSource(focusSource)
-               focusSource = void 0;
-            }
-         }
-         else
-         {
-            A11yHelper.applyFocusSource(focusSource)
-            focusSource = void 0;
          }
       }
    }
@@ -466,12 +465,11 @@
    {
       if (!closed)
       {
+         A11yHelper.applyFocusSource(focusSource);
+
          dispatch('close:contextmenu');
          closed = true;
          TJSSvelte.util.outroAndDestroy(current_component);
-
-         A11yHelper.applyFocusSource(focusSource)
-         focusSource = void 0;
       }
    }
 </script>

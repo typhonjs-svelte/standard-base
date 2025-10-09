@@ -135,9 +135,6 @@
    /** @type {string} */
    export let keyCode = void 0;
 
-   /** @type {boolean} */
-   export let onPressApplyFocus = false;
-
    /** @type {{ duration: number, easing: Function }} */
    export let transitionOptions = void 0;
 
@@ -245,9 +242,6 @@
    $: keyCode = isObject(menu) && typeof menu.keyCode === 'string' ? menu.keyCode :
     typeof keyCode === 'string' ? keyCode : 'Enter';
 
-   $: onPressApplyFocus = isObject(menu) && typeof menu.onPressApplyFocus === 'boolean' ? menu.onPressApplyFocus :
-    typeof onPressApplyFocus === 'boolean' ? onPressApplyFocus : false;
-
    $: transitionOptions = isObject(menu) && isObject(menu.transitionOptions) ? menu.transitionOptions :
     isObject(transitionOptions) ? transitionOptions : { duration: 120, easing: 'quintOut' };
 
@@ -278,6 +272,9 @@
       activeWindow?.document.body.removeEventListener('wheel', onClose, true);
       activeWindow?.removeEventListener('blur', onWindowBlur);
       activeWindow?.removeEventListener('resize', onWindowBlur);
+
+      focusEl = void 0;
+      focusSource = void 0;
    });
 
    onMount(() =>
@@ -314,27 +311,25 @@
             // Silently focus the menu element so that keyboard handling functions.
             menuEl.focus();
          }
-
-         // Menu opened by keyboard navigation; set focus source to activeEl and pass to menu item callbacks.
-         focusSource = {
-            focusEl: [activeEl]
-         };
-
-         // Append any optional focus source from `focusEl` prop.
-         if (focusEl) { focusSource.focusEl.push(focusEl); }
       }
       else
       {
          // Silently focus the menu element so that keyboard handling functions.
          menuEl.focus();
+      }
 
-         // Create focus source from optional `focusEl` prop.
-         if (focusEl)
-         {
-            focusSource = {
-               focusEl: [focusEl]
-            };
-         }
+      // Create focus source from `focusEl` when provided and fallback to `activeEl` which is the previous active
+      // element before menu is displayed.
+      if (activeEl || focusEl)
+      {
+         const focusElements = [];
+
+         if (focusEl) { focusElements.push(focusEl); }
+         if (activeEl) { focusElements.push(activeEl); }
+
+         focusSource = {
+            focusEl: focusElements
+         };
       }
    });
 
@@ -385,6 +380,36 @@
    }
 
    /**
+    * Handles item `onPress` invocation and applying immediate focus automatically if a `truthy` result is not
+    * returned as a result from the `onPress` callback signaling a focus continuation.
+    *
+    * @param {KeyboardEvent | PointerEvent}  event - Originating event.
+    *
+    * @param {import('./types').TJSMenuData.Menu.Item}  item - Target menu item.
+    */
+   function handleOnPress(event, item)
+   {
+      if (!event) { return; }
+
+      if (typeof item?.onPress === 'function')
+      {
+         Promise.resolve(item.onPress({ event, item, focusSource })).then((result) =>
+         {
+            // Coerce result to boolean.
+            const focusDeferred = !!result;
+
+            // Potentially apply focus source automatically if no deferral signaled.
+            if (!focusDeferred) { A11yHelper.applyFocusSource(focusSource); }
+         });
+      }
+      else
+      {
+         // Apply focus immediately.
+         A11yHelper.applyFocusSource(focusSource);
+      }
+   }
+
+   /**
     * Invokes a function on click of a menu item then fires the `close` event and automatically runs the outro
     * transition and destroys the component.
     *
@@ -394,17 +419,7 @@
     */
    function onClick(event, item)
    {
-      if (typeof item?.onPress === 'function')
-      {
-         item.onPress({ event, item, focusSource });
-
-         // Potentially apply focus source automatically.
-         if (onPressApplyFocus)
-         {
-            A11yHelper.applyFocusSource(focusSource)
-            focusSource = void 0;
-         }
-      }
+      handleOnPress(event, item);
 
       if (!closed)
       {
@@ -527,17 +542,7 @@
    {
       if (event.code === keyCode)
       {
-         if (typeof item?.onPress === 'function')
-         {
-            item.onPress({ event, item, focusSource });
-
-            // Potentially apply focus source automatically.
-            if (onPressApplyFocus)
-            {
-               A11yHelper.applyFocusSource(focusSource)
-               focusSource = void 0;
-            }
-         }
+         handleOnPress(event, item);
 
          if (!closed)
          {
@@ -559,6 +564,8 @@
    {
       if (!closed)
       {
+         A11yHelper.applyFocusSource(focusSource);
+
          closed = true;
          menuEl?.dispatchEvent(new CustomEvent('close:popup', { bubbles: true, cancelable: true }));
       }

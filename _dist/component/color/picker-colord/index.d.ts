@@ -66,6 +66,7 @@ declare namespace TjsColordButton {
     enabled?: any;
     styles?: any;
     tooltip?: any;
+    tooltipDirection?: any;
     efx?: any;
     onPress?: any;
     onContextMenu?: any;

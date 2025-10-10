@@ -1,5 +1,5 @@
 import * as _runtime_svelte_util from '#runtime/svelte/util';
-import * as svelte_store from 'svelte/store';
+import * as _runtime_svelte_store_util from '#runtime/svelte/store/util';
 import { SvelteComponent } from 'svelte';
 
 /**
@@ -24,13 +24,16 @@ declare namespace TjsScrollContainer {
   export type Props = {
     /** @type {import('.').TJSScrollContainerData} */
     container?: TJSScrollContainerData;
-    /** @type {import('svelte/store').Writable<number>} */
-    scrollLeft?: svelte_store.Writable<number>;
-    /** @type {import('svelte/store').Writable<number>} */
-    scrollTop?: svelte_store.Writable<number>;
+    /** @type {import('#runtime/svelte/store/util').MinimalWritable<number>} */
+    scrollLeft?: _runtime_svelte_store_util.MinimalWritable<number>;
+    /** @type {import('#runtime/svelte/store/util').MinimalWritable<number>} */
+    scrollTop?: _runtime_svelte_store_util.MinimalWritable<number>;
     /** @type {boolean} */
     allowTabFocus?: boolean;
-    onContextMenu?: any;
+    /** @type {boolean} */
+    keyPropagate?: boolean;
+    /** @type {(data: { event: KeyboardEvent | PointerEvent }) => void} */
+    onContextMenu?: (data: { event: KeyboardEvent | PointerEvent }) => void;
     /** @type {{ [key: string]: string | null }} */
     styles?: { [key: string]: string | null };
   };
@@ -46,20 +49,25 @@ type TJSScrollContainerData = {
    */
   allowTabFocus?: boolean;
   /**
+   * By default, the scroll container stops propagation of all keys that are
+   * related to keyboard scrolling accessibility. When true, the scroll container will not capture scrolling key events.
+   */
+  keyPropagate?: boolean;
+  /**
    * Callback to handle context menu
    * presses.
    */
   onContextMenu?: (data: { event: KeyboardEvent | PointerEvent }) => void;
   /**
-   * A Svelte store that serializes the scroll left
-   * position of the scrollable container.
+   * A Svelte store that serializes
+   * the scroll left position of the scrollable container.
    */
-  scrollLeft?: svelte_store.Writable<number>;
+  scrollLeft?: _runtime_svelte_store_util.MinimalWritable<number>;
   /**
-   * A Svelte store that serializes the scroll top
-   * position of the scrollable container.
+   * A Svelte store that serializes
+   * the scroll top position of the scrollable container.
    */
-  scrollTop?: svelte_store.Writable<number>;
+  scrollTop?: _runtime_svelte_store_util.MinimalWritable<number>;
   /**
    * Inline styles to assign to the container.
    */

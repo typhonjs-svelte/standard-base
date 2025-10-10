@@ -121,6 +121,7 @@ declare namespace TjsToggleLabel {
     onClose?: any;
     onContextMenu?: any;
     clickPropagate?: any;
+    tooltipDirection?: any;
   };
   /** Events type alias for {@link TjsToggleLabel | associated component}. */
   export type Events = {

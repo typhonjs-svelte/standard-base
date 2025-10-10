@@ -28,6 +28,8 @@
 
    export let tooltip = void 0;
 
+   export let tooltipDirection = void 0;
+
    export let styles = void 0;
 
    export let keyCode = void 0;
@@ -58,6 +60,9 @@
 
    $: tooltip = isObject(button) && typeof button.tooltip === 'string' ? button.tooltip :
     typeof tooltip === 'string' ? tooltip : void 0;
+
+   $: tooltipDirection = isObject(button) && typeof button.tooltipDirection === 'string' ? button.tooltipDirection :
+    typeof tooltipDirection === 'string' ? tooltipDirection : void 0;
 
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
     isObject(styles) ? styles : void 0;
@@ -94,6 +99,15 @@
     */
    function onClick(event)
    {
+      // Ignore click events from `button` element coming from the keyboard.
+      if (event.detail === 0)
+      {
+         event.preventDefault();
+         event.stopImmediatePropagation();
+
+         return;
+      }
+
       if (typeof onPress === 'function') { onPress({ event }); }
 
       dispatch('press', { event });
@@ -173,7 +187,7 @@
         on:contextmenu
         on:press
         disabled={!enabled}
-        use:popoverTooltip={{ tooltip }}
+        use:popoverTooltip={{ tooltip, direction: tooltipDirection }}
         use:applyStyles={styles}>
    <span class=tjs-form-button-efx bind:this={efxEl} use:efx={{ enabled }}>
       <span class=tjs-form-button-span>
@@ -234,6 +248,8 @@
       height: var(--tjs-form-button-height, var(--tjs-input-height, inherit));
       min-width: var(--tjs-form-button-height, var(--tjs-input-height, 100%));
       width: var(--tjs-form-button-width, 100%);
+
+      min-height: unset;
 
       padding: 0;
       user-select: none;

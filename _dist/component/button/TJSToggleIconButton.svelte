@@ -61,6 +61,7 @@
    export let enabled = void 0;
    export let icon = void 0;
    export let tooltip = void 0;
+   export let tooltipDirection = void 0;
    export let tooltipSelected = void 0;
    export let store = void 0;
    export let styles = void 0;
@@ -79,32 +80,44 @@
 
    $: enabled = isObject(button) && typeof button.enabled === 'boolean' ? button.enabled :
     typeof enabled === 'boolean' ? enabled : true;
+
    $: icon = isObject(button) && typeof button.icon === 'string' ? button.icon :
     typeof icon === 'string' ? icon : void 0;
+
    $: tooltip = isObject(button) && typeof button.tooltip === 'string' ? button.tooltip :
     typeof tooltip === 'string' ? tooltip : '';
+
+   $: tooltipDirection = isObject(button) && typeof button.tooltipDirection === 'string' ? button.tooltipDirection :
+    typeof tooltipDirection === 'string' ? tooltipDirection : void 0;
+
    $: tooltipSelected = isObject(button) && typeof button.tooltipSelected === 'string' ? button.tooltipSelected :
     typeof tooltipSelected === 'string' ? tooltipSelected : '';
+
    $: store = isObject(button) && isMinimalWritableStore(button.store) ? button.store : isMinimalWritableStore(store) ?
     store : void 0;
+
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
     isObject(styles) ? styles : void 0;
+
    $: efx = isObject(button) && typeof button.efx === 'function' ? button.efx :
     typeof efx === 'function' ? efx : s_EFX_DEFAULT;
+
    $: keyCode = isObject(button) && typeof button.keyCode === 'string' ? button.keyCode :
     typeof keyCode === 'string' ? keyCode : 'Enter';
 
    $: onPress = isObject(button) && typeof button.onPress === 'function' ? button.onPress :
     typeof onPress === 'function' ? onPress : void 0;
+
    $: onClose = isObject(button) && typeof button.onClose === 'function' ? button.onClose :
     typeof onClose === 'function' ? onClose : void 0;
+
    $: onContextMenu = isObject(button) && typeof button.onContextMenu === 'function' ? button.onContextMenu :
     typeof onContextMenu === 'function' ? onContextMenu : void 0;
 
    $: clickPropagate = isObject(button) && typeof button.clickPropagate === 'boolean' ? button.clickPropagate :
     typeof clickPropagate === 'boolean' ? clickPropagate : false;
 
-   let anchorEl;
+   let buttonEl;
    let selected = false;
 
    $: if (store) { selected = $store; }
@@ -135,6 +148,15 @@
    {
       if (!enabled) { return; }
 
+      // Ignore click events from `button` element coming from the keyboard.
+      if (event.detail === 0)
+      {
+         event.preventDefault();
+         event.stopImmediatePropagation();
+
+         return;
+      }
+
       selected = !selected;
       if (store) { store.set(selected); }
 
@@ -156,7 +178,7 @@
    {
       if (!enabled) { return; }
 
-      if (typeof onContextMenu === 'function') { onContextMenu({ event }); }
+      if (typeof onContextMenu === 'function') { onContextMenu({ event, selected }); }
 
       if (!clickPropagate)
       {
@@ -193,9 +215,9 @@
       if (typeof onClose === 'function') { onClose({ event, selected }); }
 
       // The close event was triggered from a key press, so focus the anchor element / button.
-      if (typeof event?.detail?.keyboardFocus === 'boolean' && event.detail.keyboardFocus && anchorEl?.isConnected)
+      if (typeof event?.detail?.keyboardFocus === 'boolean' && event.detail.keyboardFocus && buttonEl?.isConnected)
       {
-         anchorEl.focus();
+         buttonEl.focus();
 
          event.stopPropagation();
          event.preventDefault();
@@ -250,7 +272,7 @@
      use:applyStyles={styles}
      role=button>
    <!-- svelte-ignore a11y-missing-attribute -->
-   <button bind:this={anchorEl}
+   <button bind:this={buttonEl}
       class:selected
       on:click={onClick}
       on:contextmenu={onContextMenuPress}
@@ -259,7 +281,7 @@
       on:click
       on:contextmenu
       tabindex={enabled ? 0 : null}
-      use:popoverTooltip={{ tooltip: tooltipCurrent }}
+      use:popoverTooltip={{ tooltip: tooltipCurrent, direction: tooltipDirection }}
       use:efx={{ enabled }}>
       {#if icon}
          {#if iconType === 'font'}
@@ -272,7 +294,7 @@
       {/if}
    </button>
    {#if selected}
-      <slot/>
+      <slot />
    {/if}
 </div>
 
@@ -280,9 +302,9 @@
    div {
       display: block;
       position: relative;
-      flex: 0 0 var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2em));
-      height: var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2em));
-      width: var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2em));
+      flex: 0 0 var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2.5em));
+      height: var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2.5em));
+      width: var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2.5em));
       align-self: center;
       text-align: center;
       user-select: none;
@@ -307,6 +329,9 @@
 
       width: 100%;
       height: 100%;
+
+      min-height: unset;
+      min-width: unset;
 
       appearance: var(--tjs-icon-button-appearance, none);
       background: var(--tjs-icon-button-background, var(--tjs-button-background));

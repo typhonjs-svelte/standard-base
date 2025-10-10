@@ -117,7 +117,7 @@
    /** @type {import('./types').TJSMenuData.Menu} */
    export let menu = void 0;
 
-   /** @type {Iterable<import('./types').TJSMenuData.Items>} */
+   /** @type {Iterable<import('./types').TJSMenuData.Items> | (() => Iterable<import('./types').TJSMenuData.Items>)} */
    export let items = void 0;
 
    /** @type {HTMLElement | string} */
@@ -134,9 +134,6 @@
 
    /** @type {string} */
    export let keyCode = void 0;
-
-   /** @type {boolean} */
-   export let onPressApplyFocus = false;
 
    /** @type {{ duration: number, easing: Function }} */
    export let transitionOptions = void 0;
@@ -165,8 +162,25 @@
    let hasIcon = false;
 
    $: {
-      const tempList = isObject(menu) && isIterable(menu.items) ? menu.items :
-       isIterable(items) ? items : [];
+      const itemFn = isObject(menu) && typeof menu.items === 'function' ? menu.items :
+       typeof items === 'function' ? items : void 0;
+
+      let itemList;
+
+      if (itemFn)
+      {
+         itemList = itemFn();
+
+         if (!isIterable(itemList))
+         {
+            throw new TypeError(`TJSMenu error: 'items' function did not return an iterable list.`);
+         }
+      }
+      else
+      {
+          itemList = isObject(menu) && isIterable(menu.items) ? menu.items :
+           isIterable(items) ? items : [];
+      }
 
       hasIcon = false;
 
@@ -174,7 +188,7 @@
 
       let cntr = -1;
 
-      for (const item of tempList)
+      for (const item of itemList)
       {
          cntr++;
          if (!isObject(item)) { throw new TypeError(`TJSMenu error: 'item[${cntr}]' is not an object.`); }
@@ -228,9 +242,6 @@
    $: keyCode = isObject(menu) && typeof menu.keyCode === 'string' ? menu.keyCode :
     typeof keyCode === 'string' ? keyCode : 'Enter';
 
-   $: onPressApplyFocus = isObject(menu) && typeof menu.onPressApplyFocus === 'boolean' ? menu.onPressApplyFocus :
-    typeof onPressApplyFocus === 'boolean' ? onPressApplyFocus : false;
-
    $: transitionOptions = isObject(menu) && isObject(menu.transitionOptions) ? menu.transitionOptions :
     isObject(transitionOptions) ? transitionOptions : { duration: 120, easing: 'quintOut' };
 
@@ -257,10 +268,13 @@
    onDestroy(() =>
    {
       // To support cases when the active window may be a popped out browser register directly.
-      activeWindow?.document.body.removeEventListener('pointerdown', onClose);
-      activeWindow?.document.body.removeEventListener('wheel', onClose);
+      activeWindow?.document.body.removeEventListener('pointerdown', onClose, true);
+      activeWindow?.document.body.removeEventListener('wheel', onClose, true);
       activeWindow?.removeEventListener('blur', onWindowBlur);
       activeWindow?.removeEventListener('resize', onWindowBlur);
+
+      focusEl = void 0;
+      focusSource = void 0;
    });
 
    onMount(() =>
@@ -269,8 +283,8 @@
       activeWindow = CrossWindow.getWindow(menuEl);
 
       // To support cases when the active window may be a popped out browser unregister directly.
-      activeWindow.document.body.addEventListener('pointerdown', onClose);
-      activeWindow.document.body.addEventListener('wheel', onClose);
+      activeWindow.document.body.addEventListener('pointerdown', onClose, true);
+      activeWindow.document.body.addEventListener('wheel', onClose, true);
       activeWindow.addEventListener('blur', onWindowBlur);
       activeWindow.addEventListener('resize', onWindowBlur);
 
@@ -297,27 +311,25 @@
             // Silently focus the menu element so that keyboard handling functions.
             menuEl.focus();
          }
-
-         // Menu opened by keyboard navigation; set focus source to activeEl and pass to menu item callbacks.
-         focusSource = {
-            focusEl: [activeEl]
-         };
-
-         // Append any optional focus source from `focusEl` prop.
-         if (focusEl) { focusSource.focusEl.push(focusEl); }
       }
       else
       {
          // Silently focus the menu element so that keyboard handling functions.
          menuEl.focus();
+      }
 
-         // Create focus source from optional `focusEl` prop.
-         if (focusEl)
-         {
-            focusSource = {
-               focusEl: [focusEl]
-            };
-         }
+      // Create focus source from `focusEl` when provided and fallback to `activeEl` which is the previous active
+      // element before menu is displayed.
+      if (activeEl || focusEl)
+      {
+         const focusElements = [];
+
+         if (focusEl) { focusElements.push(focusEl); }
+         if (activeEl) { focusElements.push(activeEl); }
+
+         focusSource = {
+            focusEl: focusElements
+         };
       }
    });
 
@@ -368,6 +380,36 @@
    }
 
    /**
+    * Handles item `onPress` invocation and applying immediate focus automatically if a `truthy` result is not
+    * returned as a result from the `onPress` callback signaling a focus continuation.
+    *
+    * @param {KeyboardEvent | PointerEvent}  event - Originating event.
+    *
+    * @param {import('./types').TJSMenuData.Menu.Item}  item - Target menu item.
+    */
+   function handleOnPress(event, item)
+   {
+      if (!event) { return; }
+
+      if (typeof item?.onPress === 'function')
+      {
+         Promise.resolve(item.onPress({ event, item, focusSource })).then((result) =>
+         {
+            // Coerce result to boolean.
+            const focusDeferred = !!result;
+
+            // Potentially apply focus source automatically if no deferral signaled.
+            if (!focusDeferred) { A11yHelper.applyFocusSource(focusSource); }
+         });
+      }
+      else
+      {
+         // Apply focus immediately.
+         A11yHelper.applyFocusSource(focusSource);
+      }
+   }
+
+   /**
     * Invokes a function on click of a menu item then fires the `close` event and automatically runs the outro
     * transition and destroys the component.
     *
@@ -377,17 +419,7 @@
     */
    function onClick(event, item)
    {
-      if (typeof item?.onPress === 'function')
-      {
-         item.onPress({ event, item, focusSource });
-
-         // Potentially apply focus source automatically.
-         if (onPressApplyFocus)
-         {
-            A11yHelper.applyFocusSource(focusSource)
-            focusSource = void 0;
-         }
-      }
+      handleOnPress(event, item);
 
       if (!closed)
       {
@@ -406,15 +438,15 @@
    async function onClose(event)
    {
       // Early out if the pointer down is inside the menu element.
-      if (event.target === menuEl || menuEl.contains(event.target)) { return; }
+      if (event.target === menuEl || menuEl?.contains(event.target)) { return; }
 
-      if (event.target === menuEl.parentElement || menuEl.parentElement.contains(event.target)) { return; }
+      if (event.target === menuEl?.parentElement || menuEl?.parentElement.contains(event.target)) { return; }
 
       if (!closed)
       {
          closed = true;
 
-         menuEl.dispatchEvent(new CustomEvent('close:popup', {
+         menuEl?.dispatchEvent(new CustomEvent('close:popup', {
             bubbles: true,
             cancelable: true,
             detail: { target: event.target }
@@ -489,7 +521,7 @@
             if (!closed)
             {
                closed = true;
-               menuEl.dispatchEvent(new CustomEvent('close:popup',
+               menuEl?.dispatchEvent(new CustomEvent('close:popup',
                 { bubbles: true, cancelable: true, detail: { keyboardFocus: hasKeyboardFocus } }));
             }
 
@@ -510,17 +542,7 @@
    {
       if (event.code === keyCode)
       {
-         if (typeof item?.onPress === 'function')
-         {
-            item.onPress({ event, item, focusSource });
-
-            // Potentially apply focus source automatically.
-            if (onPressApplyFocus)
-            {
-               A11yHelper.applyFocusSource(focusSource)
-               focusSource = void 0;
-            }
-         }
+         handleOnPress(event, item);
 
          if (!closed)
          {
@@ -529,7 +551,7 @@
             event.preventDefault();
             event.stopPropagation();
 
-            menuEl.dispatchEvent(new CustomEvent('close:popup',
+            menuEl?.dispatchEvent(new CustomEvent('close:popup',
              { bubbles: true, cancelable: true, detail: { keyboardFocus: hasKeyboardFocus } }));
          }
       }
@@ -542,8 +564,10 @@
    {
       if (!closed)
       {
+         A11yHelper.applyFocusSource(focusSource);
+
          closed = true;
-         menuEl.dispatchEvent(new CustomEvent('close:popup', { bubbles: true, cancelable: true }));
+         menuEl?.dispatchEvent(new CustomEvent('close:popup', { bubbles: true, cancelable: true }));
       }
    }
 </script>
@@ -566,7 +590,7 @@
    <ol class=tjs-menu-items role=menu>
       <!-- TJSMenu supports hosting a slot for menu content -->
       <slot>
-         {#if TJSSvelte.util.isComponent(menu?.slotDefault?.class)}
+         {#if TJSSvelte.config.isConfigEmbed(menu?.slotDefault)}
             <svelte:component this={menu.slotDefault.class} {...(isObject(menu?.slotDefault?.props) ? menu.slotDefault.props : {})} />
          {/if}
       </slot>
@@ -580,7 +604,7 @@
              tabindex=0>
             <TJSFocusIndicator absolute={true} />
             <slot name=before>
-               {#if TJSSvelte.util.isComponent(menu?.slotBefore?.class)}
+               {#if TJSSvelte.config.isConfigEmbed(menu?.slotBefore)}
                   <svelte:component this={menu.slotBefore.class} {...(isObject(menu?.slotBefore?.props) ? menu.slotBefore.props : {})} />
                {/if}
             </slot>
@@ -653,7 +677,7 @@
              tabindex=0>
             <TJSFocusIndicator absolute={true} />
             <slot name=after>
-               {#if TJSSvelte.util.isComponent(menu?.slotAfter?.class)}
+               {#if TJSSvelte.config.isConfigEmbed(menu?.slotAfter)}
                   <svelte:component this={menu.slotAfter.class} {...(isObject(menu?.slotAfter?.props) ? menu.slotAfter.props : {})} />
                {/if}
             </slot>
@@ -766,6 +790,6 @@
    }
 
    .tjs-menu-item-label.has-icons {
-      padding-left: calc(var(--tjs-menu-item-icon-width, 1.25em) + var(--tjs-menu-item-button-gap, 0.25em));
+      padding-left: calc(var(--tjs-menu-item-icon-width, 1.25em) + var(--tjs-menu-item-button-gap, 0.5em));
    }
 </style>

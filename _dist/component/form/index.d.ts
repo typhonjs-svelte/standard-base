@@ -17,6 +17,7 @@ declare namespace TjsButton {
     tooltip?: any;
     enabled?: any;
     icon?: any;
+    tooltipDirection?: any;
     styles?: any;
     efx?: any;
     onPress?: any;

@@ -74,6 +74,12 @@ declare namespace TjsMediaContent {
      */
     videoMuted?: boolean;
     /**
+     * The tooltip direction for the media element.
+     *
+     * @type {string}
+     */
+    tooltipDirection?: string;
+    /**
      * Play video on pointer hover.
      *
      * @type {boolean}

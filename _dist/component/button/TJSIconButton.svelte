@@ -59,6 +59,7 @@
    export let enabled = void 0;
    export let icon = void 0;
    export let tooltip = void 0;
+   export let tooltipDirection = void 0;
    export let styles = void 0;
    export let efx = void 0;
    export let keyCode = void 0;
@@ -74,19 +75,28 @@
 
    $: enabled = isObject(button) && typeof button.enabled === 'boolean' ? button.enabled :
     typeof enabled === 'boolean' ? enabled : true;
+
    $: icon = isObject(button) && typeof button.icon === 'string' ? button.icon :
     typeof icon === 'string' ? icon : void 0;
+
    $: tooltip = isObject(button) && typeof button.tooltip === 'string' ? button.tooltip :
     typeof tooltip === 'string' ? tooltip : '';
+
+   $: tooltipDirection = isObject(button) && typeof button.tooltipDirection === 'string' ? button.tooltipDirection :
+    typeof tooltipDirection === 'string' ? tooltipDirection : void 0;
+
    $: styles = isObject(button) && isObject(button.styles) ? button.styles :
     isObject(styles) ? styles : void 0;
+
    $: efx = isObject(button) && typeof button.efx === 'function' ? button.efx :
     typeof efx === 'function' ? efx : s_EFX_DEFAULT;
+
    $: keyCode = isObject(button) && typeof button.keyCode === 'string' ? button.keyCode :
     typeof keyCode === 'string' ? keyCode : 'Enter';
 
    $: onPress = isObject(button) && typeof button.onPress === 'function' ? button.onPress :
     typeof onPress === 'function' ? onPress : void 0;
+
    $: onContextMenu = isObject(button) && typeof button.onContextMenu === 'function' ? button.onContextMenu :
     typeof onContextMenu === 'function' ? onContextMenu : void 0;
 
@@ -113,6 +123,15 @@
    function onClick(event)
    {
       if (!enabled) { return; }
+
+      // Ignore click events from `button` element coming from the keyboard.
+      if (event.detail === 0)
+      {
+         event.preventDefault();
+         event.stopImmediatePropagation();
+
+         return;
+      }
 
       if (typeof onPress === 'function') { onPress({ event }); }
 
@@ -189,7 +208,7 @@
        on:click
        on:contextmenu
        tabindex={enabled ? 0 : null}
-       use:popoverTooltip={{ tooltip }}
+       use:popoverTooltip={{ tooltip, direction: tooltipDirection }}
        use:efx={{ enabled }}>
        {#if icon}
           {#if iconType === 'font'}
@@ -207,9 +226,9 @@
     div {
         pointer-events: none;
         display: block;
-        flex: 0 0 var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2em));
-        height: var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2em));
-        width: var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2em));
+        flex: 0 0 var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2.5em));
+        height: var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2.5em));
+        width: var(--tjs-icon-button-diameter, var(--tjs-button-diameter, 2.5em));
         align-self: center;
         text-align: center;
         user-select: none;
@@ -234,6 +253,9 @@
 
         width: 100%;
         height: 100%;
+
+        min-height: unset;
+        min-width: unset;
 
         appearance: var(--tjs-icon-button-appearance, none);
         background: var(--tjs-icon-button-background, var(--tjs-button-background));

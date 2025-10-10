@@ -502,7 +502,7 @@ changing the open state.  -->
       {/if}
 
       <slot name=label>
-         {#if TJSSvelte.util.isComponent(folder?.slotLabel?.class)}
+         {#if TJSSvelte.config.isConfigEmbed(folder?.slotLabel)}
             <svelte:component this={folder.slotLabel.class} {...(isObject(folder?.slotLabel?.props) ? folder.slotLabel.props : {})} />
          {:else}
             <div bind:this={labelEl} class=label>{localize(label)}</div>
@@ -510,7 +510,7 @@ changing the open state.  -->
       </slot>
 
       <slot name="summary-end">
-         {#if TJSSvelte.util.isComponent(folder?.slotSummaryEnd?.class)}
+         {#if TJSSvelte.config.isConfigEmbed(folder?.slotSummaryEnd)}
             <svelte:component this={folder.slotSummaryEnd.class} {...(isObject(folder?.slotSummaryEnd?.props) ? folder.slotSummaryEnd.props : {})} />
          {/if}
       </slot>
@@ -520,7 +520,7 @@ changing the open state.  -->
       <div class=contents>
       {#if visible}
          <slot>
-            {#if TJSSvelte.util.isComponent(folder?.slotDefault?.class)}
+            {#if TJSSvelte.config.isConfigEmbed(folder?.slotDefault)}
                <svelte:component this={folder.slotDefault.class} {...(isObject(folder?.slotDefault?.props) ? folder.slotDefault.props : {})} />
             {/if}
          </slot>
@@ -529,7 +529,7 @@ changing the open state.  -->
    {:else}
       <div class=contents class:hidden={!visible} aria-hidden={!visible}>
          <slot>
-            {#if TJSSvelte.util.isComponent(folder?.slotDefault?.class)}
+            {#if TJSSvelte.config.isConfigEmbed(folder?.slotDefault)}
                <svelte:component this={folder.slotDefault.class} {...(isObject(folder?.slotDefault?.props) ? folder.slotDefault.props : {})} />
             {/if}
          </slot>

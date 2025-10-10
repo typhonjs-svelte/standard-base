@@ -142,9 +142,16 @@
    export let activeWindow = globalThis;
 
    /**
-    * @type {boolean} Automatically apply any focus source on menu item press.
+    * @type {number} Subtracted when menu is adjusted upwards and configured by the `alignBottom` option in
+    *       `TJSContextMenu`.
     */
-   export let onPressApplyFocus = false;
+   export let targetElHeight = 0;
+
+   /**
+    * @type {number} Added when menu is adjusted leftward and configured by the `alignBottom` option in
+    *       `TJSContextMenu`.
+    */
+   export let targetElWidth = 0;
 
    /**
     * This component. Set externally removing dependence on `current_component`.
@@ -175,17 +182,19 @@
    onDestroy(() =>
    {
       // To support cases when the active window may be a popped out browser register directly.
-      activeWindow.document.body.removeEventListener('pointerdown', onClose);
-      activeWindow.document.body.removeEventListener('wheel', onCloseWheel);
+      activeWindow.document.body.removeEventListener('pointerdown', onClose, true);
+      activeWindow.document.body.removeEventListener('wheel', onCloseWheel, true);
       activeWindow.removeEventListener('blur', onWindowBlur);
       activeWindow.removeEventListener('resize', onWindowBlur);
+
+      focusSource = void 0;
    });
 
    onMount(() =>
    {
       // To support cases when the active window may be a popped out browser unregister directly.
-      activeWindow.document.body.addEventListener('pointerdown', onClose);
-      activeWindow.document.body.addEventListener('wheel', onCloseWheel);
+      activeWindow.document.body.addEventListener('pointerdown', onClose, true);
+      activeWindow.document.body.addEventListener('wheel', onCloseWheel, true);
       activeWindow.addEventListener('blur', onWindowBlur);
       activeWindow.addEventListener('resize', onWindowBlur);
 
@@ -236,8 +245,11 @@
       const expandLeft = (x + node.clientWidth) > browserClientWidth;
       const expandUp = (y + node.clientHeight) > browserClientHeight;
 
-      const adjustedX = expandLeft ? Math.min(x + offsetX, browserClientWidth) : Math.max(x - offsetX, 0);
-      const adjustedY = expandUp ? Math.min(y + offsetY, browserClientHeight) : Math.max(y - offsetY, 0);
+      const adjustedX = expandLeft ? Math.min(x + offsetX + targetElWidth, browserClientWidth) :
+       Math.max(x - offsetX, 0);
+
+      const adjustedY = expandUp ? Math.min(y + offsetY - targetElHeight, browserClientHeight) :
+       Math.max(y - offsetY, 0);
 
       node.style.top = expandUp ? null : `${adjustedY}px`;
       node.style.bottom = expandUp ? `${browserClientHeight - adjustedY}px` : null;
@@ -246,6 +258,36 @@
       node.style.right = expandLeft ? `${browserClientWidth - adjustedX}px` : null;
 
       return slideFade(node, transitionOptions);
+   }
+
+   /**
+    * Handles item `onPress` invocation and applying immediate focus automatically if a `truthy` result is not
+    * returned as a result from the `onPress` callback signaling a focus continuation.
+    *
+    * @param {KeyboardEvent | PointerEvent}  event - Originating event.
+    *
+    * @param {import('../types').TJSMenuData.Menu.Item}  item - Target menu item.
+    */
+   function handleOnPress(event, item)
+   {
+      if (!event) { return; }
+
+      if (typeof item?.onPress === 'function')
+      {
+         Promise.resolve(item.onPress({ event, item, focusSource })).then((result) =>
+         {
+            // Coerce result to boolean.
+            const focusDeferred = !!result;
+
+            // Potentially apply focus source automatically if no deferral signaled.
+            if (!focusDeferred) { A11yHelper.applyFocusSource(focusSource); }
+         });
+      }
+      else
+      {
+         // Apply focus immediately.
+         A11yHelper.applyFocusSource(focusSource);
+      }
    }
 
    /**
@@ -258,22 +300,7 @@
     */
    function onClick(event, item)
    {
-      if (typeof item?.onPress === 'function')
-      {
-         item.onPress({ event, item, focusSource });
-
-         // Potentially apply focus source automatically.
-         if (onPressApplyFocus)
-         {
-            A11yHelper.applyFocusSource(focusSource)
-            focusSource = void 0;
-         }
-      }
-      else
-      {
-         A11yHelper.applyFocusSource(focusSource)
-         focusSource = void 0;
-      }
+      handleOnPress(event, item);
 
       if (!closed)
       {
@@ -294,7 +321,7 @@
    function onClose(event, isWheel = false)
    {
       // Early out if the pointer down is inside the menu element.
-      if (event.target === menuEl || menuEl.contains(event.target)) { return; }
+      if (event.target === menuEl || menuEl?.contains(event.target)) { return; }
 
       // Early out if the event page X / Y is the same as this context menu.
       if (!isWheel && Math.floor(event.pageX) === x && Math.floor(event.pageY) === y) { return; }
@@ -387,18 +414,20 @@
 
             if (!closed)
             {
-               closed = true;
-               dispatch('close:contextmenu');
-               TJSSvelte.util.outroAndDestroy(current_component);
+               let localFocusSource = focusSource;
 
                // Note: Due to the differences between browsers a small delay is added before applying any previous
                // focus source. Browsers like Firefox will trigger a `contextmenu` event in response to the keyboard
                // `ContextMenu` event and this will be received by any previous focus source which is not desired.
                setTimeout(() =>
                {
-                  A11yHelper.applyFocusSource(focusSource)
-                  focusSource = void 0;
+                  A11yHelper.applyFocusSource(localFocusSource);
+                  localFocusSource = void 0;
                }, 50);
+
+               closed = true;
+               dispatch('close:contextmenu');
+               TJSSvelte.util.outroAndDestroy(current_component);
             }
             break;
       }
@@ -415,6 +444,8 @@
    {
       if (event.code === keyCode)
       {
+         handleOnPress(event, item);
+
          if (!closed)
          {
             closed = true;
@@ -423,23 +454,6 @@
 
             event.preventDefault();
             event.stopPropagation();
-         }
-
-         if (typeof item?.onPress === 'function')
-         {
-            item.onPress({ event, item, focusSource });
-
-            // Potentially apply focus source automatically.
-            if (onPressApplyFocus)
-            {
-               A11yHelper.applyFocusSource(focusSource)
-               focusSource = void 0;
-            }
-         }
-         else
-         {
-            A11yHelper.applyFocusSource(focusSource)
-            focusSource = void 0;
          }
       }
    }
@@ -451,12 +465,11 @@
    {
       if (!closed)
       {
+         A11yHelper.applyFocusSource(focusSource);
+
          dispatch('close:contextmenu');
          closed = true;
          TJSSvelte.util.outroAndDestroy(current_component);
-
-         A11yHelper.applyFocusSource(focusSource)
-         focusSource = void 0;
       }
    }
 </script>
@@ -644,6 +657,6 @@
     }
 
     .tjs-context-menu-item-label.has-icons {
-       padding-left: calc(var(--tjs-context-menu-item-icon-width, 1.25em) + var(--tjs-context-menu-item-button-gap, 0.25em));
+       padding-left: calc(var(--tjs-context-menu-item-icon-width, 1.25em) + var(--tjs-context-menu-item-button-gap, 0.5em));
     }
 </style>

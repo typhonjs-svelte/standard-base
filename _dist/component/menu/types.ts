@@ -13,9 +13,9 @@ namespace TJSMenuData
    export interface Menu
    {
       /**
-       * The data driven menu items.
+       * The data driven menu item list or a function that returns a menu item list.
        */
-      items?: Iterable<Items>;
+      items?: Iterable<Items> | (() => Iterable<Items>);
 
       /**
        * Optional X / Y offsets for the menu display.
@@ -64,15 +64,11 @@ namespace TJSMenuData
       keyCode?: string;
 
       /**
-       * A specific HTMLElement or selector string as the default focus target.
+       * A specific HTMLElement or selector string as the explicit focus target. Note: that the menu components will
+       * automatically resume focus with the originating component / element by default. Only provide `focusEl` to
+       * explicitly focus a given target.
        */
       focusEl?: HTMLElement | string;
-
-      /**
-       * When true, any focus source derived from the associated `event` or defined `focusEl` is applied
-       * automatically in response to menu item presses.
-       */
-      onPressApplyFocus?: boolean;
 
       /**
        * Custom transition options for duration and easing function reference. The default easing function is
@@ -95,6 +91,13 @@ namespace TJSMenuData
    export namespace Item
    {
       /**
+       * Defines the return result from item `onPress` callback functions regarding applying any focus source.
+       * A `falsy` result immediately applies the detected focus source before the menu mounting. Returning `true`
+       * indicates that focus continuation via {@link A11yFocusSource} is handled by the callback.
+       */
+      export type OnPressResult = boolean | void | undefined;
+
+      /**
        * Common menu item data.
        */
       export interface Common<Item>
@@ -105,14 +108,16 @@ namespace TJSMenuData
          condition?: boolean | (() => boolean);
 
          /**
-          * A callback function to invoke; The object contains the item menu item data and an A11yFocusSource object
-          * to potentially pass to a new application.
+          * A callback function to invoke; The data object contains the originating event, menu item data, and an
+          * {@link A11yFocusSource} object to potentially handle later in a continuation of user interaction.
+          *
+          * To defer immediate application of the {@link A11yFocusSource} return `true` indicating a focus continuation.
           */
          onPress?: (data?: {
             event?: KeyboardEvent | PointerEvent;
             item?: Item;
             focusSource?: A11yFocusSource;
-         }) => void;
+         }) => OnPressResult | Promise<OnPressResult>;
       }
 
       /**
@@ -156,7 +161,7 @@ namespace TJSMenuData
          /**
           * A menu item separator; only 'hr' supported.
           */
-         separator: 'hr';
+         separator: string;
 
          /**
           * Exclusivity guard: present only on other variants. Do not provide.

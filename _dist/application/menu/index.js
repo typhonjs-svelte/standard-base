@@ -38,20 +38,27 @@ class TJSContextMenu
     *
     * @param {object}      opts - Optional parameters.
     *
-    * @param {KeyboardEvent | MouseEvent}  [opts.event] - The source MouseEvent or KeyboardEvent. It is highly
-    *        recommended to pass the originating DOM event for automatic configuration.
+    * @param {PointerEvent | MouseEvent | KeyboardEvent}  [opts.event] - The source PointerEvent, MouseEvent or
+    *        KeyboardEvent. It is highly recommended to pass the originating DOM event for automatic configuration.
     *
-    * @param {Iterable<import('#standard/component/menu').TJSMenuData.Items>} [opts.items] - Menu items to display.
+    * @param {(
+    *    Iterable<import('#standard/component/menu').TJSMenuData.Items> |
+    *    (() => Iterable<import('#standard/component/menu').TJSMenuData.Items>)
+    * )} [opts.items] - Menu items list of function returning a menu item list to display.
     *
     * @param {number}      [opts.x] - X position override for the top / left of the menu.
     *
     * @param {number}      [opts.y] - Y position override for the top / left of the menu.
     *
-    * @param {number}      [opts.offsetX=2] - Small positive integer offset for context menu so the pointer / mouse is
+    * @param {number}      [opts.offsetX=2] - Small positive number offset for context menu so the pointer / mouse is
     *        over the menu on display.
     *
-    * @param {number}      [opts.offsetY=2] - Small positive integer offset for context menu so the pointer / mouse is
+    * @param {number}      [opts.offsetY=2] - Small positive number offset for context menu so the pointer / mouse is
     *        over the menu on display.
+    *
+    * @param {boolean}     [opts.anchorToEventTarget=false] - Align context menu to the `event.target` element. This
+    *        will usually display the context menu aligned at the bottom left of the target element with automatic
+    *        alignment adjustments when the menu opens to the left or upwards.
     *
     * @param {Iterable<string>}    [opts.classes] - Additional custom CSS classes to add to the menu. This allows CSS
     *        style targeting.
@@ -74,7 +81,8 @@ class TJSContextMenu
     *
     * @param {{ [key: string]: string | null }}  [opts.styles] - Optional inline styles to apply.
     *
-    * @param {number}      [opts.duration] - Transition option for duration of transition in milliseconds.
+    * @param {number}      [opts.duration] - Transition option for duration of transition in milliseconds;
+    *        default: `120ms`.
     *
     * @param {import('#runtime/svelte/easing').EasingReference}   [opts.easing] - Transition option for ease. Either an
     *        easing function or easing function name.
@@ -82,37 +90,48 @@ class TJSContextMenu
     * @param {Window}      [opts.activeWindow] - The active browser window that the context menu is displaying inside.
     *        When you pass an `event` this is determined automatically.
     */
-   static create({ event, items, x, y, offsetX = 2, offsetY = 2, focusDebug = false, focusEl,
-    keyCode = 'Enter', classes = [], id = '', onClose, onPressApplyFocus = false, styles, duration = 120, easing,
-     activeWindow })
+   static create({ event, items, x, y, offsetX = 2, offsetY = 2, anchorToEventTarget = false, classes = [],
+    focusDebug = false, focusEl, keyCode = 'Enter', id = '', onClose, onPressApplyFocus = false, styles, duration = 120,
+     easing, activeWindow })
    {
       if (TJSContextMenu.#contextMenu !== void 0) { return; }
-
-      if (!event && (typeof x !== 'number' || typeof y !== 'number'))
-      {
-         throw new Error(`TJSContextMenu.create error: No event or absolute X / Y position not defined.`);
-      }
-
-      if (Number.isInteger(offsetX) && offsetX < 0)
-      {
-         throw new TypeError(`TJSContextMenu.create error: offsetX is not a positive integer.`);
-      }
-
-      if (Number.isInteger(offsetY) && offsetY < 0)
-      {
-         throw new TypeError(`TJSContextMenu.create error: offsetY is not a positive integer.`);
-      }
-
-      if (!Number.isInteger(duration) || duration < 0)
-      {
-         throw new TypeError(`TJSContextMenu.create error: 'duration' is not a positive integer.`);
-      }
 
       // Perform duck typing on event constructor name.
       if (event !== void 0 && !CrossWindow.isUserInputEvent(event))
       {
          throw new TypeError(
           `TJSContextMenu.create error: 'event' is not a KeyboardEvent, MouseEvent, or PointerEvent.`);
+      }
+
+      if (!event && (typeof x !== 'number' || typeof y !== 'number'))
+      {
+         throw new Error(`TJSContextMenu.create error: No event or absolute X / Y position not defined.`);
+      }
+
+      if (typeof anchorToEventTarget !== 'boolean')
+      {
+         throw new TypeError(`TJSContextMenu.create error: 'anchorToEventTarget' is not a boolean.`);
+      }
+
+      if (anchorToEventTarget === true && !event)
+      {
+         throw new TypeError(
+          `TJSContextMenu.create error: 'anchorToEventTarget' when 'true' requires 'event' to be defined.`);
+      }
+
+      if (Number.isFinite(offsetX) && offsetX < 0)
+      {
+         throw new TypeError(`TJSContextMenu.create error: offsetX is not a positive number.`);
+      }
+
+      if (Number.isFinite(offsetY) && offsetY < 0)
+      {
+         throw new TypeError(`TJSContextMenu.create error: offsetY is not a positive number.`);
+      }
+
+      if (!Number.isInteger(duration) || duration < 0)
+      {
+         throw new TypeError(`TJSContextMenu.create error: 'duration' is not a positive integer.`);
       }
 
       // If `activeWindow` is not defined determine it from the given event.
@@ -150,6 +169,15 @@ class TJSContextMenu
 
       const hasIcon = processedItems.some((entry) => entry['#type'] === 'font' || entry['#type'] === 'svg');
 
+      // Used for `anchorToEventTarget` storing target element width / height and defining `x / y` for bottom left
+      // positioning.
+      let targetElHeight = 0, targetElWidth = 0;
+
+      if (anchorToEventTarget)
+      {
+         ({ x, y, targetElHeight, targetElWidth } = this.#calcAnchorToEventTarget(event, activeWindow, x, y));
+      }
+
       const focusSource = A11yHelper.getFocusSource({ event, x, y, focusEl, debug: focusDebug });
 
       const easingFn = getEasingFunc(easing, { default: false });
@@ -180,7 +208,9 @@ class TJSContextMenu
             styles,
             transitionOptions: { duration, easing: easingFn },
             activeWindow,
-            onPressApplyFocus
+            onPressApplyFocus,
+            targetElHeight,
+            targetElWidth
          }
       });
 
@@ -197,22 +227,71 @@ class TJSContextMenu
    }
 
    /**
+    * Find bottom / left viewport coordinates for current target element of event.
+    *
+    * @param {PointerEvent | MouseEvent | KeyboardEvent} event -
+    *
+    * @param {Window}   activeWindow -
+    *
+    * @param {number}   [x] -
+    *
+    * @param {number}   [y] -
+    *
+    * @returns {{ x: number, y: number, targetElHeight: number, targetElWidth: number }} X / Y viewport coordinates
+    *          aligned to the event target element bottom / left in addition to the target element height / width for
+    *          when the context menu is repositioned due to constraints.
+    */
+   static #calcAnchorToEventTarget(event, activeWindow, x, y)
+   {
+      let targetElHeight = 0, targetElWidth = 0, targetX, targetY;
+
+      const rect = (event?.currentTarget ?? event?.target)?.getBoundingClientRect?.();
+
+      if (rect)
+      {
+         targetX = rect.left + activeWindow.scrollX;
+         targetY = rect.bottom + activeWindow.scrollY;
+         targetElHeight = rect.height;
+         targetElWidth = rect.width;
+      }
+
+      // Allow any defined x / y to take precedence.
+      return { x: x ?? targetX, y: y ?? targetY, targetElHeight, targetElWidth };
+   }
+
+   /**
     * Processes menu item data for conditions and evaluating the type of menu item.
     *
-    * @param {Iterable<import('#standard/component/menu').TJSMenuData.Items>} items - Menu item data.
+    * @param {(
+    *    Iterable<import('#standard/component/menu').TJSMenuData.Items> |
+    *    (() => Iterable<import('#standard/component/menu').TJSMenuData.Items>)
+    * )} items - Menu item data of function returning items.
     *
     * @returns {object[]} Processed menu items.
     */
    static #processItems(items)
    {
-      if (!isIterable(items)) { throw new TypeError(`TJSContextMenu error: 'items' is not an iterable list.`); }
+      let itemList;
 
-      const tempList = items;
+      if (typeof items === 'function')
+      {
+         itemList = items();
+
+         if (!isIterable(itemList))
+         {
+            throw new TypeError(`TJSContextMenu error: 'items' function did not return an iterable list.`);
+         }
+      }
+      else
+      {
+         itemList = isIterable(items) ? items : [];
+      }
+
       const tempItems = [];
 
       let cntr = -1;
 
-      for (const item of tempList)
+      for (const item of itemList)
       {
          cntr++;
          if (!isObject(item)) { throw new TypeError(`TJSContextMenu error: 'item[${cntr}]' is not an object.`); }

@@ -19,20 +19,27 @@ declare class TJSContextMenu {
    *
    * @param {object}      opts - Optional parameters.
    *
-   * @param {KeyboardEvent | MouseEvent}  [opts.event] - The source MouseEvent or KeyboardEvent. It is highly
-   *        recommended to pass the originating DOM event for automatic configuration.
+   * @param {PointerEvent | MouseEvent | KeyboardEvent}  [opts.event] - The source PointerEvent, MouseEvent or
+   *        KeyboardEvent. It is highly recommended to pass the originating DOM event for automatic configuration.
    *
-   * @param {Iterable<import('#standard/component/menu').TJSMenuData.Items>} [opts.items] - Menu items to display.
+   * @param {(
+   *    Iterable<import('#standard/component/menu').TJSMenuData.Items> |
+   *    (() => Iterable<import('#standard/component/menu').TJSMenuData.Items>)
+   * )} [opts.items] - Menu items list of function returning a menu item list to display.
    *
    * @param {number}      [opts.x] - X position override for the top / left of the menu.
    *
    * @param {number}      [opts.y] - Y position override for the top / left of the menu.
    *
-   * @param {number}      [opts.offsetX=2] - Small positive integer offset for context menu so the pointer / mouse is
+   * @param {number}      [opts.offsetX=2] - Small positive number offset for context menu so the pointer / mouse is
    *        over the menu on display.
    *
-   * @param {number}      [opts.offsetY=2] - Small positive integer offset for context menu so the pointer / mouse is
+   * @param {number}      [opts.offsetY=2] - Small positive number offset for context menu so the pointer / mouse is
    *        over the menu on display.
+   *
+   * @param {boolean}     [opts.anchorToEventTarget=false] - Align context menu to the `event.target` element. This
+   *        will usually display the context menu aligned at the bottom left of the target element with automatic
+   *        alignment adjustments when the menu opens to the left or upwards.
    *
    * @param {Iterable<string>}    [opts.classes] - Additional custom CSS classes to add to the menu. This allows CSS
    *        style targeting.
@@ -55,7 +62,8 @@ declare class TJSContextMenu {
    *
    * @param {{ [key: string]: string | null }}  [opts.styles] - Optional inline styles to apply.
    *
-   * @param {number}      [opts.duration] - Transition option for duration of transition in milliseconds.
+   * @param {number}      [opts.duration] - Transition option for duration of transition in milliseconds;
+   *        default: `120ms`.
    *
    * @param {import('#runtime/svelte/easing').EasingReference}   [opts.easing] - Transition option for ease. Either an
    *        easing function or easing function name.
@@ -70,10 +78,11 @@ declare class TJSContextMenu {
     y,
     offsetX,
     offsetY,
+    anchorToEventTarget,
+    classes,
     focusDebug,
     focusEl,
     keyCode,
-    classes,
     id,
     onClose,
     onPressApplyFocus,
@@ -82,12 +91,15 @@ declare class TJSContextMenu {
     easing,
     activeWindow,
   }: {
-    event?: KeyboardEvent | MouseEvent;
-    items?: Iterable<_standard_component_menu.TJSMenuData.Items>;
+    event?: PointerEvent | MouseEvent | KeyboardEvent;
+    items?:
+      | Iterable<_standard_component_menu.TJSMenuData.Items>
+      | (() => Iterable<_standard_component_menu.TJSMenuData.Items>);
     x?: number;
     y?: number;
     offsetX?: number;
     offsetY?: number;
+    anchorToEventTarget?: boolean;
     classes?: Iterable<string>;
     focusDebug?: boolean;
     focusEl?: HTMLElement | string;

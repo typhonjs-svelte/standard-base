@@ -183,6 +183,11 @@
       box-shadow: var(--tjs-scroll-container-box-shadow);
       color: var(--tjs-scroll-container-color, inherit);
 
+      max-height: var(--tjs-scroll-container-max-height, unset);
+      max-width: var(--tjs-scroll-container-max-width, unset);
+      min-height: var(--tjs-scroll-container-min-height, unset);
+      min-width: var(--tjs-scroll-container-min-width, unset);
+
       margin: var(--tjs-scroll-container-margin, 0);
       padding: var(--tjs-scroll-container-padding, 0);
 

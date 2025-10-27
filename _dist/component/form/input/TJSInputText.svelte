@@ -243,10 +243,6 @@
         width: var(--tjs-input-text-width, var(--tjs-input-width));
     }
 
-    .is-value-invalid {
-        color: var(--tjs-input-text-value-invalid-color, var(--tjs-input-value-invalid-color, red));
-    }
-
     input {
         pointer-events: initial;
         display: inline-block;
@@ -296,5 +292,9 @@
 
     input::placeholder {
         color: var(--tjs-input-text-placeholder-color, var(--tjs-input-placeholder-color, inherit));
+    }
+
+    .is-value-invalid, input.is-value-invalid:focus {
+       color: var(--tjs-input-text-value-invalid-color, var(--tjs-input-value-invalid-color, red));
     }
 </style>

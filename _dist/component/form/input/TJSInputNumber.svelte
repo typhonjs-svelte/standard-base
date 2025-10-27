@@ -243,10 +243,6 @@
         width: var(--tjs-input-number-width, var(--tjs-input-width));
     }
 
-    .is-value-invalid {
-        color: var(--tjs-input-number-value-invalid-color, var(--tjs-input-value-invalid-color, red));
-    }
-
     input {
         pointer-events: initial;
         display: inline-block;
@@ -308,6 +304,10 @@
     input::-webkit-outer-spin-button {
         appearance: var(--tjs-input-number-webkit-outer-spin-button-appearance, inherit);
         opacity: var(--tjs-input-number-webkit-outer-spin-button-opacity, inherit);
+    }
+
+    .is-value-invalid, input.is-value-invalid:focus {
+       color: var(--tjs-input-number-value-invalid-color, var(--tjs-input-value-invalid-color, red));
     }
 
     /* `localOptions` support classes ------------------------------------------------------------------------------- */

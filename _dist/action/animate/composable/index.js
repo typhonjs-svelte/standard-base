@@ -1,6 +1,6 @@
 import { Timing } from '#runtime/util';
 import { isObject } from '#runtime/util/object';
-import { CrossWindow } from '#runtime/util/browser';
+import { CrossRealm } from '#runtime/util/browser';
 import { A11yHelper } from '#runtime/util/a11y';
 import { nextAnimationFrame } from '#runtime/util/animate';
 
@@ -251,7 +251,7 @@ function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = false, 
             top = e.clientY ? `${e.clientY - (elementRect.top + radius)}px` : '0';
          }
 
-         const span = CrossWindow.getDocument(element).createElement('span');
+         const span = CrossRealm.getDocument(element).createElement('span');
 
          span.style.position = 'absolute';
          span.style.width = `${diameter}px`;
@@ -311,7 +311,7 @@ function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = false, 
       {
          const actual = event?.detail?.event;
 
-         if (CrossWindow.isUserInputEvent(actual)) { createRipple(actual); }
+         if (CrossRealm.isUserInputEvent(actual)) { createRipple(actual); }
 
          event.preventDefault();
          event.stopPropagation();
@@ -461,7 +461,7 @@ function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration = 300, 
 
          // When clicking outside the browser window or to another tab `document.activeElement` remains
          // the same despite blur being invoked; IE the target element.
-         if (!force && (activeSpans.length === 0 || targetEl === CrossWindow.getActiveElement(targetEl))) { return; }
+         if (!force && (activeSpans.length === 0 || targetEl === CrossRealm.getActiveElement(targetEl))) { return; }
 
          for (const span of activeSpans)
          {
@@ -516,7 +516,7 @@ function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration = 300, 
       {
          // If targetEl is the active element when Window blurs keep track of this state to defer focus when the Window
          // regains focus.
-         if (CrossWindow.isActiveElement(targetEl)) { windowBlurActiveFocus = true; }
+         if (CrossRealm.isActiveElement(targetEl)) { windowBlurActiveFocus = true; }
 
          // Force blur
          blurRipple(event, true);
@@ -537,7 +537,7 @@ function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration = 300, 
 
             await nextAnimationFrame(2);
 
-            if (!CrossWindow.isActiveElement(targetEl)) { return; }
+            if (!CrossRealm.isActiveElement(targetEl)) { return; }
          }
 
          if (!enabled) { return; }
@@ -559,7 +559,7 @@ function rippleFocus({ background = 'rgba(255, 255, 255, 0.7)', duration = 300, 
          const left = `${actualX - (elementRect.left + radius)}px`;
          const top = `${actualY - (elementRect.top + radius)}px`;
 
-         const span = CrossWindow.getDocument(element).createElement('span');
+         const span = CrossRealm.getDocument(element).createElement('span');
 
          span.style.position = 'absolute';
          span.style.width = `${diameter}px`;

@@ -102,7 +102,7 @@
    import { A11yHelper }         from '#runtime/util/a11y';
    import {
       AssetValidator,
-      CrossWindow }              from '#runtime/util/browser';
+      CrossRealm }               from '#runtime/util/browser';
    import { getStackingContext } from '#runtime/util/dom/layout';
    import { localize }           from '#runtime/util/i18n';
 
@@ -280,7 +280,7 @@
    onMount(() =>
    {
       // Store active window.
-      activeWindow = CrossWindow.getWindow(menuEl);
+      activeWindow = CrossRealm.getWindow(menuEl);
 
       // To support cases when the active window may be a popped out browser unregister directly.
       activeWindow.document.body.addEventListener('pointerdown', onClose, true);
@@ -296,12 +296,12 @@
 
       // Determine if the parent element to the menu contains the active element and that it is explicitly focused
       // via `:focus-visible` / keyboard navigation. If so then explicitly focus the first menu item possible.
-      if (CrossWindow.isHTMLElement(parentEl) && CrossWindow.isHTMLElement(activeEl) && parentEl.contains(activeEl) &&
+      if (CrossRealm.isHTMLElement(parentEl) && CrossRealm.isHTMLElement(activeEl) && parentEl.contains(activeEl) &&
         activeEl.matches(':focus-visible'))
       {
          const firstFocusEl = A11yHelper.getFirstFocusableElement(menuEl);
 
-         if  (CrossWindow.isHTMLElement(firstFocusEl) && !firstFocusEl.classList.contains('tjs-focus-wrap'))
+         if  (CrossRealm.isHTMLElement(firstFocusEl) && !firstFocusEl.classList.contains('tjs-focus-wrap'))
          {
             firstFocusEl.focus();
             hasKeyboardFocus = true;
@@ -489,7 +489,7 @@
                if (menuEl === activeWindow.document.activeElement ||
                 firstFocusEl === activeWindow.document.activeElement)
                {
-                  if (CrossWindow.isHTMLElement(lastFocusEl) && firstFocusEl !== lastFocusEl)
+                  if (CrossRealm.isHTMLElement(lastFocusEl) && firstFocusEl !== lastFocusEl)
                   {
                      lastFocusEl.focus();
                   }

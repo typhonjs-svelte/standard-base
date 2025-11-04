@@ -3,7 +3,7 @@ import { TJSSvelte }          from '#runtime/svelte/util';
 import { A11yHelper }         from '#runtime/util/a11y';
 import { AssetValidator }     from '#runtime/util/browser';
 import { ThemeObserver }      from '#runtime/util/dom/theme';
-import { CrossWindow }        from '#runtime/util/browser';
+import { CrossRealm }        from '#runtime/util/browser';
 
 import {
    isIterable,
@@ -102,7 +102,7 @@ export class TJSContextMenu
       if (TJSContextMenu.#contextMenu !== void 0) { return; }
 
       // Perform duck typing on event constructor name.
-      if (event !== void 0 && !CrossWindow.isUserInputEvent(event))
+      if (event !== void 0 && !CrossRealm.isUserInputEvent(event))
       {
          throw new TypeError(
           `TJSContextMenu.create error: 'event' is not a KeyboardEvent, MouseEvent, or PointerEvent.`);
@@ -140,9 +140,9 @@ export class TJSContextMenu
       }
 
       // If `activeWindow` is not defined determine it from the given event.
-      if (activeWindow === void 0 && event !== void 0) { activeWindow = CrossWindow.getWindow(event); }
+      if (activeWindow === void 0 && event !== void 0) { activeWindow = CrossRealm.getWindow(event); }
 
-      if (!CrossWindow.isWindow(activeWindow))
+      if (!CrossRealm.isWindow(activeWindow))
       {
          throw new TypeError(`TJSContextMenu.create error: 'activeWindow' is not a Window.`);
       }

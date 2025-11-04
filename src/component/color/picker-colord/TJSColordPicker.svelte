@@ -20,7 +20,7 @@
    import { A11yHelper }               from '#runtime/util/a11y';
    import {
       ClipboardAccess,
-      CrossWindow }                    from '#runtime/util/browser';
+      CrossRealm }                     from '#runtime/util/browser';
    import { isObject }                 from '#runtime/util/object';
 
    import { InternalState }            from './model/index.js';
@@ -175,11 +175,11 @@
          case 'KeyC':
          case 'KeyX':
             // Note: Do not perform action if the active element is TJSInput.
-            if (CrossWindow.getActiveElement(event)?.classList.contains('tjs-input')) { break; }
+            if (CrossRealm.getActiveElement(event)?.classList.contains('tjs-input')) { break; }
 
             if (event.ctrlKey || event.metaKey)
             {
-               handleCopy(CrossWindow.getWindow(event));
+               handleCopy(CrossRealm.getWindow(event));
 
                event.preventDefault();
                event.stopImmediatePropagation();
@@ -190,9 +190,9 @@
             if (event.ctrlKey || event.metaKey)
             {
                // Note: Do not perform action if the active element is TJSInput.
-               if (CrossWindow.getActiveElement(event)?.classList.contains('tjs-input')) { break; }
+               if (CrossRealm.getActiveElement(event)?.classList.contains('tjs-input')) { break; }
 
-               handlePaste(CrossWindow.getWindow(event));
+               handlePaste(CrossRealm.getWindow(event));
 
                event.preventDefault();
                event.stopImmediatePropagation();
@@ -251,7 +251,7 @@
 
          case 'Tab':
          {
-            const activeElement = CrossWindow.getActiveElement(event);
+            const activeElement = CrossRealm.getActiveElement(event);
 
             // If the popup is open and `Shift-Tab` is pressed and the active element is the first focus element
             // or container element then search for the last focusable element that is not `FocusWrap` to traverse
@@ -261,7 +261,7 @@
             {
                // Collect all focusable elements from `elementRoot` and ignore TJSFocusWrap.
                const lastFocusEl = A11yHelper.getLastFocusableElement(containerEl, lastFocusableElementOptions);
-               if (CrossWindow.isHTMLElement(lastFocusEl)) { lastFocusEl.focus(); }
+               if (CrossRealm.isHTMLElement(lastFocusEl)) { lastFocusEl.focus(); }
 
                event.preventDefault();
                event.stopImmediatePropagation();

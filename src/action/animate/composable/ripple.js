@@ -1,5 +1,5 @@
 import { Timing }       from '#runtime/util';
-import { CrossWindow }  from '#runtime/util/browser';
+import { CrossRealm }   from '#runtime/util/browser';
 import { isObject }     from '#runtime/util/object';
 
 /**
@@ -77,7 +77,7 @@ export function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = 
             top = e.clientY ? `${e.clientY - (elementRect.top + radius)}px` : '0';
          }
 
-         const span = CrossWindow.getDocument(element).createElement('span');
+         const span = CrossRealm.getDocument(element).createElement('span');
 
          span.style.position = 'absolute';
          span.style.width = `${diameter}px`;
@@ -137,7 +137,7 @@ export function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = 
       {
          const actual = event?.detail?.event;
 
-         if (CrossWindow.isUserInputEvent(actual)) { createRipple(actual); }
+         if (CrossRealm.isUserInputEvent(actual)) { createRipple(actual); }
 
          event.preventDefault();
          event.stopPropagation();

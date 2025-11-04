@@ -145,7 +145,7 @@
       subscribeIgnoreFirst }     from '#runtime/svelte/store/util';
 
    import { TJSSvelte }          from '#runtime/svelte/util';
-   import { CrossWindow }        from '#runtime/util/browser';
+   import { CrossRealm }         from '#runtime/util/browser';
    import { localize }           from '#runtime/util/i18n';
    import { isObject }           from '#runtime/util/object';
 
@@ -345,7 +345,7 @@
       // Firefox sends a `click` event / non-standard response so check for mozInputSource equaling 6 (keyboard) or
       // a negative pointerId from Chromium and prevent default. This allows `onKeyUp` to handle any open / close
       // action.
-      if (summaryEl === CrossWindow.getActiveElement(event) && (event?.pointerId === -1 || event?.mozInputSource === 6))
+      if (summaryEl === CrossRealm.getActiveElement(event) && (event?.pointerId === -1 || event?.mozInputSource === 6))
       {
          event.preventDefault();
          event.stopPropagation();
@@ -379,7 +379,7 @@
    {
       if (!enabled) { return; }
 
-      if (summaryEl === CrossWindow.getActiveElement(event) && event.code === keyCode)
+      if (summaryEl === CrossRealm.getActiveElement(event) && event.code === keyCode)
       {
          event.preventDefault();
          event.stopPropagation();
@@ -395,7 +395,7 @@
    {
       if (!enabled) { return; }
 
-      if (summaryEl === CrossWindow.getActiveElement(event) && event.code === keyCode)
+      if (summaryEl === CrossRealm.getActiveElement(event) && event.code === keyCode)
       {
          handleOpenClose(event, true);
 

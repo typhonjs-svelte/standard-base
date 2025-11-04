@@ -26,7 +26,7 @@
    import { isReadableStore } from '#runtime/svelte/store/util';
    import {
       AssetValidator,
-      CrossWindow }           from '#runtime/util/browser';
+      CrossRealm }            from '#runtime/util/browser';
    import { isObject }        from '#runtime/util/object';
 
    /**
@@ -124,12 +124,12 @@
 
    // ----------------------------------------------------------------------------------------------------------------
 
-   $: url = isObject(media) && (typeof media.url === 'string' || CrossWindow.isURL(media.url)) ? media.url :
-    typeof url === 'string' || CrossWindow.isURL(url) ? url : void 0;
+   $: url = isObject(media) && (typeof media.url === 'string' || CrossRealm.isURL(media.url)) ? media.url :
+    typeof url === 'string' || CrossRealm.isURL(url) ? url : void 0;
 
-   $: urlDefault = isObject(media) && (typeof media.urlDefault === 'string' || CrossWindow.isURL(media.urlDefault)) ?
+   $: urlDefault = isObject(media) && (typeof media.urlDefault === 'string' || CrossRealm.isURL(media.urlDefault)) ?
      media.urlDefault :
-    typeof urlDefault === 'string' || CrossWindow.isURL(urlDefault) ? urlDefault : void 0;
+    typeof urlDefault === 'string' || CrossRealm.isURL(urlDefault) ? urlDefault : void 0;
 
    $: imgAlt = isObject(media) && typeof media.imgAlt === 'string' ? media.imgAlt :
     typeof imgAlt === 'string' ? imgAlt : void 0;

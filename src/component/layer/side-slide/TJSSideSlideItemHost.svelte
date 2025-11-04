@@ -2,7 +2,7 @@
    import { onDestroy }    from '#svelte';
 
    import { slideFade }    from '#runtime/svelte/transition';
-   import { CrossWindow }  from '#runtime/util/browser';
+   import { CrossRealm }   from '#runtime/util/browser';
    import { isObject }     from '#runtime/util/object';
 
    /** @type {HTMLDivElement} */
@@ -27,7 +27,7 @@
    {
       // Handle the case when the panel is being destroyed and focus transfers to the `document.body`; focus parent
       // container instead.
-      if (CrossWindow.getActiveElement(hostEl) === CrossWindow.getDocument(hostEl)?.body)
+      if (CrossRealm.getActiveElement(hostEl) === CrossRealm.getDocument(hostEl)?.body)
       {
          hostEl?.parentElement?.focus();
       }

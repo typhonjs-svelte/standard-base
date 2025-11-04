@@ -15,7 +15,7 @@
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
    import { TJSSvelte }                from '#runtime/svelte/util';
-   import { CrossWindow }              from '#runtime/util/browser';
+   import { CrossRealm }               from '#runtime/util/browser';
    import { isObject }                 from '#runtime/util/object';
 
    /** @type {import('.').TJSScrollContainerData} */
@@ -99,7 +99,7 @@
          case 'PageUp':
          case 'Space':
          {
-            const activeEl = CrossWindow.getActiveElement(event);
+            const activeEl = CrossRealm.getActiveElement(event);
             if (activeEl === containerEl || containerEl.contains(activeEl)) { event.stopPropagation(); }
 
             break;
@@ -129,7 +129,7 @@
          case 'PageUp':
          case 'Space':
          {
-            const activeEl = CrossWindow.getActiveElement(event);
+            const activeEl = CrossRealm.getActiveElement(event);
             if (activeEl === containerEl || containerEl.contains(activeEl)) { event.stopPropagation(); }
 
             break;
@@ -146,7 +146,7 @@
    {
       event.stopPropagation();
 
-      const activeEl = CrossWindow.getActiveElement(event);
+      const activeEl = CrossRealm.getActiveElement(event);
       if (activeEl !== containerEl && !containerEl.contains(activeEl)) { containerEl.focus(); }
    }
 </script>

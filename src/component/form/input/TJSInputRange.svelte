@@ -67,7 +67,7 @@
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
    import { isObject }                 from '#runtime/util/object';
-   import { CrossWindow }              from '#runtime/util/browser';
+   import { CrossRealm }               from '#runtime/util/browser';
 
    import {
       TJSSlotLabel,
@@ -202,7 +202,7 @@
     */
    function onPointerdown(event)
    {
-      if (localOptions.cancelOnEscKey && inputEl !== CrossWindow.getActiveElement(event))
+      if (localOptions.cancelOnEscKey && inputEl !== CrossRealm.getActiveElement(event))
       {
          initialValue = globalThis.parseFloat(inputEl.value);
          initialPointerdownTime = performance.now();

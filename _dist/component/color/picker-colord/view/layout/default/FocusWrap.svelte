@@ -3,7 +3,7 @@
    import { writable }     from 'svelte/store';
 
    import { isFocused }    from '#runtime/svelte/action/dom/focus';
-   import { CrossWindow }  from '#runtime/util/browser';
+   import { CrossRealm }   from '#runtime/util/browser';
 
    const internalState = getContext('#tjs-color-picker-state');
 
@@ -14,7 +14,7 @@
    /**
     * Handle forwarding on focus to any first focusable element set when in popup mode.
     */
-   $: if ($isPopup && $focused && CrossWindow.isHTMLElement($firstFocusEl))
+   $: if ($isPopup && $focused && CrossRealm.isHTMLElement($firstFocusEl))
    {
       $firstFocusEl.focus();
    }

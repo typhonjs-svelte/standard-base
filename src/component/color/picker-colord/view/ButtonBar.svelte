@@ -3,7 +3,7 @@
 
    import {
       ClipboardAccess,
-      CrossWindow }           from '#runtime/util/browser';
+      CrossRealm }            from '#runtime/util/browser';
 
    import { ripple }          from '#standard/action/animate/composable';
 
@@ -35,7 +35,7 @@
          try
          {
             // Use the `sectionEl` owner document / window as this component could be in a separate window.
-            const EyeDropperCtor = CrossWindow.getWindow(sectionEl).EyeDropper;
+            const EyeDropperCtor = CrossRealm.getWindow(sectionEl).EyeDropper;
 
             /** @type {EyeDropper} */
             const eyeDropper = new EyeDropperCtor();
@@ -61,7 +61,7 @@
     */
    function onPress()
    {
-      ClipboardAccess.writeText($currentColorString, CrossWindow.getWindow(sectionEl));
+      ClipboardAccess.writeText($currentColorString, CrossRealm.getWindow(sectionEl));
    }
 </script>
 

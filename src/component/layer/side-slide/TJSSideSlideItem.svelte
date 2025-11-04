@@ -6,7 +6,7 @@
    import { popoverTooltip }     from '#runtime/svelte/action/dom/tooltip';
    import { TJSSvelte }          from '#runtime/svelte/util';
    import { A11yHelper }         from '#runtime/util/a11y';
-   import { CrossWindow }        from '#runtime/util/browser';
+   import { CrossRealm }         from '#runtime/util/browser';
    import { isObject }           from '#runtime/util/object';
 
    import TJSSideSlideItemHost   from './TJSSideSlideItemHost.svelte';
@@ -197,7 +197,7 @@
                const lastFocusEl = allFocusable.length > 0 ? allFocusable[allFocusable.length - 1] : void 0;
 
                // This component may be embedded in an alternate window.
-               const activeElement = CrossWindow.getActiveElement(event);
+               const activeElement = CrossRealm.getActiveElement(event);
 
                if (event.shiftKey)
                {

@@ -3,7 +3,7 @@
    import { writable }     from '#svelte/store';
 
    import { isFocused }    from '#runtime/svelte/action/dom/focus';
-   import { CrossRealm }   from '#runtime/util/browser';
+   import { CrossRealm }   from '#runtime/util';
 
    const internalState = getContext('#tjs-color-picker-state');
 

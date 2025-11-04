@@ -1,7 +1,8 @@
 import { getEasingFunc } from '#runtime/svelte/easing';
 import { TJSSvelte } from '#runtime/svelte/util';
+import { CrossRealm } from '#runtime/util';
 import { A11yHelper } from '#runtime/util/a11y';
-import { CrossRealm, AssetValidator } from '#runtime/util/browser';
+import { AssetValidator } from '#runtime/util/browser';
 import { ThemeObserver } from '#runtime/util/dom/theme';
 import { isIterable, isObject } from '#runtime/util/object';
 import { TJSContextMenuImpl } from '#standard/component/menu';

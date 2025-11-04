@@ -1,6 +1,5 @@
-import { Timing } from '#runtime/util';
+import { Timing, CrossRealm } from '#runtime/util';
 import { isObject } from '#runtime/util/object';
-import { CrossRealm } from '#runtime/util/browser';
 import { A11yHelper } from '#runtime/util/a11y';
 import { nextAnimationFrame } from '#runtime/util/animate';
 

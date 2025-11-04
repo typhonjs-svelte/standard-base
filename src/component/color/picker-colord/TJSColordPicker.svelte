@@ -17,10 +17,9 @@
    import { colord }                   from '#runtime/data/color/colord';
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
+   import { CrossRealm }               from '#runtime/util';
    import { A11yHelper }               from '#runtime/util/a11y';
-   import {
-      ClipboardAccess,
-      CrossRealm }                     from '#runtime/util/browser';
+   import { ClipboardAccess }          from '#runtime/util/browser';
    import { isObject }                 from '#runtime/util/object';
 
    import { InternalState }            from './model/index.js';

@@ -1,6 +1,8 @@
-import { Timing }       from '#runtime/util';
-import { CrossRealm }   from '#runtime/util/browser';
-import { isObject }     from '#runtime/util/object';
+import {
+   CrossRealm,
+   Timing }          from '#runtime/util';
+
+import { isObject }  from '#runtime/util/object';
 
 /**
  * Defines the classic Material Design ripple effect as an action. `ripple` is a wrapper around the returned action.

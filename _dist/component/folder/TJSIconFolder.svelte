@@ -141,9 +141,8 @@
       subscribeIgnoreFirst }     from '#runtime/svelte/store/util';
 
    import { TJSSvelte }          from '#runtime/svelte/util';
-   import {
-      AssetValidator,
-      CrossRealm }               from '#runtime/util/browser';
+   import { CrossRealm }         from '#runtime/util';
+   import { AssetValidator }     from '#runtime/util/browser';
    import { localize }           from '#runtime/util/i18n';
    import { isObject }           from '#runtime/util/object';
 

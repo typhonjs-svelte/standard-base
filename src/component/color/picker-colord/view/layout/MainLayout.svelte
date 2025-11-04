@@ -3,7 +3,7 @@
       getContext,
       onDestroy }                from '#svelte';
 
-   import { CrossRealm }         from '#runtime/util/browser';
+   import { CrossRealm }         from '#runtime/util';
    import { getStackingContext } from '#runtime/util/dom/layout';
 
    /** @type {HTMLElement} */

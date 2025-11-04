@@ -24,9 +24,8 @@
    import { inlineSvg }       from '#runtime/svelte/action/dom/inline-svg';
    import { popoverTooltip }  from '#runtime/svelte/action/dom/tooltip';
    import { isReadableStore } from '#runtime/svelte/store/util';
-   import {
-      AssetValidator,
-      CrossRealm }            from '#runtime/util/browser';
+   import { CrossRealm }      from '#runtime/util';
+   import { AssetValidator }  from '#runtime/util/browser';
    import { isObject }        from '#runtime/util/object';
 
    /**

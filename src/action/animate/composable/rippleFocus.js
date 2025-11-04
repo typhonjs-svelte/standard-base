@@ -1,5 +1,5 @@
+import { CrossRealm }         from '#runtime/util';
 import { A11yHelper }         from '#runtime/util/a11y';
-import { CrossRealm }         from '#runtime/util/browser';
 import { isObject }           from '#runtime/util/object';
 import { nextAnimationFrame } from '#runtime/util/animate';
 

@@ -1,9 +1,9 @@
 import { getEasingFunc }      from '#runtime/svelte/easing';
 import { TJSSvelte }          from '#runtime/svelte/util';
+import { CrossRealm }         from '#runtime/util';
 import { A11yHelper }         from '#runtime/util/a11y';
 import { AssetValidator }     from '#runtime/util/browser';
 import { ThemeObserver }      from '#runtime/util/dom/theme';
-import { CrossRealm }        from '#runtime/util/browser';
 
 import {
    isIterable,

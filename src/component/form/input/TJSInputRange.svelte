@@ -66,8 +66,8 @@
 
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
+   import { CrossRealm }               from '#runtime/util';
    import { isObject }                 from '#runtime/util/object';
-   import { CrossRealm }               from '#runtime/util/browser';
 
    import {
       TJSSlotLabel,

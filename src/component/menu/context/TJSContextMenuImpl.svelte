@@ -90,8 +90,8 @@
    import { slideFade }       from '#runtime/svelte/transition';
    import { TJSSvelte }       from '#runtime/svelte/util';
 
+   import { CrossRealm }      from '#runtime/util';
    import { A11yHelper }      from '#runtime/util/a11y';
-   import { CrossRealm }      from '#runtime/util/browser';
    import { localize }        from '#runtime/util/i18n';
    import { isObject }        from '#runtime/util/object';
 

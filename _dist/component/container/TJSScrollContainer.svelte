@@ -15,7 +15,7 @@
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
    import { TJSSvelte }                from '#runtime/svelte/util';
-   import { CrossRealm }               from '#runtime/util/browser';
+   import { CrossRealm }               from '#runtime/util';
    import { isObject }                 from '#runtime/util/object';
 
    /** @type {import('.').TJSScrollContainerData} */

@@ -99,10 +99,9 @@
    import { applyStyles }        from '#runtime/svelte/action/dom/style';
    import { slideFade }          from '#runtime/svelte/transition';
    import { TJSSvelte }          from '#runtime/svelte/util';
+   import { CrossRealm }         from '#runtime/util';
    import { A11yHelper }         from '#runtime/util/a11y';
-   import {
-      AssetValidator,
-      CrossRealm }               from '#runtime/util/browser';
+   import { AssetValidator }     from '#runtime/util/browser';
    import { getStackingContext } from '#runtime/util/dom/layout';
    import { localize }           from '#runtime/util/i18n';
 

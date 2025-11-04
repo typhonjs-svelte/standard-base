@@ -1,9 +1,8 @@
 <script>
    import { getContext }      from 'svelte';
 
-   import {
-      ClipboardAccess,
-      CrossRealm }            from '#runtime/util/browser';
+   import { CrossRealm }      from '#runtime/util';
+   import { ClipboardAccess } from '#runtime/util/browser';
 
    import { ripple }          from '#standard/action/animate/composable';
 

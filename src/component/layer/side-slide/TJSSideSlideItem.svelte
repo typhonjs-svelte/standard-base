@@ -5,8 +5,8 @@
 
    import { popoverTooltip }     from '#runtime/svelte/action/dom/tooltip';
    import { TJSSvelte }          from '#runtime/svelte/util';
+   import { CrossRealm }         from '#runtime/util';
    import { A11yHelper }         from '#runtime/util/a11y';
-   import { CrossRealm }         from '#runtime/util/browser';
    import { isObject }           from '#runtime/util/object';
 
    import TJSSideSlideItemHost   from './TJSSideSlideItemHost.svelte';

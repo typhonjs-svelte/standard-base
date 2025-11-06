@@ -90,10 +90,10 @@
    import { slideFade }       from '#runtime/svelte/transition';
    import { TJSSvelte }       from '#runtime/svelte/util';
 
-   import { CrossRealm }      from '#runtime/util';
    import { A11yHelper }      from '#runtime/util/a11y';
    import { localize }        from '#runtime/util/i18n';
    import { isObject }        from '#runtime/util/object';
+   import { CrossRealm }      from '#runtime/util/realm';
 
    import {
       TJSFocusIndicator,
@@ -206,7 +206,7 @@
       {
          const firstFocusEl = A11yHelper.getFirstFocusableElement(menuEl);
 
-         if (CrossRealm.isHTMLElement(firstFocusEl) && !firstFocusEl.classList.contains('tjs-focus-wrap'))
+         if (CrossRealm.browser.isHTMLElement(firstFocusEl) && !firstFocusEl.classList.contains('tjs-focus-wrap'))
          {
             firstFocusEl.focus();
          }
@@ -379,7 +379,7 @@
                if (menuEl === activeWindow.document.activeElement ||
                 firstFocusEl === activeWindow.document.activeElement)
                {
-                  if (CrossRealm.isHTMLElement(lastFocusEl) && firstFocusEl !== lastFocusEl)
+                  if (CrossRealm.browser.isHTMLElement(lastFocusEl) && firstFocusEl !== lastFocusEl)
                   {
                      lastFocusEl.focus();
                   }

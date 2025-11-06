@@ -24,9 +24,9 @@
    import { inlineSvg }       from '#runtime/svelte/action/dom/inline-svg';
    import { popoverTooltip }  from '#runtime/svelte/action/dom/tooltip';
    import { isReadableStore } from '#runtime/svelte/store/util';
-   import { CrossRealm }      from '#runtime/util';
    import { AssetValidator }  from '#runtime/util/browser';
    import { isObject }        from '#runtime/util/object';
+   import { CrossRealm }      from '#runtime/util/realm';
 
    /**
     * The `url` store potentially set from a parent component like `TJSFileSlotButton`.
@@ -123,12 +123,12 @@
 
    // ----------------------------------------------------------------------------------------------------------------
 
-   $: url = isObject(media) && (typeof media.url === 'string' || CrossRealm.isURL(media.url)) ? media.url :
-    typeof url === 'string' || CrossRealm.isURL(url) ? url : void 0;
+   $: url = isObject(media) && (typeof media.url === 'string' || CrossRealm.browser.isURL(media.url)) ? media.url :
+    typeof url === 'string' || CrossRealm.browser.isURL(url) ? url : void 0;
 
-   $: urlDefault = isObject(media) && (typeof media.urlDefault === 'string' || CrossRealm.isURL(media.urlDefault)) ?
-     media.urlDefault :
-    typeof urlDefault === 'string' || CrossRealm.isURL(urlDefault) ? urlDefault : void 0;
+   $: urlDefault = isObject(media) &&
+    (typeof media.urlDefault === 'string' || CrossRealm.browser.isURL(media.urlDefault)) ? media.urlDefault :
+    typeof urlDefault === 'string' || CrossRealm.browser.isURL(urlDefault) ? urlDefault : void 0;
 
    $: imgAlt = isObject(media) && typeof media.imgAlt === 'string' ? media.imgAlt :
     typeof imgAlt === 'string' ? imgAlt : void 0;

@@ -1,9 +1,9 @@
 import { getEasingFunc } from '#runtime/svelte/easing';
 import { TJSSvelte } from '#runtime/svelte/util';
-import { CrossRealm } from '#runtime/util';
 import { A11yHelper } from '#runtime/util/a11y';
 import { AssetValidator } from '#runtime/util/browser';
 import { ThemeObserver } from '#runtime/util/dom/theme';
+import { CrossRealm } from '#runtime/util/realm';
 import { isIterable, isObject } from '#runtime/util/object';
 import { TJSContextMenuImpl } from '#standard/component/menu';
 
@@ -98,7 +98,7 @@ class TJSContextMenu
       if (TJSContextMenu.#contextMenu !== void 0) { return; }
 
       // Perform duck typing on event constructor name.
-      if (event !== void 0 && !CrossRealm.isUserInputEvent(event))
+      if (event !== void 0 && !CrossRealm.browser.isUserInputEvent(event))
       {
          throw new TypeError(
           `TJSContextMenu.create error: 'event' is not a KeyboardEvent, MouseEvent, or PointerEvent.`);
@@ -136,9 +136,9 @@ class TJSContextMenu
       }
 
       // If `activeWindow` is not defined determine it from the given event.
-      if (activeWindow === void 0 && event !== void 0) { activeWindow = CrossRealm.getWindow(event); }
+      if (activeWindow === void 0 && event !== void 0) { activeWindow = CrossRealm.browser.getWindow(event); }
 
-      if (!CrossRealm.isWindow(activeWindow))
+      if (!CrossRealm.browser.isWindow(activeWindow))
       {
          throw new TypeError(`TJSContextMenu.create error: 'activeWindow' is not a Window.`);
       }

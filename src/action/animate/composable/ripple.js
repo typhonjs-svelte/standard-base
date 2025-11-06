@@ -1,8 +1,6 @@
-import {
-   CrossRealm,
-   Timing }          from '#runtime/util';
-
-import { isObject }  from '#runtime/util/object';
+import { Timing }       from '#runtime/util';
+import { isObject }     from '#runtime/util/object';
+import { CrossRealm }   from '#runtime/util/realm';
 
 /**
  * Defines the classic Material Design ripple effect as an action. `ripple` is a wrapper around the returned action.
@@ -79,7 +77,7 @@ export function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = 
             top = e.clientY ? `${e.clientY - (elementRect.top + radius)}px` : '0';
          }
 
-         const span = CrossRealm.getDocument(element).createElement('span');
+         const span = CrossRealm.browser.getDocument(element).createElement('span');
 
          span.style.position = 'absolute';
          span.style.width = `${diameter}px`;
@@ -139,7 +137,7 @@ export function ripple({ background = 'rgba(255, 255, 255, 0.7)', contextmenu = 
       {
          const actual = event?.detail?.event;
 
-         if (CrossRealm.isUserInputEvent(actual)) { createRipple(actual); }
+         if (CrossRealm.browser.isUserInputEvent(actual)) { createRipple(actual); }
 
          event.preventDefault();
          event.stopPropagation();

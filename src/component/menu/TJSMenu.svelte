@@ -99,11 +99,11 @@
    import { applyStyles }        from '#runtime/svelte/action/dom/style';
    import { slideFade }          from '#runtime/svelte/transition';
    import { TJSSvelte }          from '#runtime/svelte/util';
-   import { CrossRealm }         from '#runtime/util';
    import { A11yHelper }         from '#runtime/util/a11y';
    import { AssetValidator }     from '#runtime/util/browser';
    import { getStackingContext } from '#runtime/util/dom/layout';
    import { localize }           from '#runtime/util/i18n';
+   import { CrossRealm }         from '#runtime/util/realm';
 
    import {
       isIterable,
@@ -279,7 +279,7 @@
    onMount(() =>
    {
       // Store active window.
-      activeWindow = CrossRealm.getWindow(menuEl);
+      activeWindow = CrossRealm.browser.getWindow(menuEl);
 
       // To support cases when the active window may be a popped out browser unregister directly.
       activeWindow.document.body.addEventListener('pointerdown', onClose, true);
@@ -295,12 +295,12 @@
 
       // Determine if the parent element to the menu contains the active element and that it is explicitly focused
       // via `:focus-visible` / keyboard navigation. If so then explicitly focus the first menu item possible.
-      if (CrossRealm.isHTMLElement(parentEl) && CrossRealm.isHTMLElement(activeEl) && parentEl.contains(activeEl) &&
-        activeEl.matches(':focus-visible'))
+      if (CrossRealm.browser.isHTMLElement(parentEl) && CrossRealm.browser.isHTMLElement(activeEl) &&
+       parentEl.contains(activeEl) && activeEl.matches(':focus-visible'))
       {
          const firstFocusEl = A11yHelper.getFirstFocusableElement(menuEl);
 
-         if  (CrossRealm.isHTMLElement(firstFocusEl) && !firstFocusEl.classList.contains('tjs-focus-wrap'))
+         if  (CrossRealm.browser.isHTMLElement(firstFocusEl) && !firstFocusEl.classList.contains('tjs-focus-wrap'))
          {
             firstFocusEl.focus();
             hasKeyboardFocus = true;
@@ -488,7 +488,7 @@
                if (menuEl === activeWindow.document.activeElement ||
                 firstFocusEl === activeWindow.document.activeElement)
                {
-                  if (CrossRealm.isHTMLElement(lastFocusEl) && firstFocusEl !== lastFocusEl)
+                  if (CrossRealm.browser.isHTMLElement(lastFocusEl) && firstFocusEl !== lastFocusEl)
                   {
                      lastFocusEl.focus();
                   }

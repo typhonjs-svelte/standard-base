@@ -1,8 +1,8 @@
 <script>
    import { getContext }      from '#svelte';
 
-   import { CrossRealm }      from '#runtime/util';
    import { ClipboardAccess } from '#runtime/util/browser';
+   import { CrossRealm }      from '#runtime/util/realm';
 
    import { ripple }          from '#standard/action/animate/composable';
 
@@ -34,7 +34,7 @@
          try
          {
             // Use the `sectionEl` owner document / window as this component could be in a separate window.
-            const EyeDropperCtor = CrossRealm.getWindow(sectionEl).EyeDropper;
+            const EyeDropperCtor = CrossRealm.browser.getWindow(sectionEl).EyeDropper;
 
             /** @type {EyeDropper} */
             const eyeDropper = new EyeDropperCtor();
@@ -60,7 +60,7 @@
     */
    function onPress()
    {
-      ClipboardAccess.writeText($currentColorString, CrossRealm.getWindow(sectionEl));
+      ClipboardAccess.writeText($currentColorString, CrossRealm.browser.getWindow(sectionEl));
    }
 </script>
 

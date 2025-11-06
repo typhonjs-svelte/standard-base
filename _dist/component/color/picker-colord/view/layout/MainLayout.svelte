@@ -3,8 +3,8 @@
       getContext,
       onDestroy }                from 'svelte';
 
-   import { CrossRealm }         from '#runtime/util';
    import { getStackingContext } from '#runtime/util/dom/layout';
+   import { CrossRealm }         from '#runtime/util/realm';
 
    /** @type {HTMLElement} */
    export let containerEl = void 0;
@@ -22,9 +22,10 @@
 
    $: if ($isPopup && $isOpen && containerEl)
    {
-      CrossRealm.getDocument(containerEl)?.body.addEventListener('pointerdown', onPointerdown, { capture: true });
+      CrossRealm.browser.getDocument(containerEl)?.body.addEventListener('pointerdown', onPointerdown,
+       { capture: true });
 
-      CrossRealm.getWindow(containerEl)?.addEventListener('blur', closePopup, { once: true });
+      CrossRealm.browser.getWindow(containerEl)?.addEventListener('blur', closePopup, { once: true });
 
       // Focus containerEl on next macrotask so that potential tab navigation in popup mode can be traversed in reverse.
       setTimeout(() => containerEl.focus(), 0);
@@ -33,13 +34,13 @@
    // Sanity case to remove listener when `options.isPopup` state changes externally.
    $: if (!$isPopup && containerEl)
    {
-      CrossRealm.getDocument(containerEl)?.body.removeEventListener('pointerdown', onPointerdown);
-      CrossRealm.getWindow(containerEl)?.removeEventListener('blur', closePopup);
+      CrossRealm.browser.getDocument(containerEl)?.body.removeEventListener('pointerdown', onPointerdown);
+      CrossRealm.browser.getWindow(containerEl)?.removeEventListener('blur', closePopup);
    }
 
    onDestroy(() => {
-      CrossRealm.getDocument(containerEl)?.body.removeEventListener('pointerdown', onPointerdown)
-      CrossRealm.getWindow(containerEl)?.removeEventListener('blur', closePopup);
+      CrossRealm.browser.getDocument(containerEl)?.body.removeEventListener('pointerdown', onPointerdown)
+      CrossRealm.browser.getWindow(containerEl)?.removeEventListener('blur', closePopup);
    });
 
    /**
@@ -102,7 +103,7 @@
       // Find parent stacking context. This usually is `window-app` or it could be the browser window.
       const result = getStackingContext(node.parentElement);
 
-      if (!CrossRealm.isHTMLElement(result?.node))
+      if (!CrossRealm.browser.isHTMLElement(result?.node))
       {
          console.warn(`'TJSColordPicker.updatePosition warning: Could not locate parent stacking context element.`);
          return { delay: 0, duration: 0 };

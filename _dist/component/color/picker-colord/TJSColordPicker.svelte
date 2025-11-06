@@ -17,10 +17,10 @@
    import { colord }                   from '#runtime/data/color/colord';
    import { applyStyles }              from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
-   import { CrossRealm }               from '#runtime/util';
    import { A11yHelper }               from '#runtime/util/a11y';
    import { ClipboardAccess }          from '#runtime/util/browser';
    import { isObject }                 from '#runtime/util/object';
+   import { CrossRealm }               from '#runtime/util/realm';
 
    import { InternalState }            from './model/index.js';
 
@@ -174,11 +174,11 @@
          case 'KeyC':
          case 'KeyX':
             // Note: Do not perform action if the active element is TJSInput.
-            if (CrossRealm.getActiveElement(event)?.classList.contains('tjs-input')) { break; }
+            if (CrossRealm.browser.getActiveElement(event)?.classList.contains('tjs-input')) { break; }
 
             if (event.ctrlKey || event.metaKey)
             {
-               handleCopy(CrossRealm.getWindow(event));
+               handleCopy(CrossRealm.browser.getWindow(event));
 
                event.preventDefault();
                event.stopImmediatePropagation();
@@ -189,9 +189,9 @@
             if (event.ctrlKey || event.metaKey)
             {
                // Note: Do not perform action if the active element is TJSInput.
-               if (CrossRealm.getActiveElement(event)?.classList.contains('tjs-input')) { break; }
+               if (CrossRealm.browser.getActiveElement(event)?.classList.contains('tjs-input')) { break; }
 
-               handlePaste(CrossRealm.getWindow(event));
+               handlePaste(CrossRealm.browser.getWindow(event));
 
                event.preventDefault();
                event.stopImmediatePropagation();
@@ -250,7 +250,7 @@
 
          case 'Tab':
          {
-            const activeElement = CrossRealm.getActiveElement(event);
+            const activeElement = CrossRealm.browser.getActiveElement(event);
 
             // If the popup is open and `Shift-Tab` is pressed and the active element is the first focus element
             // or container element then search for the last focusable element that is not `FocusWrap` to traverse
@@ -260,7 +260,7 @@
             {
                // Collect all focusable elements from `elementRoot` and ignore TJSFocusWrap.
                const lastFocusEl = A11yHelper.getLastFocusableElement(containerEl, lastFocusableElementOptions);
-               if (CrossRealm.isHTMLElement(lastFocusEl)) { lastFocusEl.focus(); }
+               if (CrossRealm.browser.isHTMLElement(lastFocusEl)) { lastFocusEl.focus(); }
 
                event.preventDefault();
                event.stopImmediatePropagation();

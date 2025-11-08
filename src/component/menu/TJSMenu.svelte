@@ -53,24 +53,24 @@
     * ```
     * The following CSS variables are supported, but not defined by default:
     *
-    * --tjs-menu-background - fallback: --tjs-default-menu-background; fallback: --tjs-default-popup-background; default: #23221d
-    * --tjs-menu-border - fallback: --tjs-default-popup-border; default: 1px solid #000
-    * --tjs-menu-border-radius - fallback: --tjs-default-popup-border-radius; default: 5px
-    * --tjs-menu-box-shadow - fallback: --tjs-default-popup-box-shadow; default: 0 0 2px #000
-    * --tjs-menu-primary-color - fallback: --tjs-default-menu-primary-color; fallback: --tjs-default-popup-primary-color; default: #b5b3a4
-    * --tjs-menu-max-width - fallback: --tjs-default-menu-max-width; default: 360px
-    * --tjs-menu-min-width - fallback: --tjs-default-menu-min-width; default: 20px
-    * --tjs-menu-z-index - fallback: --tjs-default-popup-z-index; default: 100
+    * --tjs-menu-background
+    * --tjs-menu-border
+    * --tjs-menu-border-radius
+    * --tjs-menu-box-shadow
+    * --tjs-menu-primary-color
+    * --tjs-menu-max-width - default: 360px
+    * --tjs-menu-min-width - default: 20px
+    * --tjs-menu-z-index - default: 100
     *
     * The following CSS variables define attributes for the data driven menu items.
     *
     * All menu items:
-    * --tjs-menu-item-line-height - fallback: --tjs-default-menu-item-line-height; default: 2em
-    * --tjs-menu-item-padding - fallback: --tjs-default-menu-item-padding; default: 0 0.5em 0 0
+    * --tjs-menu-item-line-height - default: 2em
+    * --tjs-menu-item-padding - default: 0 0.5em 0 0
     *
     * Icon / Image menu items (considered a button item):
-    * --tjs-menu-item-button-gap - fallback: --tjs-default-menu-item-button-gap; default: 0.25em
-    * --tjs-menu-item-highlight-color - fallback: --tjs-default-menu-highlight-color; fallback: --tjs-default-popup-highlight-color; default: #f0f0e0
+    * --tjs-menu-item-button-gap - default: 0.25em
+    * --tjs-menu-item-highlight-color -  default: #f0f0e0
     * --tjs-menu-item-cursor-hover - fallback: --tjs-default-menu-cursor-hover; fallback: --tjs-cursor-pointer
     * --tjs-menu-item-text-shadow-focus-hover - fallback: --tjs-default-text-shadow-focus-hover; default: 0 0 8px red
     *

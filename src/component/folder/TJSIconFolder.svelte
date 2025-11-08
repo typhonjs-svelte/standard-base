@@ -634,6 +634,10 @@ changing the open state.  -->
       background: var(--tjs-folder-summary-background-open, var(--tjs-folder-summary-background, inherit));
    }
 
+   details[open] .contents {
+      border-top: var(--tjs-folder-contents-border-top-open, none);
+   }
+
    .contents {
       display: var(--tjs-folder-contents-display, flex);
       flex-direction: var(--tjs-folder-contents-flex-direction, column);

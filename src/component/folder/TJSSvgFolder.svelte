@@ -621,6 +621,10 @@ changing the open state.  -->
       transform: rotate(var(--tjs-folder-summary-chevron-rotate-open, 0));
    }
 
+   details[open] .contents {
+      border-top: var(--tjs-folder-contents-border-top-open, none);
+   }
+
    .contents {
       display: var(--tjs-folder-contents-display, flex);
       flex-direction: var(--tjs-folder-contents-flex-direction, column);

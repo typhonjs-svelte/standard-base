@@ -30,7 +30,7 @@
         width: inherit;
 
         display: grid;
-        border-top: 1px solid gray;
+        border-top: var(--tjs-component-border);
 
         --tjs-icon-button-border: var(--tjs-component-border);
         --tjs-icon-button-border-radius: 0.25em;

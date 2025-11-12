@@ -48,8 +48,8 @@
     * --tjs-select-transition-focus-visible
     * --tjs-select-width
     *
-    * --tjs-select-option-background; fallback: --tjs-default-popup-background; default: #23221d
-    * --tjs-select-option-color; fallback: --tjs-default-popup-primary-color; default: #b5b3a4
+    * --tjs-select-option-background
+    * --tjs-select-option-color
     * ```
     * @componentDocumentation
     */

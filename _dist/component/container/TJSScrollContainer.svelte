@@ -138,16 +138,21 @@
    }
 
    /**
-    * Handles stopping propagation and silently focusing the container element so key commands function.
+    * Handles stopping propagation and silently focusing the container element so key commands function when active
+    * element is outside the container and the event target isn't focusable.
     *
     * @param {WheelEvent}  event - A WheelEvent.
     */
    function onWheel(event)
    {
-      event.stopPropagation();
-
       const activeEl = CrossRealm.browser.getActiveElement(event);
-      if (activeEl !== containerEl && !containerEl.contains(activeEl)) { containerEl.focus(); }
+
+      if (activeEl !== containerEl && !containerEl.contains(activeEl) &&
+       !CrossRealm.browser.isFocusableHTMLElement(event.target))
+      {
+         event.stopPropagation();
+         containerEl.focus();
+      }
    }
 </script>
 

@@ -79,9 +79,10 @@
         flex-direction: column;
         display: flex;
 
-        background: var(--tjs-color-picker-wrapper-background, var(--tjs-default-popup-background, #23221d));
-        border: var(--tjs-color-picker-wrapper-border, var(--tjs-default-popup-border, 1px solid black));
-        color: var(--tjs-color-picker-wrapper-primary-color, var(--tjs-default-popup-primary-color, #b5b3a4));
+        background: var(--tjs-color-picker-wrapper-background, var(--tjs-component-background));
+        border: var(--tjs-color-picker-wrapper-border, var(--tjs-component-border));
+        color: var(--tjs-color-picker-wrapper-primary-color, var(--tjs-component-primary-color));
+
         margin: var(--tjs-color-picker-wrapper-margin, 0);
 
         width: 100%;
@@ -91,7 +92,7 @@
     }
 
     .tjs-color-picker-wrapper.pop-up {
-        box-shadow: var(--tjs-color-picker-wrapper-box-shadow, var(--tjs-default-popup-box-shadow, 0 0 2px #000));
+        box-shadow: var(--tjs-color-picker-wrapper-box-shadow, var(--tjs-default-popup-box-shadow));
     }
 
     .extra, .sliders, .tjs-color-picker-wrapper-body {
@@ -132,7 +133,8 @@
         }
 
         .tjs-color-picker-wrapper {
-            border-radius: max(var(--tjs-color-picker-wrapper-border-radius, var(--tjs-default-popup-border-radius, 5px)), 2cqw);
+            border-radius: max(var(--tjs-color-picker-wrapper-border-radius, var(--tjs-component-border-radius)), 2cqw);
+
             gap: max(2px, 2.5cqw);
         }
 

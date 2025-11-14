@@ -32,8 +32,18 @@ declare namespace TjsScrollContainer {
     allowTabFocus?: boolean;
     /** @type {boolean} */
     keyPropagate?: boolean;
+    /** @type {boolean} */
+    gutterStable?: boolean;
     /** @type {(data: { event: KeyboardEvent | PointerEvent }) => void} */
     onContextMenu?: (data: { event: KeyboardEvent | PointerEvent }) => void;
+    /**
+     * When true, the inline styles for padding of the parent element to the scroll container element
+     * is adjusted for any border image applied to the parent element allowing the scroll container to take up the
+     * entire visual content space.
+     *
+     * @type {boolean}
+     */
+    paddingToBorder?: boolean;
     /** @type {{ [key: string]: string | null }} */
     styles?: { [key: string]: string | null };
   };
@@ -54,10 +64,21 @@ type TJSScrollContainerData = {
    */
   keyPropagate?: boolean;
   /**
+   * When true, the scrollbar gutter is set to `stable`. This is a convenience
+   * for automatic configuration without a wrapping element to set a CSS variable.
+   */
+  gutterStable?: boolean;
+  /**
    * Callback to handle context menu
    * presses.
    */
   onContextMenu?: (data: { event: KeyboardEvent | PointerEvent }) => void;
+  /**
+   * When true, the inline styles for padding of the parent element to the
+   * scroll container element is adjusted for any border image applied to the parent element allowing the scroll
+   * container to take up the entire visual content space.
+   */
+  paddingToBorder?: boolean;
   /**
    * A Svelte store that serializes
    * the scroll left position of the scrollable container.

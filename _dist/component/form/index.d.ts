@@ -14,8 +14,8 @@ declare namespace TjsButton {
     keyCode?: any;
     button?: any;
     label?: any;
-    tooltip?: any;
     enabled?: any;
+    tooltip?: any;
     icon?: any;
     tooltipDirection?: any;
     styles?: any;

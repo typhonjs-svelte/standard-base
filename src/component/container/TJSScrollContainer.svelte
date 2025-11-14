@@ -12,7 +12,9 @@
     */
 
    import { applyScroll }              from '#runtime/svelte/action/dom/properties';
-   import { applyStyles }              from '#runtime/svelte/action/dom/style';
+   import {
+      applyStyles,
+      padToBorder }                    from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
    import { TJSSvelte }                from '#runtime/svelte/util';
    import { isObject }                 from '#runtime/util/object';
@@ -27,8 +29,20 @@
    /** @type {boolean} */
    export let keyPropagate = void 0;
 
+   /** @type {boolean} */
+   export let gutterStable = void 0;
+
    /** @type {(data: { event: KeyboardEvent | PointerEvent }) => void} */
    export let onContextMenu = void 0;
+
+   /**
+    * When true, the inline styles for padding of the parent element to the scroll container element
+    * is adjusted for any border image applied to the parent element allowing the scroll container to take up the
+    * entire visual content space.
+    *
+    * @type {boolean}
+    */
+   export let paddingToBorder = void 0;
 
    /** @type {import('#runtime/svelte/store/util').MinimalWritable<number>} */
    export let scrollLeft = void 0;
@@ -45,8 +59,14 @@
    $: keyPropagate = isObject(container) && typeof container.keyPropagate === 'boolean' ? container.keyPropagate :
     typeof keyPropagate === 'boolean' ? keyPropagate : false;
 
+   $: gutterStable = isObject(container) && typeof container.gutterStable === 'boolean' ? container.gutterStable :
+    typeof gutterStable === 'boolean' ? gutterStable : false;
+
    $: onContextMenu = isObject(container) && typeof container.onContextMenu === 'function' ? container.onContextMenu :
     typeof onContextMenu === 'function' ? onContextMenu : void 0;
+
+   $: paddingToBorder = isObject(container) && typeof container.paddingToBorder === 'boolean' ?
+    container.paddingToBorder : typeof paddingToBorder === 'boolean' ? paddingToBorder : false;
 
    $: scrollLeft = isObject(container) && isMinimalWritableStore(container.scrollLeft) ? container.scrollLeft :
     isMinimalWritableStore(scrollLeft) ? scrollLeft : void 0;
@@ -158,6 +178,7 @@
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions a11y-no-noninteractive-tabindex -->
 <div class="tjs-scroll-container tjs-a11y-focusable"
+     class:gutter-stable={gutterStable}
      bind:this={containerEl}
      on:contextmenu={onContextMenuPress}
      on:keydown={onKeydown}
@@ -165,6 +186,7 @@
      on:wheel={onWheel}
      use:applyScroll={{ scrollLeft, scrollTop }}
      use:applyStyles={styles}
+     use:padToBorder={{ enabled: paddingToBorder, parent: true }}
      role=region
      tabindex={allowTabFocus ? 0 : -1}>
    <slot>
@@ -199,11 +221,15 @@
       overflow: var(--tjs-scroll-container-overflow, auto);
       overscroll-behavior: var(--tjs-scroll-container-overscroll-behavior, contain);
 
-      scrollbar-gutter: var(--tjs-scroll-container-scrollbar-gutter, stable);
+      scrollbar-gutter: var(--tjs-scroll-container-scrollbar-gutter, auto);
       scrollbar-color: var(--tjs-scroll-container-scrollbar-color, inherit);
       scrollbar-width: var(--tjs-scroll-container-scrollbar-width, thin);
 
       transition: var(--tjs-scroll-container-transition);
+   }
+
+   .tjs-scroll-container.gutter-stable {
+      scrollbar-gutter: var(--tjs-scroll-container-scrollbar-gutter, stable);
    }
 
    .tjs-scroll-container:focus {

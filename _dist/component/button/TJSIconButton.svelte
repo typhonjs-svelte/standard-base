@@ -276,7 +276,7 @@
     }
 
     button:focus {
-        background: var(--tjs-icon-button-background-focus, none);
+        background: var(--tjs-icon-button-background-focus, var(--tjs-icon-button-background));
         box-shadow: var(--tjs-icon-button-box-shadow-focus, none);
         outline: var(--tjs-icon-button-outline-focus, none);
         text-shadow: var(--tjs-icon-button-text-shadow-focus, var(--tjs-button-text-shadow-focus, var(--tjs-default-text-shadow-focus-hover)));

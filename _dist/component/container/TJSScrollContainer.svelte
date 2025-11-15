@@ -44,7 +44,6 @@
     */
    export let paddingToBorder = void 0;
 
-
    /** @type {import('#runtime/svelte/store/util').MinimalWritable<number>} */
    export let scrollLeft = void 0;
 

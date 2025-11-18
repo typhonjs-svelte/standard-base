@@ -14,7 +14,7 @@
    import { applyScroll }              from '#runtime/svelte/action/dom/properties';
    import {
       applyStyles,
-      padToBorder }                    from '#runtime/svelte/action/dom/style';
+      padToVisualEdgeInsets }          from '#runtime/svelte/action/dom/style';
    import { isMinimalWritableStore }   from '#runtime/svelte/store/util';
    import { TJSSvelte }                from '#runtime/svelte/util';
    import { isObject }                 from '#runtime/util/object';
@@ -37,12 +37,12 @@
 
    /**
     * When true, the inline styles for padding of the parent element to the scroll container element
-    * is adjusted for any border image applied to the parent element allowing the scroll container to take up the
-    * entire visual content space.
+    * is adjusted for any visual edge insets / border image applied to the parent element allowing the scroll
+    * container to take up the entire visual content space.
     *
     * @type {boolean}
     */
-   export let paddingToBorder = void 0;
+   export let padToVisualEdge = void 0;
 
    /** @type {import('#runtime/svelte/store/util').MinimalWritable<number>} */
    export let scrollLeft = void 0;
@@ -65,8 +65,8 @@
    $: onContextMenu = isObject(container) && typeof container.onContextMenu === 'function' ? container.onContextMenu :
     typeof onContextMenu === 'function' ? onContextMenu : void 0;
 
-   $: paddingToBorder = isObject(container) && typeof container.paddingToBorder === 'boolean' ?
-    container.paddingToBorder : typeof paddingToBorder === 'boolean' ? paddingToBorder : false;
+   $: padToVisualEdge = isObject(container) && typeof container.padToVisualEdge === 'boolean' ?
+    container.padToVisualEdge : typeof padToVisualEdge === 'boolean' ? padToVisualEdge : false;
 
    $: scrollLeft = isObject(container) && isMinimalWritableStore(container.scrollLeft) ? container.scrollLeft :
     isMinimalWritableStore(scrollLeft) ? scrollLeft : void 0;
@@ -177,7 +177,7 @@
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions a11y-no-noninteractive-tabindex -->
-<div class="tjs-scroll-container tjs-a11y-focusable"
+<div class="tjs-scroll-container tjs-a11y-focusable tjs-content-vars"
      class:gutter-stable={gutterStable}
      bind:this={containerEl}
      on:contextmenu={onContextMenuPress}
@@ -186,7 +186,7 @@
      on:wheel={onWheel}
      use:applyScroll={{ scrollLeft, scrollTop }}
      use:applyStyles={styles}
-     use:padToBorder={{ enabled: paddingToBorder, parent: true }}
+     use:padToVisualEdgeInsets={{ enabled: padToVisualEdge, parent: true }}
      role=region
      tabindex={allowTabFocus ? 0 : -1}>
    <slot>

@@ -38,12 +38,12 @@ declare namespace TjsScrollContainer {
     onContextMenu?: (data: { event: KeyboardEvent | PointerEvent }) => void;
     /**
      * When true, the inline styles for padding of the parent element to the scroll container element
-     * is adjusted for any border image applied to the parent element allowing the scroll container to take up the
-     * entire visual content space.
+     * is adjusted for any visual edge insets / border image applied to the parent element allowing the scroll
+     * container to take up the entire visual content space.
      *
      * @type {boolean}
      */
-    paddingToBorder?: boolean;
+    padToVisualEdge?: boolean;
     /** @type {{ [key: string]: string | null }} */
     styles?: { [key: string]: string | null };
   };
@@ -75,10 +75,10 @@ type TJSScrollContainerData = {
   onContextMenu?: (data: { event: KeyboardEvent | PointerEvent }) => void;
   /**
    * When true, the inline styles for padding of the parent element to the
-   * scroll container element is adjusted for any border image applied to the parent element allowing the scroll
-   * container to take up the entire visual content space.
+   * scroll container element is adjusted for any visual edge insets / border image applied to the parent element allowing
+   * the scroll container to take up the entire visual content space.
    */
-  paddingToBorder?: boolean;
+  padToVisualEdge?: boolean;
   /**
    * A Svelte store that serializes
    * the scroll left position of the scrollable container.

@@ -87,17 +87,17 @@
 
    import { inlineSvg }       from '#runtime/svelte/action/dom/inline-svg';
    import { applyStyles }     from '#runtime/svelte/action/dom/style';
+
+   import {
+      TJSFocusIndicator,
+      TJSFocusWrap }          from '#runtime/svelte/component/dom/focus';
+
    import { slideFade }       from '#runtime/svelte/transition';
    import { TJSSvelte }       from '#runtime/svelte/util';
-
    import { A11yHelper }      from '#runtime/util/a11y';
    import { localize }        from '#runtime/util/i18n';
    import { isObject }        from '#runtime/util/object';
    import { CrossRealm }      from '#runtime/util/realm';
-
-   import {
-      TJSFocusIndicator,
-      TJSFocusWrap }          from '#standard/component/dom/focus';
 
    export let id = '';
 

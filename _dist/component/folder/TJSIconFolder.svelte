@@ -135,6 +135,7 @@
    import { inlineSvg }          from '#runtime/svelte/action/dom/inline-svg';
    import { toggleDetails }      from '#runtime/svelte/action/dom/properties';
    import { applyStyles }        from '#runtime/svelte/action/dom/style';
+   import { TJSFocusIndicator }  from '#runtime/svelte/component/dom/focus';
 
    import {
       isMinimalWritableStore,
@@ -145,8 +146,6 @@
    import { localize }           from '#runtime/util/i18n';
    import { isObject }           from '#runtime/util/object';
    import { CrossRealm }         from '#runtime/util/realm';
-
-   import { TJSFocusIndicator }  from '#standard/component/dom/focus';
 
    /** @type {import('./types').TJSFolder.DataIcon} */
    export let folder = void 0;

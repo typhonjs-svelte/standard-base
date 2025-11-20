@@ -72,7 +72,6 @@ for (const compFile of compFiles)
 }
 
 await generateDTS({ input: '_dist/component/button/index.js', ...dtsOptions });
-await generateDTS({ input: '_dist/component/dom/focus/index.js', ...dtsOptions });
 await generateDTS({ input: '_dist/component/folder/index.js', ...dtsOptions });
 await generateDTS({ input: '_dist/component/label/index.js', ...dtsOptions });
 await generateDTS({ input: '_dist/component/layer/position/index.js', ...dtsOptions });

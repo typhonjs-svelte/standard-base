@@ -33,10 +33,6 @@
       "types": "./_dist/component/color/picker-colord/index.d.ts",
       "import": "./_dist/component/color/picker-colord/index.js"
     },
-    "./component/dom/focus": {
-      "types": "./_dist/component/dom/focus/index.d.ts",
-      "import": "./_dist/component/dom/focus/index.js"
-    },
     "./component/folder": {
       "types": "./_dist/component/folder/index.d.ts",
       "import": "./_dist/component/folder/index.js"

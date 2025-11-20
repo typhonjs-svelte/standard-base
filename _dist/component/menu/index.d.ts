@@ -248,14 +248,14 @@ declare namespace TjsMenu {
     menu?: TJSMenuData.Menu;
     /** @type {HTMLElement | string} */
     focusEl?: HTMLElement | string;
+    /** @type {Iterable<import('./types').TJSMenuData.Items> | (() => Iterable<import('./types').TJSMenuData.Items>)} */
+    items?: Iterable<TJSMenuData.Items> | (() => Iterable<TJSMenuData.Items>);
     /** @type {{ [key: string]: string | null }} */
     styles?: { [key: string]: string | null };
     /** @type {Function} */
     efx?: Function;
     /** @type {{ duration: number, easing: Function }} */
     transitionOptions?: { duration: number; easing: Function };
-    /** @type {Iterable<import('./types').TJSMenuData.Items> | (() => Iterable<import('./types').TJSMenuData.Items>)} */
-    items?: Iterable<TJSMenuData.Items> | (() => Iterable<TJSMenuData.Items>);
   };
   /** Events type alias for {@link TjsMenu | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };
@@ -360,14 +360,14 @@ declare namespace TjsContextMenuImpl {
     id?: string;
     x?: number;
     y?: number;
-    /** @type {{ [key: string]: string | null }} */
-    styles?: { [key: string]: string | null };
-    /** @type {{ duration: number, easing: import('#runtime/svelte/easing').EasingFunction }} */
-    transitionOptions?: { duration: number; easing: _runtime_svelte_easing.EasingFunction };
     /**
      * @type {import('../types').TJSMenuData.Items[]}
      */
     items?: TJSMenuData.Items[];
+    /** @type {{ [key: string]: string | null }} */
+    styles?: { [key: string]: string | null };
+    /** @type {{ duration: number, easing: import('#runtime/svelte/easing').EasingFunction }} */
+    transitionOptions?: { duration: number; easing: _runtime_svelte_easing.EasingFunction };
     offsetX?: number;
     offsetY?: number;
     /** @type {string[]} */

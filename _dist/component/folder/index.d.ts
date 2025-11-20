@@ -301,6 +301,8 @@ declare namespace TjsSvgFolder {
     store?: _runtime_svelte_store_util.MinimalWritable<boolean>;
     /** @type {boolean} */
     enabled?: boolean;
+    /** @type {import('./types').TJSFolder.Data} */
+    folder?: TJSFolder.Data;
     /** @type {object} */
     styles?: object;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
@@ -309,8 +311,6 @@ declare namespace TjsSvgFolder {
     onOpen?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
     /** @type {(data?: { event?: PointerEvent }) => void} */
     onContextMenu?: (data?: { event?: PointerEvent }) => void;
-    /** @type {import('./types').TJSFolder.Data} */
-    folder?: TJSFolder.Data;
   };
   /** Events type alias for {@link TjsSvgFolder | associated component}. */
   export type Events = {
@@ -534,6 +534,8 @@ declare namespace TjsIconFolder {
     iconClosed?: string;
     /** @type {string} */
     iconOpen?: string;
+    /** @type {import('./types').TJSFolder.DataIcon} */
+    folder?: TJSFolder.DataIcon;
     /** @type {object} */
     styles?: object;
     /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
@@ -542,8 +544,6 @@ declare namespace TjsIconFolder {
     onOpen?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
     /** @type {(data?: { event?: PointerEvent }) => void} */
     onContextMenu?: (data?: { event?: PointerEvent }) => void;
-    /** @type {import('./types').TJSFolder.DataIcon} */
-    folder?: TJSFolder.DataIcon;
   };
   /** Events type alias for {@link TjsIconFolder | associated component}. */
   export type Events = {

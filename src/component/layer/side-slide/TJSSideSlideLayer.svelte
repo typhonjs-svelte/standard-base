@@ -9,9 +9,13 @@
    import { setContext }            from '#svelte';
    import { writable }              from '#svelte/store';
 
-   import { applyStyles }           from '#runtime/svelte/action/dom/style';
+   import {
+      applyStyles,
+      applyVisualEdgeInsets }       from '#runtime/svelte/action/dom/style';
+
    import { getEasingFunc }         from '#runtime/svelte/easing';
    import { TJSSvelte }             from '#runtime/svelte/util';
+
    import {
       isIterable,
       isObject }                    from '#runtime/util/object';
@@ -150,6 +154,13 @@
    setContext('#side-slide-layer-item-z-index', writable(1));
 
    /**
+    * Stores the stacking context visual edge constraints.
+    *
+    * @type {import('svelte/store').Writable<import('#runtime/util/dom/style').StyleMetric.Data.BoxSides>}
+    */
+   const visualEdgeInsets = writable({ top: 0, right: 0, bottom: 0, left: 0 });
+
+   /**
     * The actual easing functions after lookup or direct assignment if easing props are functions.
     *
     * @type {import('#runtime/svelte/easing').EasingFunction}
@@ -214,14 +225,17 @@
    }
 
    $: {
+      const newTop = typeof top === 'number' ? `${top}${typeof topUnit === 'string' ? topUnit : 'px'}` : top;
+      const newZIndex = typeof zIndex === 'number' ? zIndex : 10;
+
       switch (side)
       {
          case 'left':
             allStyles = {
-               left: sideAbs ? 0 : null,
+               left: sideAbs ? `${$visualEdgeInsets.left}px` : null,
                right: null,
-               top: typeof top === 'number' ? `${top}${typeof topUnit === 'string' ? topUnit : 'px'}` : top,
-               'z-index': typeof zIndex === 'number' ? zIndex : 10,
+               top: `calc(${$visualEdgeInsets.top}px + ${newTop})`,
+               'z-index': newZIndex,
                ...(isObject(styles) ? styles : {})
             };
             break;
@@ -229,9 +243,9 @@
          case 'right':
             allStyles = {
                left: null,
-               right: sideAbs ? 0 : null,
-               top: typeof top === 'number' ? `${top}${typeof topUnit === 'string' ? topUnit : 'px'}` : top,
-               'z-index': typeof zIndex === 'number' ? zIndex : 10,
+               right: sideAbs ? `${$visualEdgeInsets.right}px` : null,
+               top: `calc(${$visualEdgeInsets.top}px + ${newTop})`,
+               'z-index': newZIndex,
                ...(isObject(styles) ? styles : {})
             };
             break;
@@ -249,7 +263,8 @@
 </script>
 
 <section class={`tjs-side-slide-layer${isIterable(classes) ? ` ${Array.from(classes).join(' ')}` : ''}`}
-         use:applyStyles={allStyles}>
+         use:applyStyles={allStyles}
+         use:applyVisualEdgeInsets={{ sides: false, parent: { stackingContext: true }, store: visualEdgeInsets }}>
    {#each filteredItems as item (item.icon)}
       <TJSSideSlideItem {item} {allowLocking} {clickToOpen} {duration} easingIn={actualEasingIn} easingOut={actualEasingOut} {side} {tooltips} {tooltipDirection} />
    {/each}

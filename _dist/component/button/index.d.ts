@@ -54,8 +54,8 @@ declare namespace TjsIconButton {
   export type Props = {
     keyCode?: any;
     button?: any;
-    enabled?: any;
     tooltip?: any;
+    enabled?: any;
     icon?: any;
     tooltipDirection?: any;
     styles?: any;
@@ -102,8 +102,8 @@ declare namespace TjsSlotButton {
   export type Props = {
     keyCode?: any;
     button?: any;
-    enabled?: any;
     tooltip?: any;
+    enabled?: any;
     tooltipDirection?: any;
     styles?: any;
     efx?: any;
@@ -178,8 +178,9 @@ declare namespace TjsToggleIconButton {
   export type Props = {
     keyCode?: any;
     button?: any;
-    enabled?: any;
+    store?: any;
     tooltip?: any;
+    enabled?: any;
     icon?: any;
     tooltipDirection?: any;
     styles?: any;
@@ -188,7 +189,6 @@ declare namespace TjsToggleIconButton {
     onContextMenu?: any;
     clickPropagate?: any;
     tooltipSelected?: any;
-    store?: any;
     onClose?: any;
   };
   /** Events type alias for {@link TjsToggleIconButton | associated component}. */

@@ -112,9 +112,9 @@ declare namespace TjsToggleLabel {
     text?: any;
     enabled?: any;
     tooltip?: any;
+    store?: any;
     comp?: any;
     tooltipSelected?: any;
-    store?: any;
     styles?: any;
     efx?: any;
     onPress?: any;

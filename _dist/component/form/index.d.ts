@@ -14,8 +14,8 @@ declare namespace TjsButton {
     keyCode?: any;
     button?: any;
     label?: any;
-    enabled?: any;
     tooltip?: any;
+    enabled?: any;
     icon?: any;
     tooltipDirection?: any;
     styles?: any;
@@ -121,7 +121,7 @@ declare class TjsInputCheckbox extends SvelteComponent<
 /** Event / Prop / Slot type aliases for {@link TjsInputCheckbox | associated component}. */
 declare namespace TjsInputCheckbox {
   /** Props type alias for {@link TjsInputCheckbox | associated component}. */
-  export type Props = { input?: any; label?: any; readonly?: any; enabled?: any; styles?: any; efx?: any; store?: any };
+  export type Props = { input?: any; label?: any; readonly?: any; store?: any; enabled?: any; styles?: any; efx?: any };
   /** Events type alias for {@link TjsInputCheckbox | associated component}. */
   export type Events = { pointerdown: PointerEvent } & { [evt: string]: CustomEvent<any> };
   /** Slots type alias for {@link TjsInputCheckbox | associated component}. */
@@ -210,12 +210,12 @@ declare namespace TjsInputNumber {
     label?: any;
     options?: any;
     readonly?: any;
+    store?: any;
     enabled?: any;
     styles?: any;
     efx?: any;
     placeholder?: any;
     step?: any;
-    store?: any;
     storeIsValid?: any;
   };
   /** Events type alias for {@link TjsInputNumber | associated component}. */
@@ -298,11 +298,11 @@ declare namespace TjsInputRange {
     label?: any;
     options?: any;
     readonly?: any;
+    store?: any;
     enabled?: any;
     styles?: any;
     efx?: any;
     step?: any;
-    store?: any;
   };
   /** Events type alias for {@link TjsInputRange | associated component}. */
   export type Events = { pointerdown: PointerEvent } & { [evt: string]: CustomEvent<any> };
@@ -336,10 +336,10 @@ declare namespace TjsInputRangeNumber {
     label?: any;
     options?: any;
     readonly?: any;
+    store?: any;
     enabled?: any;
     styles?: any;
     step?: any;
-    store?: any;
     efxNumber?: any;
     efxRange?: any;
   };
@@ -425,11 +425,11 @@ declare namespace TjsInputText {
     label?: any;
     options?: any;
     readonly?: any;
+    store?: any;
     enabled?: any;
     styles?: any;
     efx?: any;
     placeholder?: any;
-    store?: any;
     storeIsValid?: any;
   };
   /** Events type alias for {@link TjsInputText | associated component}. */
@@ -500,10 +500,10 @@ declare namespace TjsSelect {
     label?: any;
     select?: any;
     options?: any;
+    store?: any;
     enabled?: any;
     styles?: any;
     efx?: any;
-    store?: any;
     selected?: any;
   };
   /** Events type alias for {@link TjsSelect | associated component}. */

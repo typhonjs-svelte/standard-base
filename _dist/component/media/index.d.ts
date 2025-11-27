@@ -17,15 +17,15 @@ import { SvelteComponent } from 'svelte';
  * --tjs-media-content-width - 100px
  * ```
  */
-declare class TjsMediaContent extends SvelteComponent<
-  TjsMediaContent.Props,
-  TjsMediaContent.Events,
-  TjsMediaContent.Slots
+declare class TJSMediaContent extends SvelteComponent<
+  TJSMediaContent.Props,
+  TJSMediaContent.Events,
+  TJSMediaContent.Slots
 > {}
 
-/** Event / Prop / Slot type aliases for {@link TjsMediaContent | associated component}. */
-declare namespace TjsMediaContent {
-  /** Props type alias for {@link TjsMediaContent | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSMediaContent | associated component}. */
+declare namespace TJSMediaContent {
+  /** Props type alias for {@link TJSMediaContent | associated component}. */
   export type Props = {
     /**
      * @type {object}
@@ -56,6 +56,12 @@ declare namespace TjsMediaContent {
      */
     imgAlt?: string;
     /**
+     * The tooltip direction for the media element.
+     *
+     * @type {string}
+     */
+    tooltipDirection?: string;
+    /**
      * Automatically start video playback; default: true
      *
      * @type {boolean}
@@ -68,23 +74,17 @@ declare namespace TjsMediaContent {
      */
     videoLoop?: boolean;
     /**
-     * Mute video playback audio; default: true
-     *
-     * @type {boolean}
-     */
-    videoMuted?: boolean;
-    /**
-     * The tooltip direction for the media element.
-     *
-     * @type {string}
-     */
-    tooltipDirection?: string;
-    /**
      * Play video on pointer hover.
      *
      * @type {boolean}
      */
     videoPlayOnHover?: boolean;
+    /**
+     * Mute video playback audio; default: true
+     *
+     * @type {boolean}
+     */
+    videoMuted?: boolean;
     /**
      * Video playback rate - clamped internally between 0 - 2.
      *
@@ -92,10 +92,10 @@ declare namespace TjsMediaContent {
      */
     videoPlaybackRate?: number;
   };
-  /** Events type alias for {@link TjsMediaContent | associated component}. */
+  /** Events type alias for {@link TJSMediaContent | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsMediaContent | associated component}. */
+  /** Slots type alias for {@link TJSMediaContent | associated component}. */
   export type Slots = { 'video-fallback': {} };
 }
 
-export { TjsMediaContent as TJSMediaContent };
+export { TJSMediaContent };

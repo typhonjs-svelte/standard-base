@@ -5,11 +5,11 @@ import { SvelteComponent } from 'svelte';
  * TODO: Add description
  *
  */
-declare class TjsButton extends SvelteComponent<TjsButton.Props, TjsButton.Events, TjsButton.Slots> {}
+declare class TJSButton extends SvelteComponent<TJSButton.Props, TJSButton.Events, TJSButton.Slots> {}
 
-/** Event / Prop / Slot type aliases for {@link TjsButton | associated component}. */
-declare namespace TjsButton {
-  /** Props type alias for {@link TjsButton | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSButton | associated component}. */
+declare namespace TJSButton {
+  /** Props type alias for {@link TJSButton | associated component}. */
   export type Props = {
     keyCode?: any;
     button?: any;
@@ -24,11 +24,11 @@ declare namespace TjsButton {
     onContextMenu?: any;
     clickPropagate?: any;
   };
-  /** Events type alias for {@link TjsButton | associated component}. */
-  export type Events = { click: MouseEvent; contextmenu: MouseEvent; press: CustomEvent<any> } & {
+  /** Events type alias for {@link TJSButton | associated component}. */
+  export type Events = { click: PointerEvent; contextmenu: PointerEvent; press: CustomEvent<any> } & {
     [evt: string]: CustomEvent<any>;
   };
-  /** Slots type alias for {@link TjsButton | associated component}. */
+  /** Slots type alias for {@link TJSButton | associated component}. */
   export type Slots = { default: {} };
 }
 
@@ -61,15 +61,15 @@ declare namespace TjsButton {
  * --tjs-input-label-white-space - nowrap
  * ```
  */
-declare class TjsInput extends SvelteComponent<TjsInput.Props, TjsInput.Events, TjsInput.Slots> {}
+declare class TJSInput extends SvelteComponent<TJSInput.Props, TJSInput.Events, TJSInput.Slots> {}
 
-/** Event / Prop / Slot type aliases for {@link TjsInput | associated component}. */
-declare namespace TjsInput {
-  /** Props type alias for {@link TjsInput | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSInput | associated component}. */
+declare namespace TJSInput {
+  /** Props type alias for {@link TJSInput | associated component}. */
   export type Props = { input?: any; type?: any };
-  /** Events type alias for {@link TjsInput | associated component}. */
+  /** Events type alias for {@link TJSInput | associated component}. */
   export type Events = { click: any; press: any; contextmenu: any } & { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsInput | associated component}. */
+  /** Slots type alias for {@link TJSInput | associated component}. */
   export type Slots = {};
 }
 
@@ -112,19 +112,19 @@ declare namespace TjsInput {
  * --tjs-input-checkbox-width
  * ```
  */
-declare class TjsInputCheckbox extends SvelteComponent<
-  TjsInputCheckbox.Props,
-  TjsInputCheckbox.Events,
-  TjsInputCheckbox.Slots
+declare class TJSInputCheckbox extends SvelteComponent<
+  TJSInputCheckbox.Props,
+  TJSInputCheckbox.Events,
+  TJSInputCheckbox.Slots
 > {}
 
-/** Event / Prop / Slot type aliases for {@link TjsInputCheckbox | associated component}. */
-declare namespace TjsInputCheckbox {
-  /** Props type alias for {@link TjsInputCheckbox | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSInputCheckbox | associated component}. */
+declare namespace TJSInputCheckbox {
+  /** Props type alias for {@link TJSInputCheckbox | associated component}. */
   export type Props = { input?: any; label?: any; readonly?: any; store?: any; enabled?: any; styles?: any; efx?: any };
-  /** Events type alias for {@link TjsInputCheckbox | associated component}. */
+  /** Events type alias for {@link TJSInputCheckbox | associated component}. */
   export type Events = { pointerdown: PointerEvent } & { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsInputCheckbox | associated component}. */
+  /** Slots type alias for {@link TJSInputCheckbox | associated component}. */
   export type Slots = {};
 }
 
@@ -194,15 +194,15 @@ declare namespace TjsInputCheckbox {
  * --tjs-input-number-webkit-outer-spin-button-opacity
  * ```
  */
-declare class TjsInputNumber extends SvelteComponent<
-  TjsInputNumber.Props,
-  TjsInputNumber.Events,
-  TjsInputNumber.Slots
+declare class TJSInputNumber extends SvelteComponent<
+  TJSInputNumber.Props,
+  TJSInputNumber.Events,
+  TJSInputNumber.Slots
 > {}
 
-/** Event / Prop / Slot type aliases for {@link TjsInputNumber | associated component}. */
-declare namespace TjsInputNumber {
-  /** Props type alias for {@link TjsInputNumber | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSInputNumber | associated component}. */
+declare namespace TJSInputNumber {
+  /** Props type alias for {@link TJSInputNumber | associated component}. */
   export type Props = {
     input?: any;
     max?: any;
@@ -218,9 +218,9 @@ declare namespace TjsInputNumber {
     step?: any;
     storeIsValid?: any;
   };
-  /** Events type alias for {@link TjsInputNumber | associated component}. */
+  /** Events type alias for {@link TJSInputNumber | associated component}. */
   export type Events = { pointerdown: PointerEvent } & { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsInputNumber | associated component}. */
+  /** Slots type alias for {@link TJSInputNumber | associated component}. */
   export type Slots = {};
 }
 
@@ -286,11 +286,11 @@ declare namespace TjsInputNumber {
  * --tjs-input-range-width
  * ```
  */
-declare class TjsInputRange extends SvelteComponent<TjsInputRange.Props, TjsInputRange.Events, TjsInputRange.Slots> {}
+declare class TJSInputRange extends SvelteComponent<TJSInputRange.Props, TJSInputRange.Events, TJSInputRange.Slots> {}
 
-/** Event / Prop / Slot type aliases for {@link TjsInputRange | associated component}. */
-declare namespace TjsInputRange {
-  /** Props type alias for {@link TjsInputRange | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSInputRange | associated component}. */
+declare namespace TJSInputRange {
+  /** Props type alias for {@link TJSInputRange | associated component}. */
   export type Props = {
     input?: any;
     max?: any;
@@ -304,9 +304,9 @@ declare namespace TjsInputRange {
     efx?: any;
     step?: any;
   };
-  /** Events type alias for {@link TjsInputRange | associated component}. */
+  /** Events type alias for {@link TJSInputRange | associated component}. */
   export type Events = { pointerdown: PointerEvent } & { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsInputRange | associated component}. */
+  /** Slots type alias for {@link TJSInputRange | associated component}. */
   export type Slots = {};
 }
 
@@ -320,15 +320,15 @@ declare namespace TjsInputRange {
  * Note: The `efx` animation action applies to both the range / number inputs.
  *
  */
-declare class TjsInputRangeNumber extends SvelteComponent<
-  TjsInputRangeNumber.Props,
-  TjsInputRangeNumber.Events,
-  TjsInputRangeNumber.Slots
+declare class TJSInputRangeNumber extends SvelteComponent<
+  TJSInputRangeNumber.Props,
+  TJSInputRangeNumber.Events,
+  TJSInputRangeNumber.Slots
 > {}
 
-/** Event / Prop / Slot type aliases for {@link TjsInputRangeNumber | associated component}. */
-declare namespace TjsInputRangeNumber {
-  /** Props type alias for {@link TjsInputRangeNumber | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSInputRangeNumber | associated component}. */
+declare namespace TJSInputRangeNumber {
+  /** Props type alias for {@link TJSInputRangeNumber | associated component}. */
   export type Props = {
     input?: any;
     max?: any;
@@ -340,12 +340,12 @@ declare namespace TjsInputRangeNumber {
     enabled?: any;
     styles?: any;
     step?: any;
-    efxNumber?: any;
     efxRange?: any;
+    efxNumber?: any;
   };
-  /** Events type alias for {@link TjsInputRangeNumber | associated component}. */
+  /** Events type alias for {@link TJSInputRangeNumber | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsInputRangeNumber | associated component}. */
+  /** Slots type alias for {@link TJSInputRangeNumber | associated component}. */
   export type Slots = {};
 }
 
@@ -414,11 +414,11 @@ declare namespace TjsInputRangeNumber {
  * --tjs-input-text-width
  * ```
  */
-declare class TjsInputText extends SvelteComponent<TjsInputText.Props, TjsInputText.Events, TjsInputText.Slots> {}
+declare class TJSInputText extends SvelteComponent<TJSInputText.Props, TJSInputText.Events, TJSInputText.Slots> {}
 
-/** Event / Prop / Slot type aliases for {@link TjsInputText | associated component}. */
-declare namespace TjsInputText {
-  /** Props type alias for {@link TjsInputText | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSInputText | associated component}. */
+declare namespace TJSInputText {
+  /** Props type alias for {@link TJSInputText | associated component}. */
   export type Props = {
     input?: any;
     type?: any;
@@ -432,9 +432,9 @@ declare namespace TjsInputText {
     placeholder?: any;
     storeIsValid?: any;
   };
-  /** Events type alias for {@link TjsInputText | associated component}. */
+  /** Events type alias for {@link TJSInputText | associated component}. */
   export type Events = { pointerdown: PointerEvent } & { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsInputText | associated component}. */
+  /** Slots type alias for {@link TJSInputText | associated component}. */
   export type Slots = {};
 }
 
@@ -491,11 +491,11 @@ declare namespace TjsInputText {
  * --tjs-select-option-color
  * ```
  */
-declare class TjsSelect extends SvelteComponent<TjsSelect.Props, TjsSelect.Events, TjsSelect.Slots> {}
+declare class TJSSelect extends SvelteComponent<TJSSelect.Props, TJSSelect.Events, TJSSelect.Slots> {}
 
-/** Event / Prop / Slot type aliases for {@link TjsSelect | associated component}. */
-declare namespace TjsSelect {
-  /** Props type alias for {@link TjsSelect | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSSelect | associated component}. */
+declare namespace TJSSelect {
+  /** Props type alias for {@link TJSSelect | associated component}. */
   export type Props = {
     label?: any;
     select?: any;
@@ -506,19 +506,19 @@ declare namespace TjsSelect {
     efx?: any;
     selected?: any;
   };
-  /** Events type alias for {@link TjsSelect | associated component}. */
+  /** Events type alias for {@link TJSSelect | associated component}. */
   export type Events = { change: Event; pointerdown: PointerEvent } & { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsSelect | associated component}. */
+  /** Slots type alias for {@link TJSSelect | associated component}. */
   export type Slots = {};
 }
 
 export {
-  TjsButton as TJSButton,
-  TjsInput as TJSInput,
-  TjsInputCheckbox as TJSInputCheckbox,
-  TjsInputNumber as TJSInputNumber,
-  TjsInputRange as TJSInputRange,
-  TjsInputRangeNumber as TJSInputRangeNumber,
-  TjsInputText as TJSInputText,
-  TjsSelect as TJSSelect,
+  TJSButton,
+  TJSInput,
+  TJSInputCheckbox,
+  TJSInputNumber,
+  TJSInputRange,
+  TJSInputRangeNumber,
+  TJSInputText,
+  TJSSelect,
 };

@@ -46,11 +46,11 @@ import { SvelteComponent } from 'svelte';
  * --tjs-icon-button-transition-focus-visible
  * ```
  */
-declare class TjsIconButton extends SvelteComponent<TjsIconButton.Props, TjsIconButton.Events, TjsIconButton.Slots> {}
+declare class TJSIconButton extends SvelteComponent<TJSIconButton.Props, TJSIconButton.Events, TJSIconButton.Slots> {}
 
-/** Event / Prop / Slot type aliases for {@link TjsIconButton | associated component}. */
-declare namespace TjsIconButton {
-  /** Props type alias for {@link TjsIconButton | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSIconButton | associated component}. */
+declare namespace TJSIconButton {
+  /** Props type alias for {@link TJSIconButton | associated component}. */
   export type Props = {
     keyCode?: any;
     button?: any;
@@ -64,11 +64,11 @@ declare namespace TjsIconButton {
     onContextMenu?: any;
     clickPropagate?: any;
   };
-  /** Events type alias for {@link TjsIconButton | associated component}. */
-  export type Events = { click: MouseEvent; contextmenu: MouseEvent; press: CustomEvent<any> } & {
+  /** Events type alias for {@link TJSIconButton | associated component}. */
+  export type Events = { click: PointerEvent; contextmenu: PointerEvent; press: CustomEvent<any> } & {
     [evt: string]: CustomEvent<any>;
   };
-  /** Slots type alias for {@link TjsIconButton | associated component}. */
+  /** Slots type alias for {@link TJSIconButton | associated component}. */
   export type Slots = {};
 }
 
@@ -94,11 +94,11 @@ declare namespace TjsIconButton {
  * --tjs-slot-button-transition-focus-visible
  * ```
  */
-declare class TjsSlotButton extends SvelteComponent<TjsSlotButton.Props, TjsSlotButton.Events, TjsSlotButton.Slots> {}
+declare class TJSSlotButton extends SvelteComponent<TJSSlotButton.Props, TJSSlotButton.Events, TJSSlotButton.Slots> {}
 
-/** Event / Prop / Slot type aliases for {@link TjsSlotButton | associated component}. */
-declare namespace TjsSlotButton {
-  /** Props type alias for {@link TjsSlotButton | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSSlotButton | associated component}. */
+declare namespace TJSSlotButton {
+  /** Props type alias for {@link TJSSlotButton | associated component}. */
   export type Props = {
     keyCode?: any;
     button?: any;
@@ -111,11 +111,11 @@ declare namespace TjsSlotButton {
     onContextMenu?: any;
     clickPropagate?: any;
   };
-  /** Events type alias for {@link TjsSlotButton | associated component}. */
-  export type Events = { click: MouseEvent; contextmenu: MouseEvent; press: CustomEvent<any> } & {
+  /** Events type alias for {@link TJSSlotButton | associated component}. */
+  export type Events = { click: PointerEvent; contextmenu: PointerEvent; press: CustomEvent<any> } & {
     [evt: string]: CustomEvent<any>;
   };
-  /** Slots type alias for {@link TjsSlotButton | associated component}. */
+  /** Slots type alias for {@link TJSSlotButton | associated component}. */
   export type Slots = { default: {} };
 }
 
@@ -166,15 +166,15 @@ declare namespace TjsSlotButton {
  * --tjs-icon-button-transition-focus-visible
  * ```
  */
-declare class TjsToggleIconButton extends SvelteComponent<
-  TjsToggleIconButton.Props,
-  TjsToggleIconButton.Events,
-  TjsToggleIconButton.Slots
+declare class TJSToggleIconButton extends SvelteComponent<
+  TJSToggleIconButton.Props,
+  TJSToggleIconButton.Events,
+  TJSToggleIconButton.Slots
 > {}
 
-/** Event / Prop / Slot type aliases for {@link TjsToggleIconButton | associated component}. */
-declare namespace TjsToggleIconButton {
-  /** Props type alias for {@link TjsToggleIconButton | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSToggleIconButton | associated component}. */
+declare namespace TJSToggleIconButton {
+  /** Props type alias for {@link TJSToggleIconButton | associated component}. */
   export type Props = {
     keyCode?: any;
     button?: any;
@@ -191,12 +191,12 @@ declare namespace TjsToggleIconButton {
     tooltipSelected?: any;
     onClose?: any;
   };
-  /** Events type alias for {@link TjsToggleIconButton | associated component}. */
-  export type Events = { click: MouseEvent; contextmenu: MouseEvent; press: CustomEvent<any> } & {
+  /** Events type alias for {@link TJSToggleIconButton | associated component}. */
+  export type Events = { click: PointerEvent; contextmenu: PointerEvent; press: CustomEvent<any> } & {
     [evt: string]: CustomEvent<any>;
   };
-  /** Slots type alias for {@link TjsToggleIconButton | associated component}. */
+  /** Slots type alias for {@link TJSToggleIconButton | associated component}. */
   export type Slots = { default: {} };
 }
 
-export { TjsIconButton as TJSIconButton, TjsSlotButton as TJSSlotButton, TjsToggleIconButton as TJSToggleIconButton };
+export { TJSIconButton, TJSSlotButton, TJSToggleIconButton };

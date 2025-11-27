@@ -48,11 +48,11 @@ declare class TJSSlotLabelUtil {
  * --tjs-slot-label-white-space - nowrap
  * ```
  */
-declare class TjsSlotLabel extends SvelteComponent<TjsSlotLabel.Props, TjsSlotLabel.Events, TjsSlotLabel.Slots> {}
+declare class TJSSlotLabel extends SvelteComponent<TJSSlotLabel.Props, TJSSlotLabel.Events, TJSSlotLabel.Slots> {}
 
-/** Event / Prop / Slot type aliases for {@link TjsSlotLabel | associated component}. */
-declare namespace TjsSlotLabel {
-  /** Props type alias for {@link TjsSlotLabel | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSSlotLabel | associated component}. */
+declare namespace TJSSlotLabel {
+  /** Props type alias for {@link TJSSlotLabel | associated component}. */
   export type Props = {
     label?: any;
     /** @type {boolean} */
@@ -64,9 +64,9 @@ declare namespace TjsSlotLabel {
      */
     isPointer?: boolean;
   };
-  /** Events type alias for {@link TjsSlotLabel | associated component}. */
+  /** Events type alias for {@link TJSSlotLabel | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsSlotLabel | associated component}. */
+  /** Slots type alias for {@link TJSSlotLabel | associated component}. */
   export type Slots = { default: {} };
 }
 
@@ -97,15 +97,15 @@ declare namespace TjsSlotLabel {
  * --tjs-toggle-label-cursor-disabled - fallback: var(--tjs-cursor-default, default)
  * ```
  */
-declare class TjsToggleLabel extends SvelteComponent<
-  TjsToggleLabel.Props,
-  TjsToggleLabel.Events,
-  TjsToggleLabel.Slots
+declare class TJSToggleLabel extends SvelteComponent<
+  TJSToggleLabel.Props,
+  TJSToggleLabel.Events,
+  TJSToggleLabel.Slots
 > {}
 
-/** Event / Prop / Slot type aliases for {@link TjsToggleLabel | associated component}. */
-declare namespace TjsToggleLabel {
-  /** Props type alias for {@link TjsToggleLabel | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSToggleLabel | associated component}. */
+declare namespace TJSToggleLabel {
+  /** Props type alias for {@link TJSToggleLabel | associated component}. */
   export type Props = {
     keyCode?: any;
     label?: any;
@@ -114,6 +114,7 @@ declare namespace TjsToggleLabel {
     tooltip?: any;
     store?: any;
     comp?: any;
+    tooltipDirection?: any;
     tooltipSelected?: any;
     styles?: any;
     efx?: any;
@@ -121,17 +122,16 @@ declare namespace TjsToggleLabel {
     onClose?: any;
     onContextMenu?: any;
     clickPropagate?: any;
-    tooltipDirection?: any;
   };
-  /** Events type alias for {@link TjsToggleLabel | associated component}. */
+  /** Events type alias for {@link TJSToggleLabel | associated component}. */
   export type Events = {
     pointerdown: PointerEvent;
-    click: MouseEvent;
-    contextmenu: MouseEvent;
+    click: PointerEvent;
+    contextmenu: PointerEvent;
     press: CustomEvent<any>;
   } & { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsToggleLabel | associated component}. */
+  /** Slots type alias for {@link TJSToggleLabel | associated component}. */
   export type Slots = { outer: {}; left: {}; right: {}; default: {} };
 }
 
-export { TjsSlotLabel as TJSSlotLabel, TJSSlotLabelUtil, TjsToggleLabel as TJSToggleLabel };
+export { TJSSlotLabel, TJSSlotLabelUtil, TJSToggleLabel };

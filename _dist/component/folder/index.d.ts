@@ -281,11 +281,11 @@ declare namespace TJSFolder {
  * `1em * 0.8`.
  * ```
  */
-declare class TjsSvgFolder extends SvelteComponent<TjsSvgFolder.Props, TjsSvgFolder.Events, TjsSvgFolder.Slots> {}
+declare class TJSSvgFolder extends SvelteComponent<TJSSvgFolder.Props, TJSSvgFolder.Events, TJSSvgFolder.Slots> {}
 
-/** Event / Prop / Slot type aliases for {@link TjsSvgFolder | associated component}. */
-declare namespace TjsSvgFolder {
-  /** Props type alias for {@link TjsSvgFolder | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSSvgFolder | associated component}. */
+declare namespace TJSSvgFolder {
+  /** Props type alias for {@link TJSSvgFolder | associated component}. */
   export type Props = {
     /** @type {string} */
     keyCode?: string;
@@ -312,9 +312,9 @@ declare namespace TjsSvgFolder {
     /** @type {(data?: { event?: PointerEvent }) => void} */
     onContextMenu?: (data?: { event?: PointerEvent }) => void;
   };
-  /** Events type alias for {@link TjsSvgFolder | associated component}. */
+  /** Events type alias for {@link TJSSvgFolder | associated component}. */
   export type Events = {
-    click: MouseEvent;
+    click: PointerEvent;
     keydown: KeyboardEvent;
     keyup: KeyboardEvent;
     open:
@@ -334,6 +334,7 @@ declare namespace TjsSvgFolder {
       | ProgressEvent<EventTarget>
       | SecurityPolicyViolationEvent
       | SubmitEvent
+      | ToggleEvent
       | TouchEvent
       | TransitionEvent
       | WheelEvent;
@@ -355,6 +356,7 @@ declare namespace TjsSvgFolder {
       | ProgressEvent<EventTarget>
       | SecurityPolicyViolationEvent
       | SubmitEvent
+      | ToggleEvent
       | TouchEvent
       | TransitionEvent
       | WheelEvent;
@@ -375,11 +377,12 @@ declare namespace TjsSvgFolder {
       | ProgressEvent<EventTarget>
       | SecurityPolicyViolationEvent
       | SubmitEvent
+      | ToggleEvent
       | TouchEvent
       | TransitionEvent
       | WheelEvent;
   } & { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsSvgFolder | associated component}. */
+  /** Slots type alias for {@link TJSSvgFolder | associated component}. */
   export type Slots = { label: {}; 'summary-end': {}; default: {} };
 }
 
@@ -510,11 +513,11 @@ declare namespace TjsSvgFolder {
  * `1em * 0.8`.
  * ```
  */
-declare class TjsIconFolder extends SvelteComponent<TjsIconFolder.Props, TjsIconFolder.Events, TjsIconFolder.Slots> {}
+declare class TJSIconFolder extends SvelteComponent<TJSIconFolder.Props, TJSIconFolder.Events, TJSIconFolder.Slots> {}
 
-/** Event / Prop / Slot type aliases for {@link TjsIconFolder | associated component}. */
-declare namespace TjsIconFolder {
-  /** Props type alias for {@link TjsIconFolder | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSIconFolder | associated component}. */
+declare namespace TJSIconFolder {
+  /** Props type alias for {@link TJSIconFolder | associated component}. */
   export type Props = {
     /** @type {string} */
     keyCode?: string;
@@ -545,9 +548,9 @@ declare namespace TjsIconFolder {
     /** @type {(data?: { event?: PointerEvent }) => void} */
     onContextMenu?: (data?: { event?: PointerEvent }) => void;
   };
-  /** Events type alias for {@link TjsIconFolder | associated component}. */
+  /** Events type alias for {@link TJSIconFolder | associated component}. */
   export type Events = {
-    click: MouseEvent;
+    click: PointerEvent;
     keydown: KeyboardEvent;
     keyup: KeyboardEvent;
     open:
@@ -567,6 +570,7 @@ declare namespace TjsIconFolder {
       | ProgressEvent<EventTarget>
       | SecurityPolicyViolationEvent
       | SubmitEvent
+      | ToggleEvent
       | TouchEvent
       | TransitionEvent
       | WheelEvent;
@@ -588,6 +592,7 @@ declare namespace TjsIconFolder {
       | ProgressEvent<EventTarget>
       | SecurityPolicyViolationEvent
       | SubmitEvent
+      | ToggleEvent
       | TouchEvent
       | TransitionEvent
       | WheelEvent;
@@ -608,12 +613,13 @@ declare namespace TjsIconFolder {
       | ProgressEvent<EventTarget>
       | SecurityPolicyViolationEvent
       | SubmitEvent
+      | ToggleEvent
       | TouchEvent
       | TransitionEvent
       | WheelEvent;
   } & { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsIconFolder | associated component}. */
+  /** Slots type alias for {@link TJSIconFolder | associated component}. */
   export type Slots = { label: {}; 'summary-end': {}; default: {} };
 }
 
-export { TJSFolder, TjsIconFolder as TJSIconFolder, TjsSvgFolder as TJSSvgFolder };
+export { TJSFolder, TJSIconFolder, TJSSvgFolder };

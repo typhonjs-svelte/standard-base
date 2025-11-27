@@ -234,11 +234,11 @@ declare namespace TJSMenuData {
  * --tjs-menu-hr-border-bottom - fallback: --tjs-default-hr-border-bottom; default: 1px solid #444
  * ```
  */
-declare class TjsMenu extends SvelteComponent<TjsMenu.Props, TjsMenu.Events, TjsMenu.Slots> {}
+declare class TJSMenu extends SvelteComponent<TJSMenu.Props, TJSMenu.Events, TJSMenu.Slots> {}
 
-/** Event / Prop / Slot type aliases for {@link TjsMenu | associated component}. */
-declare namespace TjsMenu {
-  /** Props type alias for {@link TjsMenu | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSMenu | associated component}. */
+declare namespace TJSMenu {
+  /** Props type alias for {@link TJSMenu | associated component}. */
   export type Props = {
     /** @type {{ x?: number, y?: number }} */
     offset?: { x?: number; y?: number };
@@ -257,9 +257,9 @@ declare namespace TjsMenu {
     /** @type {{ duration: number, easing: Function }} */
     transitionOptions?: { duration: number; easing: Function };
   };
-  /** Events type alias for {@link TjsMenu | associated component}. */
+  /** Events type alias for {@link TJSMenu | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsMenu | associated component}. */
+  /** Slots type alias for {@link TJSMenu | associated component}. */
   export type Slots = { default: {}; before: {}; after: {} };
 }
 
@@ -342,18 +342,18 @@ declare namespace TjsMenu {
  * ```
  * @internal
  */
-declare class TjsContextMenuImpl extends SvelteComponent<
-  TjsContextMenuImpl.Props,
-  TjsContextMenuImpl.Events,
-  TjsContextMenuImpl.Slots
+declare class TJSContextMenuImpl extends SvelteComponent<
+  TJSContextMenuImpl.Props,
+  TJSContextMenuImpl.Events,
+  TJSContextMenuImpl.Slots
 > {}
 
 /**
- * Event / Prop / Slot type aliases for {@link TjsContextMenuImpl | associated component}.
+ * Event / Prop / Slot type aliases for {@link TJSContextMenuImpl | associated component}.
  * @internal
  */
-declare namespace TjsContextMenuImpl {
-  /** Props type alias for {@link TjsContextMenuImpl | associated component}. */
+declare namespace TJSContextMenuImpl {
+  /** Props type alias for {@link TJSContextMenuImpl | associated component}. */
   export type Props = {
     /** @type {string} */
     keyCode?: string;
@@ -402,12 +402,12 @@ declare namespace TjsContextMenuImpl {
      */
     current_component?: svelte.SvelteComponent;
   };
-  /** Events type alias for {@link TjsContextMenuImpl | associated component}. */
-  export type Events = { contextmenu: MouseEvent; click: MouseEvent; 'close:contextmenu': CustomEvent<any> } & {
+  /** Events type alias for {@link TJSContextMenuImpl | associated component}. */
+  export type Events = { contextmenu: PointerEvent; click: PointerEvent; 'close:contextmenu': CustomEvent<any> } & {
     [evt: string]: CustomEvent<any>;
   };
-  /** Slots type alias for {@link TjsContextMenuImpl | associated component}. */
+  /** Slots type alias for {@link TJSContextMenuImpl | associated component}. */
   export type Slots = {};
 }
 
-export { TjsContextMenuImpl as TJSContextMenuImpl, TjsMenu as TJSMenu, TJSMenuData };
+export { TJSContextMenuImpl, TJSMenu, TJSMenuData };

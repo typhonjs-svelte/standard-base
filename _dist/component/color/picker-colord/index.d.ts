@@ -50,15 +50,15 @@ import * as svelte_store from 'svelte/store';
  * --tjs-icon-button-transition-focus-visible
  * ```
  */
-declare class TjsColordButton extends SvelteComponent<
-  TjsColordButton.Props,
-  TjsColordButton.Events,
-  TjsColordButton.Slots
+declare class TJSColordButton extends SvelteComponent<
+  TJSColordButton.Props,
+  TJSColordButton.Events,
+  TJSColordButton.Slots
 > {}
 
-/** Event / Prop / Slot type aliases for {@link TjsColordButton | associated component}. */
-declare namespace TjsColordButton {
-  /** Props type alias for {@link TjsColordButton | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSColordButton | associated component}. */
+declare namespace TJSColordButton {
+  /** Props type alias for {@link TJSColordButton | associated component}. */
   export type Props = {
     keyCode?: any;
     button?: any;
@@ -72,11 +72,11 @@ declare namespace TjsColordButton {
     onContextMenu?: any;
     clickPropagate?: any;
   };
-  /** Events type alias for {@link TjsColordButton | associated component}. */
-  export type Events = { click: MouseEvent; contextmenu: MouseEvent; press: CustomEvent<any> } & {
+  /** Events type alias for {@link TJSColordButton | associated component}. */
+  export type Events = { click: PointerEvent; contextmenu: PointerEvent; press: CustomEvent<any> } & {
     [evt: string]: CustomEvent<any>;
   };
-  /** Slots type alias for {@link TjsColordButton | associated component}. */
+  /** Slots type alias for {@link TJSColordButton | associated component}. */
   export type Slots = { default: {} };
 }
 
@@ -88,15 +88,15 @@ declare namespace TjsColordButton {
  * - color: current color
  *
  */
-declare class TjsColordPicker extends SvelteComponent<
-  TjsColordPicker.Props,
-  TjsColordPicker.Events,
-  TjsColordPicker.Slots
+declare class TJSColordPicker extends SvelteComponent<
+  TJSColordPicker.Props,
+  TJSColordPicker.Events,
+  TJSColordPicker.Slots
 > {}
 
-/** Event / Prop / Slot type aliases for {@link TjsColordPicker | associated component}. */
-declare namespace TjsColordPicker {
-  /** Props type alias for {@link TjsColordPicker | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSColordPicker | associated component}. */
+declare namespace TJSColordPicker {
+  /** Props type alias for {@link TJSColordPicker | associated component}. */
   export type Props = {
     /**
      * color properties
@@ -118,9 +118,9 @@ declare namespace TjsColordPicker {
      */
     webStorage?: _runtime_svelte_store_web_storage.WebStorage;
   };
-  /** Events type alias for {@link TjsColordPicker | associated component}. */
+  /** Events type alias for {@link TJSColordPicker | associated component}. */
   export type Events = { color: CustomEvent<any> } & { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsColordPicker | associated component}. */
+  /** Slots type alias for {@link TJSColordPicker | associated component}. */
   export type Slots = {};
 }
 
@@ -732,6 +732,10 @@ type ColorStateStores = {
 };
 
 declare class ColorState {
+  /** @type {Set<string>} */
+  static '__#private@#supportedFormats': Set<string>;
+  /** @type {Set<string>} */
+  static '__#private@#supportedFormatTypes': Set<string>;
   /**
    * @param {import('../').InternalState}   internalState -
    *
@@ -895,6 +899,7 @@ declare class InternalState {
  * Note:
  */
 declare class SavedColorsState {
+  static '__#private@#webStorageKey': string;
   /**
    * @param {import('../../../model/InternalState').InternalState} internalState - Internal picker state.
    */
@@ -921,6 +926,7 @@ declare class SavedColorsState {
  * {@link TJSFolderData} object via a `folderData` accessor.
  */
 declare class TJSColordPickerSavedColors {
+  static '__#private@#id': string;
   /**
    * @returns {string} ID of the addon.
    */
@@ -1062,11 +1068,5 @@ type TJSColordPickerComponents = {
   wrapper?: svelte.SvelteComponent;
 };
 
-export {
-  TjsColordButton as TJSColordButton,
-  TjsColordPicker as TJSColordPicker,
-  type TJSColordPickerColor,
-  type TJSColordPickerComponents,
-  type TJSColordPickerOptions,
-  TJSColordPickerSavedColors,
-};
+export { TJSColordButton, TJSColordPicker, TJSColordPickerSavedColors };
+export type { TJSColordPickerColor, TJSColordPickerComponents, TJSColordPickerOptions };

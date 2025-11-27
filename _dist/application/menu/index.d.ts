@@ -12,6 +12,10 @@ import * as _standard_component_menu from '#standard/component/menu';
  */
 declare class TJSContextMenu {
   /**
+   * Stores any active context menu.
+   */
+  static '__#private@#contextMenu': any;
+  /**
    * Creates and manages a browser wide context menu. The best way to create the context menu is to pass in the source
    * DOM event as it is processed for the location of the context menu to display. Likewise, an A11yFocusSource object
    * is generated that allows focus to be returned to the source location. You may supply a default focus target as a
@@ -114,6 +118,47 @@ declare class TJSContextMenu {
     easing?: _runtime_svelte_easing.EasingReference;
     activeWindow?: Window;
   }): void;
+  /**
+   * Find bottom / left viewport coordinates for current target element of event.
+   *
+   * @param {PointerEvent | MouseEvent | KeyboardEvent} event -
+   *
+   * @param {Window}   activeWindow -
+   *
+   * @param {number}   [x] -
+   *
+   * @param {number}   [y] -
+   *
+   * @returns {{ x: number, y: number, targetElHeight: number, targetElWidth: number }} X / Y viewport coordinates
+   *          aligned to the event target element bottom / left in addition to the target element height / width for
+   *          when the context menu is repositioned due to constraints.
+   */
+  static '__#private@#calcAnchorToEventTarget'(
+    event: PointerEvent | MouseEvent | KeyboardEvent,
+    activeWindow: Window,
+    x?: number,
+    y?: number,
+  ): {
+    x: number;
+    y: number;
+    targetElHeight: number;
+    targetElWidth: number;
+  };
+  /**
+   * Processes menu item data for conditions and evaluating the type of menu item.
+   *
+   * @param {(
+   *    Iterable<import('#standard/component/menu').TJSMenuData.Items> |
+   *    (() => Iterable<import('#standard/component/menu').TJSMenuData.Items>)
+   * )} items - Menu item data of function returning items.
+   *
+   * @returns {object[]} Processed menu items.
+   */
+  static '__#private@#processItems'(
+    items:
+      | Iterable<_standard_component_menu.TJSMenuData.Items>
+      | (() => Iterable<_standard_component_menu.TJSMenuData.Items>),
+  ): object[];
 }
 
 export { TJSContextMenu };

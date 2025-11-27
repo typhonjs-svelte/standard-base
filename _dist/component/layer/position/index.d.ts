@@ -3,6 +3,14 @@ import { TJSPosition } from '#runtime/svelte/store/position';
 import { SvelteComponent } from 'svelte';
 
 declare class ControlStore {
+  /**
+   * Defines the options used for {@link TJSPosition.set}.
+   *
+   * @type {Readonly<{immediateElementUpdate: boolean}>}
+   */
+  static '__#private@#tjsPositionSetOptions': Readonly<{
+    immediateElementUpdate: boolean;
+  }>;
   constructor(component: any);
   get component(): any;
   get id(): any;
@@ -182,15 +190,15 @@ declare class SelectedAPI {
  * TODO: Add description
  *
  */
-declare class TjsPositionControlLayer extends SvelteComponent<
-  TjsPositionControlLayer.Props,
-  TjsPositionControlLayer.Events,
-  TjsPositionControlLayer.Slots
+declare class TJSPositionControlLayer extends SvelteComponent<
+  TJSPositionControlLayer.Props,
+  TJSPositionControlLayer.Events,
+  TJSPositionControlLayer.Slots
 > {}
 
-/** Event / Prop / Slot type aliases for {@link TjsPositionControlLayer | associated component}. */
-declare namespace TjsPositionControlLayer {
-  /** Props type alias for {@link TjsPositionControlLayer | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSPositionControlLayer | associated component}. */
+declare namespace TJSPositionControlLayer {
+  /** Props type alias for {@link TJSPositionControlLayer | associated component}. */
   export type Props = {
     enabled?: boolean;
     boundingRect?: any;
@@ -201,10 +209,10 @@ declare namespace TjsPositionControlLayer {
     controls?: ControlsStore;
     components?: any;
   };
-  /** Events type alias for {@link TjsPositionControlLayer | associated component}. */
+  /** Events type alias for {@link TJSPositionControlLayer | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsPositionControlLayer | associated component}. */
+  /** Slots type alias for {@link TJSPositionControlLayer | associated component}. */
   export type Slots = { default: {} };
 }
 
-export { TjsPositionControlLayer as TJSPositionControlLayer };
+export { TJSPositionControlLayer };

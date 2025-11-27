@@ -7,15 +7,15 @@ import { SvelteComponent } from 'svelte';
  * icons that slide out panels defined as Svelte components.
  *
  */
-declare class TjsSideSlideLayer extends SvelteComponent<
-  TjsSideSlideLayer.Props,
-  TjsSideSlideLayer.Events,
-  TjsSideSlideLayer.Slots
+declare class TJSSideSlideLayer extends SvelteComponent<
+  TJSSideSlideLayer.Props,
+  TJSSideSlideLayer.Events,
+  TJSSideSlideLayer.Slots
 > {}
 
-/** Event / Prop / Slot type aliases for {@link TjsSideSlideLayer | associated component}. */
-declare namespace TjsSideSlideLayer {
-  /** Props type alias for {@link TjsSideSlideLayer | associated component}. */
+/** Event / Prop / Slot type aliases for {@link TJSSideSlideLayer | associated component}. */
+declare namespace TJSSideSlideLayer {
+  /** Props type alias for {@link TJSSideSlideLayer | associated component}. */
   export type Props = {
     /**
      * A valid CSS value for the `top` positioning attribute for the top of the side slide layer.
@@ -127,10 +127,10 @@ declare namespace TjsSideSlideLayer {
      */
     topUnit?: string;
   };
-  /** Events type alias for {@link TjsSideSlideLayer | associated component}. */
+  /** Events type alias for {@link TJSSideSlideLayer | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };
-  /** Slots type alias for {@link TjsSideSlideLayer | associated component}. */
+  /** Slots type alias for {@link TJSSideSlideLayer | associated component}. */
   export type Slots = {};
 }
 
-export { TjsSideSlideLayer as TJSSideSlideLayer };
+export { TJSSideSlideLayer };

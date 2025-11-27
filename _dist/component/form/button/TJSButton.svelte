@@ -214,6 +214,7 @@
 
 <style>
    .tjs-form-button-efx {
+      pointer-events: auto;
       display: flex;
       justify-content: center;
       transform-style: preserve-3d;

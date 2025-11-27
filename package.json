@@ -67,7 +67,7 @@
     "svelte": ">=4.x.x <5"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-node-resolve": "^16.0.0",
     "@typhonjs-build-test/esm-d-ts": "^0.3.0-next.11",
     "@typhonjs-build-test/esm-d-ts-plugin-svelte": "^0.1.0-next.1",
     "@typhonjs-build-test/rollup-plugin-pkg-imports": "^0.6.0",
@@ -76,7 +76,7 @@
     "@typhonjs-utils/file-util": "^0.1.0",
     "eslint": "^8.57.0",
     "fs-extra": "^11.3.0",
-    "rollup": "^4.40.2"
+    "rollup": "^4.53.0"
   },
   "engines": {
     "node": ">=18"

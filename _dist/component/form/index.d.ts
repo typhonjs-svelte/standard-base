@@ -5,7 +5,32 @@ import { SvelteComponent } from 'svelte';
  * TODO: Add description
  *
  */
-declare class TJSButton extends SvelteComponent<TJSButton.Props, TJSButton.Events, TJSButton.Slots> {}
+declare class TJSButton extends SvelteComponent<
+  {
+    keyCode?: any;
+    button?: any;
+    label?: any;
+    tooltip?: any;
+    enabled?: any;
+    icon?: any;
+    tooltipDirection?: any;
+    styles?: any;
+    efx?: any;
+    onPress?: any;
+    onContextMenu?: any;
+    clickPropagate?: any;
+  },
+  {
+    click: PointerEvent;
+    contextmenu: PointerEvent;
+    press: CustomEvent<any>;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {
+    default: {};
+  }
+> {}
 
 /** Event / Prop / Slot type aliases for {@link TJSButton | associated component}. */
 declare namespace TJSButton {
@@ -61,7 +86,20 @@ declare namespace TJSButton {
  * --tjs-input-label-white-space - nowrap
  * ```
  */
-declare class TJSInput extends SvelteComponent<TJSInput.Props, TJSInput.Events, TJSInput.Slots> {}
+declare class TJSInput extends SvelteComponent<
+  {
+    input?: any;
+    type?: any;
+  },
+  {
+    click: any;
+    press: any;
+    contextmenu: any;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {}
+> {}
 
 /** Event / Prop / Slot type aliases for {@link TJSInput | associated component}. */
 declare namespace TJSInput {
@@ -113,9 +151,21 @@ declare namespace TJSInput {
  * ```
  */
 declare class TJSInputCheckbox extends SvelteComponent<
-  TJSInputCheckbox.Props,
-  TJSInputCheckbox.Events,
-  TJSInputCheckbox.Slots
+  {
+    input?: any;
+    label?: any;
+    readonly?: any;
+    store?: any;
+    enabled?: any;
+    styles?: any;
+    efx?: any;
+  },
+  {
+    pointerdown: PointerEvent;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {}
 > {}
 
 /** Event / Prop / Slot type aliases for {@link TJSInputCheckbox | associated component}. */
@@ -195,9 +245,27 @@ declare namespace TJSInputCheckbox {
  * ```
  */
 declare class TJSInputNumber extends SvelteComponent<
-  TJSInputNumber.Props,
-  TJSInputNumber.Events,
-  TJSInputNumber.Slots
+  {
+    input?: any;
+    max?: any;
+    min?: any;
+    label?: any;
+    options?: any;
+    readonly?: any;
+    store?: any;
+    enabled?: any;
+    styles?: any;
+    efx?: any;
+    placeholder?: any;
+    step?: any;
+    storeIsValid?: any;
+  },
+  {
+    pointerdown: PointerEvent;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {}
 > {}
 
 /** Event / Prop / Slot type aliases for {@link TJSInputNumber | associated component}. */
@@ -286,7 +354,27 @@ declare namespace TJSInputNumber {
  * --tjs-input-range-width
  * ```
  */
-declare class TJSInputRange extends SvelteComponent<TJSInputRange.Props, TJSInputRange.Events, TJSInputRange.Slots> {}
+declare class TJSInputRange extends SvelteComponent<
+  {
+    input?: any;
+    max?: any;
+    min?: any;
+    label?: any;
+    options?: any;
+    readonly?: any;
+    store?: any;
+    enabled?: any;
+    styles?: any;
+    efx?: any;
+    step?: any;
+  },
+  {
+    pointerdown: PointerEvent;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {}
+> {}
 
 /** Event / Prop / Slot type aliases for {@link TJSInputRange | associated component}. */
 declare namespace TJSInputRange {
@@ -321,9 +409,24 @@ declare namespace TJSInputRange {
  *
  */
 declare class TJSInputRangeNumber extends SvelteComponent<
-  TJSInputRangeNumber.Props,
-  TJSInputRangeNumber.Events,
-  TJSInputRangeNumber.Slots
+  {
+    input?: any;
+    max?: any;
+    min?: any;
+    label?: any;
+    options?: any;
+    readonly?: any;
+    store?: any;
+    enabled?: any;
+    styles?: any;
+    step?: any;
+    efxRange?: any;
+    efxNumber?: any;
+  },
+  {
+    [evt: string]: CustomEvent<any>;
+  },
+  {}
 > {}
 
 /** Event / Prop / Slot type aliases for {@link TJSInputRangeNumber | associated component}. */
@@ -414,7 +517,27 @@ declare namespace TJSInputRangeNumber {
  * --tjs-input-text-width
  * ```
  */
-declare class TJSInputText extends SvelteComponent<TJSInputText.Props, TJSInputText.Events, TJSInputText.Slots> {}
+declare class TJSInputText extends SvelteComponent<
+  {
+    input?: any;
+    type?: any;
+    label?: any;
+    options?: any;
+    readonly?: any;
+    store?: any;
+    enabled?: any;
+    styles?: any;
+    efx?: any;
+    placeholder?: any;
+    storeIsValid?: any;
+  },
+  {
+    pointerdown: PointerEvent;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {}
+> {}
 
 /** Event / Prop / Slot type aliases for {@link TJSInputText | associated component}. */
 declare namespace TJSInputText {
@@ -491,7 +614,25 @@ declare namespace TJSInputText {
  * --tjs-select-option-color
  * ```
  */
-declare class TJSSelect extends SvelteComponent<TJSSelect.Props, TJSSelect.Events, TJSSelect.Slots> {}
+declare class TJSSelect extends SvelteComponent<
+  {
+    label?: any;
+    select?: any;
+    options?: any;
+    store?: any;
+    enabled?: any;
+    styles?: any;
+    efx?: any;
+    selected?: any;
+  },
+  {
+    change: Event;
+    pointerdown: PointerEvent;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {}
+> {}
 
 /** Event / Prop / Slot type aliases for {@link TJSSelect | associated component}. */
 declare namespace TJSSelect {

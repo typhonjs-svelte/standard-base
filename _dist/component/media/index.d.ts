@@ -18,78 +18,41 @@ import { SvelteComponent } from 'svelte';
  * ```
  */
 declare class TJSMediaContent extends SvelteComponent<
-  TJSMediaContent.Props,
-  TJSMediaContent.Events,
-  TJSMediaContent.Slots
+  {
+    media?: object;
+    url?: string | URL;
+    tooltip?: string;
+    urlDefault?: string | URL;
+    imgAlt?: string;
+    tooltipDirection?: string;
+    videoAutoplay?: boolean;
+    videoLoop?: boolean;
+    videoPlayOnHover?: boolean;
+    videoMuted?: boolean;
+    videoPlaybackRate?: number;
+  },
+  {
+    [evt: string]: CustomEvent<any>;
+  },
+  {
+    'video-fallback': {};
+  }
 > {}
 
 /** Event / Prop / Slot type aliases for {@link TJSMediaContent | associated component}. */
 declare namespace TJSMediaContent {
   /** Props type alias for {@link TJSMediaContent | associated component}. */
   export type Props = {
-    /**
-     * @type {object}
-     */
     media?: object;
-    /**
-     * URL path / URL for media content.
-     *
-     * @type {string | URL}
-     */
     url?: string | URL;
-    /**
-     * A tooltip for the media element.
-     *
-     * @type {string}
-     */
     tooltip?: string;
-    /**
-     * Default URL path / URL for media content when no URL is configured.
-     *
-     * @type {string | URL}
-     */
     urlDefault?: string | URL;
-    /**
-     * Alternate image text.
-     *
-     * @type {string}
-     */
     imgAlt?: string;
-    /**
-     * The tooltip direction for the media element.
-     *
-     * @type {string}
-     */
     tooltipDirection?: string;
-    /**
-     * Automatically start video playback; default: true
-     *
-     * @type {boolean}
-     */
     videoAutoplay?: boolean;
-    /**
-     * Automatically loop video; default: true
-     *
-     * @type {boolean}
-     */
     videoLoop?: boolean;
-    /**
-     * Play video on pointer hover.
-     *
-     * @type {boolean}
-     */
     videoPlayOnHover?: boolean;
-    /**
-     * Mute video playback audio; default: true
-     *
-     * @type {boolean}
-     */
     videoMuted?: boolean;
-    /**
-     * Video playback rate - clamped internally between 0 - 2.
-     *
-     * @type {number}
-     */
     videoPlaybackRate?: number;
   };
   /** Events type alias for {@link TJSMediaContent | associated component}. */

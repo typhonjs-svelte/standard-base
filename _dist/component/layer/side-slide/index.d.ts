@@ -8,123 +8,54 @@ import { SvelteComponent } from 'svelte';
  *
  */
 declare class TJSSideSlideLayer extends SvelteComponent<
-  TJSSideSlideLayer.Props,
-  TJSSideSlideLayer.Events,
-  TJSSideSlideLayer.Slots
-> {}
-
-/** Event / Prop / Slot type aliases for {@link TJSSideSlideLayer | associated component}. */
-declare namespace TJSSideSlideLayer {
-  /** Props type alias for {@link TJSSideSlideLayer | associated component}. */
-  export type Props = {
-    /**
-     * A valid CSS value for the `top` positioning attribute for the top of the side slide layer.
-     *
-     * When top is a number it will be treated as pixels unless `topUnit` is defined.
-     *
-     * @type {string | number}
-     */
+  {
     top?: string | number;
-    /**
-     * The z-index for the side slide layer inside the parent element.
-     *
-     * @type {number}
-     */
     zIndex?: number;
-    /**
-     * Duration of transition effect.
-     *
-     * @type {number}
-     */
     duration?: number;
-    /**
-     * An iterable list of side slide items including icon (Font awesome string), a Svelte configuration object, and
-     * tooltip.
-     *
-     * You may provide a `condition` boolean or function that returns a boolean to hide the item. This is useful for
-     * adding items / panels only visible for the GM amongst other conditional tests.
-     *
-     * @type {(Iterable<{
-     *    condition?: boolean | (() => boolean)
-     *    icon: string | import('#runtime/svelte/util').TJSSvelte.Config.Embed,
-     *    svelte: import('#runtime/svelte/util').TJSSvelte.Config.Embed,
-     *    tooltip?: string
-     * }>)}
-     */
     items?: Iterable<{
       condition?: boolean | (() => boolean);
       icon: string | _runtime_svelte_util.TJSSvelte.Config.Embed;
       svelte: _runtime_svelte_util.TJSSvelte.Config.Embed;
       tooltip?: string;
     }>;
-    /**
-     * Controls whether items can be locked when `clickToOpen` is false. By default, items can be locked.
-     *
-     * @type {boolean}
-     */
     allowLocking?: boolean;
-    /**
-     * An iterable list of additional classes to add to the main slide layer element
-     *
-     * @type {Iterable<string>}
-     */
     classes?: Iterable<string>;
-    /**
-     * When true items are only opened / closed by click / keyboard interaction.
-     *
-     * @type {boolean}
-     */
     clickToOpen?: boolean;
-    /**
-     * Either the name of a Svelte easing function or a Svelte compatible easing function.
-     *
-     * @type {import('#runtime/svelte/easing').EasingReference}
-     */
     easingIn?: _runtime_svelte_easing.EasingReference;
-    /**
-     * Either the name of a Svelte easing function or a Svelte compatible easing function.
-     *
-     * @type {import('#runtime/svelte/easing').EasingReference}
-     */
     easingOut?: _runtime_svelte_easing.EasingReference;
-    /**
-     * The side in layers parent element to display.
-     *
-     * @type {'left' | 'right'}
-     */
     side?: 'left' | 'right';
-    /**
-     * Whether to apply absolute positioning for left / right layout.
-     *
-     * @type {boolean}
-     */
     sideAbs?: boolean;
-    /**
-     * Additional inline styles to apply to the side slide layer. Useful for setting CSS variables.
-     *
-     * @type {{ [key: string]: string | null }}
-     */
-    styles?: { [key: string]: string | null };
-    /**
-     * When true, tooltips are enabled.
-     *
-     * @type {boolean}
-     */
+    styles?: {
+      [key: string]: string | null;
+    };
     tooltips?: boolean;
-    /**
-     * Tooltip direction
-     *
-     * @type {string}
-     */
     tooltipDirection?: string;
-    /**
-     * When `top` is defined as a number and `topUnit` is defined then it is used to create the top style. This
-     * facilitates creating a UI for editing side slide layer via a range input and separately storing the unit type.
-     *
-     * Examples are: `px`, `%`, `em`, `rem`. Either `px` or `%` make the most sense depending on the layout constraints.
-     *
-     * @type {string}
-     */
+    topUnit?: string;
+  },
+  {
+    [evt: string]: CustomEvent<any>;
+  },
+  {}
+> {}
+
+/** Event / Prop / Slot type aliases for {@link TJSSideSlideLayer | associated component}. */
+declare namespace TJSSideSlideLayer {
+  /** Props type alias for {@link TJSSideSlideLayer | associated component}. */
+  export type Props = {
+    top?: string | number;
+    zIndex?: number;
+    duration?: number;
+    items?: Iterable<{ condition?: boolean | (() => boolean); icon: any; svelte: any; tooltip?: string }>;
+    allowLocking?: boolean;
+    classes?: Iterable<string>;
+    clickToOpen?: boolean;
+    easingIn?: any;
+    easingOut?: any;
+    side?: 'left' | 'right';
+    sideAbs?: boolean;
+    styles?: { [key: string]: string };
+    tooltips?: boolean;
+    tooltipDirection?: string;
     topUnit?: string;
   };
   /** Events type alias for {@link TJSSideSlideLayer | associated component}. */

@@ -48,22 +48,24 @@ declare class TJSSlotLabelUtil {
  * --tjs-slot-label-white-space - nowrap
  * ```
  */
-declare class TJSSlotLabel extends SvelteComponent<TJSSlotLabel.Props, TJSSlotLabel.Events, TJSSlotLabel.Slots> {}
+declare class TJSSlotLabel extends SvelteComponent<
+  {
+    label?: any;
+    enabled?: boolean;
+    isPointer?: boolean;
+  },
+  {
+    [evt: string]: CustomEvent<any>;
+  },
+  {
+    default: {};
+  }
+> {}
 
 /** Event / Prop / Slot type aliases for {@link TJSSlotLabel | associated component}. */
 declare namespace TJSSlotLabel {
   /** Props type alias for {@link TJSSlotLabel | associated component}. */
-  export type Props = {
-    label?: any;
-    /** @type {boolean} */
-    enabled?: boolean;
-    /**
-     * Set to `true` to use the `pointer` cursor over label.
-     *
-     * @type {boolean}
-     */
-    isPointer?: boolean;
-  };
+  export type Props = { label?: any; enabled?: boolean; isPointer?: boolean };
   /** Events type alias for {@link TJSSlotLabel | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };
   /** Slots type alias for {@link TJSSlotLabel | associated component}. */
@@ -98,9 +100,37 @@ declare namespace TJSSlotLabel {
  * ```
  */
 declare class TJSToggleLabel extends SvelteComponent<
-  TJSToggleLabel.Props,
-  TJSToggleLabel.Events,
-  TJSToggleLabel.Slots
+  {
+    keyCode?: any;
+    label?: any;
+    text?: any;
+    enabled?: any;
+    tooltip?: any;
+    store?: any;
+    comp?: any;
+    tooltipDirection?: any;
+    tooltipSelected?: any;
+    styles?: any;
+    efx?: any;
+    onPress?: any;
+    onClose?: any;
+    onContextMenu?: any;
+    clickPropagate?: any;
+  },
+  {
+    pointerdown: PointerEvent;
+    click: PointerEvent;
+    contextmenu: PointerEvent;
+    press: CustomEvent<any>;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {
+    outer: {};
+    left: {};
+    right: {};
+    default: {};
+  }
 > {}
 
 /** Event / Prop / Slot type aliases for {@link TJSToggleLabel | associated component}. */

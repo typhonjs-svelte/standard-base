@@ -46,7 +46,29 @@ import { SvelteComponent } from 'svelte';
  * --tjs-icon-button-transition-focus-visible
  * ```
  */
-declare class TJSIconButton extends SvelteComponent<TJSIconButton.Props, TJSIconButton.Events, TJSIconButton.Slots> {}
+declare class TJSIconButton extends SvelteComponent<
+  {
+    keyCode?: any;
+    button?: any;
+    tooltip?: any;
+    enabled?: any;
+    icon?: any;
+    tooltipDirection?: any;
+    styles?: any;
+    efx?: any;
+    onPress?: any;
+    onContextMenu?: any;
+    clickPropagate?: any;
+  },
+  {
+    click: PointerEvent;
+    contextmenu: PointerEvent;
+    press: CustomEvent<any>;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {}
+> {}
 
 /** Event / Prop / Slot type aliases for {@link TJSIconButton | associated component}. */
 declare namespace TJSIconButton {
@@ -94,7 +116,30 @@ declare namespace TJSIconButton {
  * --tjs-slot-button-transition-focus-visible
  * ```
  */
-declare class TJSSlotButton extends SvelteComponent<TJSSlotButton.Props, TJSSlotButton.Events, TJSSlotButton.Slots> {}
+declare class TJSSlotButton extends SvelteComponent<
+  {
+    keyCode?: any;
+    button?: any;
+    tooltip?: any;
+    enabled?: any;
+    tooltipDirection?: any;
+    styles?: any;
+    efx?: any;
+    onPress?: any;
+    onContextMenu?: any;
+    clickPropagate?: any;
+  },
+  {
+    click: PointerEvent;
+    contextmenu: PointerEvent;
+    press: CustomEvent<any>;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {
+    default: {};
+  }
+> {}
 
 /** Event / Prop / Slot type aliases for {@link TJSSlotButton | associated component}. */
 declare namespace TJSSlotButton {
@@ -167,9 +212,32 @@ declare namespace TJSSlotButton {
  * ```
  */
 declare class TJSToggleIconButton extends SvelteComponent<
-  TJSToggleIconButton.Props,
-  TJSToggleIconButton.Events,
-  TJSToggleIconButton.Slots
+  {
+    keyCode?: any;
+    button?: any;
+    store?: any;
+    tooltip?: any;
+    enabled?: any;
+    icon?: any;
+    tooltipDirection?: any;
+    styles?: any;
+    efx?: any;
+    onPress?: any;
+    onContextMenu?: any;
+    clickPropagate?: any;
+    tooltipSelected?: any;
+    onClose?: any;
+  },
+  {
+    click: PointerEvent;
+    contextmenu: PointerEvent;
+    press: CustomEvent<any>;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {
+    default: {};
+  }
 > {}
 
 /** Event / Prop / Slot type aliases for {@link TJSToggleIconButton | associated component}. */

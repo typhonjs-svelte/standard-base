@@ -3,14 +3,6 @@ import { TJSPosition } from '#runtime/svelte/store/position';
 import { SvelteComponent } from 'svelte';
 
 declare class ControlStore {
-  /**
-   * Defines the options used for {@link TJSPosition.set}.
-   *
-   * @type {Readonly<{immediateElementUpdate: boolean}>}
-   */
-  static '__#private@#tjsPositionSetOptions': Readonly<{
-    immediateElementUpdate: boolean;
-  }>;
   constructor(component: any);
   get component(): any;
   get id(): any;
@@ -191,9 +183,19 @@ declare class SelectedAPI {
  *
  */
 declare class TJSPositionControlLayer extends SvelteComponent<
-  TJSPositionControlLayer.Props,
-  TJSPositionControlLayer.Events,
-  TJSPositionControlLayer.Slots
+  {
+    enabled?: boolean;
+    boundingRect?: any;
+    validate?: boolean;
+    controls?: ControlsStore;
+    components?: any;
+  },
+  {
+    [evt: string]: CustomEvent<any>;
+  },
+  {
+    default: {};
+  }
 > {}
 
 /** Event / Prop / Slot type aliases for {@link TJSPositionControlLayer | associated component}. */
@@ -203,9 +205,6 @@ declare namespace TJSPositionControlLayer {
     enabled?: boolean;
     boundingRect?: any;
     validate?: boolean;
-    /**
-     * @type {ControlsStore}
-     */
     controls?: ControlsStore;
     components?: any;
   };

@@ -234,27 +234,46 @@ declare namespace TJSMenuData {
  * --tjs-menu-hr-border-bottom - fallback: --tjs-default-hr-border-bottom; default: 1px solid #444
  * ```
  */
-declare class TJSMenu extends SvelteComponent<TJSMenu.Props, TJSMenu.Events, TJSMenu.Slots> {}
+declare class TJSMenu extends SvelteComponent<
+  {
+    offset?: {
+      x?: number;
+      y?: number;
+    };
+    keyCode?: string;
+    menu?: TJSMenuData.Menu;
+    focusEl?: HTMLElement | string;
+    items?: Iterable<TJSMenuData.Items> | (() => Iterable<TJSMenuData.Items>);
+    styles?: {
+      [key: string]: string | null;
+    };
+    efx?: Function;
+    transitionOptions?: {
+      duration: number;
+      easing: Function;
+    };
+  },
+  {
+    [evt: string]: CustomEvent<any>;
+  },
+  {
+    default: {};
+    before: {};
+    after: {};
+  }
+> {}
 
 /** Event / Prop / Slot type aliases for {@link TJSMenu | associated component}. */
 declare namespace TJSMenu {
   /** Props type alias for {@link TJSMenu | associated component}. */
   export type Props = {
-    /** @type {{ x?: number, y?: number }} */
     offset?: { x?: number; y?: number };
-    /** @type {string} */
     keyCode?: string;
-    /** @type {import('./types').TJSMenuData.Menu} */
     menu?: TJSMenuData.Menu;
-    /** @type {HTMLElement | string} */
-    focusEl?: HTMLElement | string;
-    /** @type {Iterable<import('./types').TJSMenuData.Items> | (() => Iterable<import('./types').TJSMenuData.Items>)} */
+    focusEl?: string | HTMLElement;
     items?: Iterable<TJSMenuData.Items> | (() => Iterable<TJSMenuData.Items>);
-    /** @type {{ [key: string]: string | null }} */
-    styles?: { [key: string]: string | null };
-    /** @type {Function} */
+    styles?: { [key: string]: string };
     efx?: Function;
-    /** @type {{ duration: number, easing: Function }} */
     transitionOptions?: { duration: number; easing: Function };
   };
   /** Events type alias for {@link TJSMenu | associated component}. */
@@ -343,9 +362,37 @@ declare namespace TJSMenu {
  * @internal
  */
 declare class TJSContextMenuImpl extends SvelteComponent<
-  TJSContextMenuImpl.Props,
-  TJSContextMenuImpl.Events,
-  TJSContextMenuImpl.Slots
+  {
+    keyCode?: string;
+    id?: string;
+    x?: number;
+    y?: number;
+    items?: TJSMenuData.Items[];
+    styles?: {
+      [key: string]: string | null;
+    };
+    transitionOptions?: {
+      duration: number;
+      easing: _runtime_svelte_easing.EasingFunction;
+    };
+    offsetX?: number;
+    offsetY?: number;
+    classes?: string[];
+    hasIcon?: boolean;
+    focusSource?: _runtime_util_a11y.A11yFocusSource;
+    activeWindow?: Window;
+    targetElHeight?: number;
+    targetElWidth?: number;
+    current_component?: svelte.SvelteComponent;
+  },
+  {
+    contextmenu: PointerEvent;
+    click: PointerEvent;
+    'close:contextmenu': CustomEvent<any>;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {}
 > {}
 
 /**
@@ -355,52 +402,22 @@ declare class TJSContextMenuImpl extends SvelteComponent<
 declare namespace TJSContextMenuImpl {
   /** Props type alias for {@link TJSContextMenuImpl | associated component}. */
   export type Props = {
-    /** @type {string} */
     keyCode?: string;
     id?: string;
     x?: number;
     y?: number;
-    /**
-     * @type {import('../types').TJSMenuData.Items[]}
-     */
     items?: TJSMenuData.Items[];
-    /** @type {{ [key: string]: string | null }} */
-    styles?: { [key: string]: string | null };
-    /** @type {{ duration: number, easing: import('#runtime/svelte/easing').EasingFunction }} */
-    transitionOptions?: { duration: number; easing: _runtime_svelte_easing.EasingFunction };
+    styles?: { [key: string]: string };
+    transitionOptions?: { duration: number; easing: any };
     offsetX?: number;
     offsetY?: number;
-    /** @type {string[]} */
     classes?: string[];
-    /**
-     * When true, label only menu items will be indented.
-     *
-     * @type {boolean}
-     */
     hasIcon?: boolean;
-    /** @type {import('#runtime/util/a11y').A11yFocusSource} */
-    focusSource?: _runtime_util_a11y.A11yFocusSource;
-    /**
-     * @type {Window} The active window the context menu is displaying inside.
-     */
+    focusSource?: any;
     activeWindow?: Window;
-    /**
-     * @type {number} Subtracted when menu is adjusted upwards and configured by the `alignBottom` option in
-     *       `TJSContextMenu`.
-     */
     targetElHeight?: number;
-    /**
-     * @type {number} Added when menu is adjusted leftward and configured by the `alignBottom` option in
-     *       `TJSContextMenu`.
-     */
     targetElWidth?: number;
-    /**
-     * This component. Set externally removing dependence on `current_component`.
-     *
-     * @type {import('svelte').SvelteComponent}
-     * @internal
-     */
-    current_component?: svelte.SvelteComponent;
+    current_component?: any;
   };
   /** Events type alias for {@link TJSContextMenuImpl | associated component}. */
   export type Events = { contextmenu: PointerEvent; click: PointerEvent; 'close:contextmenu': CustomEvent<any> } & {

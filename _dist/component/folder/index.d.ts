@@ -281,35 +281,114 @@ declare namespace TJSFolder {
  * `1em * 0.8`.
  * ```
  */
-declare class TJSSvgFolder extends SvelteComponent<TJSSvgFolder.Props, TJSSvgFolder.Events, TJSSvgFolder.Slots> {}
+declare class TJSSvgFolder extends SvelteComponent<
+  {
+    keyCode?: string;
+    id?: string;
+    label?: string;
+    animate?: boolean;
+    options?: TJSFolder.InternalOptions;
+    store?: _runtime_svelte_store_util.MinimalWritable<boolean>;
+    enabled?: boolean;
+    folder?: TJSFolder.Data;
+    styles?: object;
+    onClose?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
+    onOpen?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
+    onContextMenu?: (data?: { event?: PointerEvent }) => void;
+  },
+  {
+    click: PointerEvent;
+    keydown: KeyboardEvent;
+    keyup: KeyboardEvent;
+    open:
+      | PointerEvent
+      | MouseEvent
+      | UIEvent
+      | Event
+      | ErrorEvent
+      | AnimationEvent
+      | ClipboardEvent
+      | CompositionEvent
+      | DragEvent
+      | FocusEvent
+      | FormDataEvent
+      | InputEvent
+      | KeyboardEvent
+      | ProgressEvent<EventTarget>
+      | SecurityPolicyViolationEvent
+      | SubmitEvent
+      | ToggleEvent
+      | TouchEvent
+      | TransitionEvent
+      | WheelEvent;
+    close: Event;
+    openAny:
+      | PointerEvent
+      | MouseEvent
+      | UIEvent
+      | Event
+      | ErrorEvent
+      | AnimationEvent
+      | ClipboardEvent
+      | CompositionEvent
+      | DragEvent
+      | FocusEvent
+      | FormDataEvent
+      | InputEvent
+      | KeyboardEvent
+      | ProgressEvent<EventTarget>
+      | SecurityPolicyViolationEvent
+      | SubmitEvent
+      | ToggleEvent
+      | TouchEvent
+      | TransitionEvent
+      | WheelEvent;
+    closeAny:
+      | PointerEvent
+      | MouseEvent
+      | UIEvent
+      | Event
+      | ErrorEvent
+      | AnimationEvent
+      | ClipboardEvent
+      | CompositionEvent
+      | DragEvent
+      | FocusEvent
+      | FormDataEvent
+      | InputEvent
+      | KeyboardEvent
+      | ProgressEvent<EventTarget>
+      | SecurityPolicyViolationEvent
+      | SubmitEvent
+      | ToggleEvent
+      | TouchEvent
+      | TransitionEvent
+      | WheelEvent;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {
+    label: {};
+    'summary-end': {};
+    default: {};
+  }
+> {}
 
 /** Event / Prop / Slot type aliases for {@link TJSSvgFolder | associated component}. */
 declare namespace TJSSvgFolder {
   /** Props type alias for {@link TJSSvgFolder | associated component}. */
   export type Props = {
-    /** @type {string} */
     keyCode?: string;
-    /** @type {string} */
     id?: string;
-    /** @type {string} */
     label?: string;
-    /** @type {boolean} */
     animate?: boolean;
-    /** @type {import('./types').TJSFolder.InternalOptions} */
     options?: TJSFolder.InternalOptions;
-    /** @type {import('#runtime/svelte/store/util').MinimalWritable<boolean>} */
-    store?: _runtime_svelte_store_util.MinimalWritable<boolean>;
-    /** @type {boolean} */
+    store?: any;
     enabled?: boolean;
-    /** @type {import('./types').TJSFolder.Data} */
     folder?: TJSFolder.Data;
-    /** @type {object} */
     styles?: object;
-    /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
     onClose?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
-    /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
     onOpen?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
-    /** @type {(data?: { event?: PointerEvent }) => void} */
     onContextMenu?: (data?: { event?: PointerEvent }) => void;
   };
   /** Events type alias for {@link TJSSvgFolder | associated component}. */
@@ -513,39 +592,118 @@ declare namespace TJSSvgFolder {
  * `1em * 0.8`.
  * ```
  */
-declare class TJSIconFolder extends SvelteComponent<TJSIconFolder.Props, TJSIconFolder.Events, TJSIconFolder.Slots> {}
+declare class TJSIconFolder extends SvelteComponent<
+  {
+    keyCode?: string;
+    id?: string;
+    label?: string;
+    animate?: boolean;
+    options?: TJSFolder.InternalOptions;
+    store?: _runtime_svelte_store_util.MinimalWritable<boolean>;
+    enabled?: boolean;
+    iconClosed?: string;
+    iconOpen?: string;
+    folder?: TJSFolder.DataIcon;
+    styles?: object;
+    onClose?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
+    onOpen?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
+    onContextMenu?: (data?: { event?: PointerEvent }) => void;
+  },
+  {
+    click: PointerEvent;
+    keydown: KeyboardEvent;
+    keyup: KeyboardEvent;
+    open:
+      | PointerEvent
+      | MouseEvent
+      | UIEvent
+      | Event
+      | ErrorEvent
+      | AnimationEvent
+      | ClipboardEvent
+      | CompositionEvent
+      | DragEvent
+      | FocusEvent
+      | FormDataEvent
+      | InputEvent
+      | KeyboardEvent
+      | ProgressEvent<EventTarget>
+      | SecurityPolicyViolationEvent
+      | SubmitEvent
+      | ToggleEvent
+      | TouchEvent
+      | TransitionEvent
+      | WheelEvent;
+    close: Event;
+    openAny:
+      | PointerEvent
+      | MouseEvent
+      | UIEvent
+      | Event
+      | ErrorEvent
+      | AnimationEvent
+      | ClipboardEvent
+      | CompositionEvent
+      | DragEvent
+      | FocusEvent
+      | FormDataEvent
+      | InputEvent
+      | KeyboardEvent
+      | ProgressEvent<EventTarget>
+      | SecurityPolicyViolationEvent
+      | SubmitEvent
+      | ToggleEvent
+      | TouchEvent
+      | TransitionEvent
+      | WheelEvent;
+    closeAny:
+      | PointerEvent
+      | MouseEvent
+      | UIEvent
+      | Event
+      | ErrorEvent
+      | AnimationEvent
+      | ClipboardEvent
+      | CompositionEvent
+      | DragEvent
+      | FocusEvent
+      | FormDataEvent
+      | InputEvent
+      | KeyboardEvent
+      | ProgressEvent<EventTarget>
+      | SecurityPolicyViolationEvent
+      | SubmitEvent
+      | ToggleEvent
+      | TouchEvent
+      | TransitionEvent
+      | WheelEvent;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {
+    label: {};
+    'summary-end': {};
+    default: {};
+  }
+> {}
 
 /** Event / Prop / Slot type aliases for {@link TJSIconFolder | associated component}. */
 declare namespace TJSIconFolder {
   /** Props type alias for {@link TJSIconFolder | associated component}. */
   export type Props = {
-    /** @type {string} */
     keyCode?: string;
-    /** @type {string} */
     id?: string;
-    /** @type {string} */
     label?: string;
-    /** @type {boolean} */
     animate?: boolean;
-    /** @type {import('./types').TJSFolder.InternalOptions} */
     options?: TJSFolder.InternalOptions;
-    /** @type {import('#runtime/svelte/store/util').MinimalWritable<boolean>} */
-    store?: _runtime_svelte_store_util.MinimalWritable<boolean>;
-    /** @type {boolean} */
+    store?: any;
     enabled?: boolean;
-    /** @type {string} */
     iconClosed?: string;
-    /** @type {string} */
     iconOpen?: string;
-    /** @type {import('./types').TJSFolder.DataIcon} */
     folder?: TJSFolder.DataIcon;
-    /** @type {object} */
     styles?: object;
-    /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
     onClose?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
-    /** @type {(data?: { event?: KeyboardEvent | PointerEvent }) => void} */
     onOpen?: (data?: { event?: KeyboardEvent | PointerEvent }) => void;
-    /** @type {(data?: { event?: PointerEvent }) => void} */
     onContextMenu?: (data?: { event?: PointerEvent }) => void;
   };
   /** Events type alias for {@link TJSIconFolder | associated component}. */

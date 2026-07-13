@@ -51,9 +51,29 @@ import * as svelte_store from 'svelte/store';
  * ```
  */
 declare class TJSColordButton extends SvelteComponent<
-  TJSColordButton.Props,
-  TJSColordButton.Events,
-  TJSColordButton.Slots
+  {
+    keyCode?: any;
+    button?: any;
+    color?: any;
+    enabled?: any;
+    styles?: any;
+    tooltip?: any;
+    tooltipDirection?: any;
+    efx?: any;
+    onPress?: any;
+    onContextMenu?: any;
+    clickPropagate?: any;
+  },
+  {
+    click: PointerEvent;
+    contextmenu: PointerEvent;
+    press: CustomEvent<any>;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {
+    default: {};
+  }
 > {}
 
 /** Event / Prop / Slot type aliases for {@link TJSColordButton | associated component}. */
@@ -89,35 +109,23 @@ declare namespace TJSColordButton {
  *
  */
 declare class TJSColordPicker extends SvelteComponent<
-  TJSColordPicker.Props,
-  TJSColordPicker.Events,
-  TJSColordPicker.Slots
+  {
+    color?: TJSColordPickerColor;
+    options?: TJSColordPickerOptions;
+    webStorage?: _runtime_svelte_store_web_storage.WebStorage;
+  },
+  {
+    color: CustomEvent<any>;
+  } & {
+    [evt: string]: CustomEvent<any>;
+  },
+  {}
 > {}
 
 /** Event / Prop / Slot type aliases for {@link TJSColordPicker | associated component}. */
 declare namespace TJSColordPicker {
   /** Props type alias for {@link TJSColordPicker | associated component}. */
-  export type Props = {
-    /**
-     * color properties
-     *
-     * @type {import('.').TJSColordPickerColor}
-     */
-    color?: TJSColordPickerColor;
-    /**
-     * User settable options / customization properties.
-     *
-     * @type {import('./').TJSColordPickerOptions}
-     */
-    options?: TJSColordPickerOptions;
-    /**
-     * External shared WebStorage instance. By assigning an external `WebStorage` instance you can share state like
-     * the saved colors plugin across color picker instances.
-     *
-     * @type {import('#runtime/svelte/store/web-storage').WebStorage}
-     */
-    webStorage?: _runtime_svelte_store_web_storage.WebStorage;
-  };
+  export type Props = { color?: any; options?: any; webStorage?: any };
   /** Events type alias for {@link TJSColordPicker | associated component}. */
   export type Events = { color: CustomEvent<any> } & { [evt: string]: CustomEvent<any> };
   /** Slots type alias for {@link TJSColordPicker | associated component}. */
@@ -732,10 +740,6 @@ type ColorStateStores = {
 };
 
 declare class ColorState {
-  /** @type {Set<string>} */
-  static '__#private@#supportedFormats': Set<string>;
-  /** @type {Set<string>} */
-  static '__#private@#supportedFormatTypes': Set<string>;
   /**
    * @param {import('../').InternalState}   internalState -
    *
@@ -899,7 +903,6 @@ declare class InternalState {
  * Note:
  */
 declare class SavedColorsState {
-  static '__#private@#webStorageKey': string;
   /**
    * @param {import('../../../model/InternalState').InternalState} internalState - Internal picker state.
    */
@@ -926,7 +929,6 @@ declare class SavedColorsState {
  * {@link TJSFolderData} object via a `folderData` accessor.
  */
 declare class TJSColordPickerSavedColors {
-  static '__#private@#id': string;
   /**
    * @returns {string} ID of the addon.
    */

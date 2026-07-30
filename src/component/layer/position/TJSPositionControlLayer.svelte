@@ -24,12 +24,12 @@
    const [controlsStore, selectedDragAPI] = ControlsStore.create();
 
    /**
-    * @type {ControlsStore}
+    * @type {TJSPositionControlLayerAPI.Controls}
     */
    export let controls = controlsStore;
 
    /**
-    * @type {TJSPositionControlLayerAPI.Entry | Iterable<TJSPositionControlLayerAPI.Entry> | undefined}
+    * @type {TJSPositionControlLayerAPI.Data.EntryInput | Iterable<TJSPositionControlLayerAPI.Data.EntryInput> | undefined}
     */
    export let entries = void 0;
 

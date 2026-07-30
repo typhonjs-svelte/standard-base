@@ -21,6 +21,9 @@ import { SelectedAPI }     from './SelectedAPI.js';
  * @import { SelectedDragAPI }            from './types-local';
  */
 
+/**
+ * @implements {TJSPositionControlLayerAPI.Controls}
+ */
 export class ControlsStore
 {
    /**
@@ -129,8 +132,9 @@ export class ControlsStore
    set validate(validate) { this.#stores.validate.set(validate); }
 
    /**
-    * Exports all or selected entry data w/ TJSPosition converted to JSON object. An option to compact the position
-    * data will transform the minimum top / left of all entries as the origin.
+    * Exports all or selected entry data w/ TJSPosition converted to a {@link TJSPosition.API.Data.TJSPositionData}
+    * JSON object. An option to compact the position data will transform the minimum top / left of all entries as
+    * the origin.
     *
     * @param {object}   [opts] - Optional parameters.
     *
@@ -138,15 +142,18 @@ export class ControlsStore
     *
     * @param {boolean}  [opts.selected=false] - When true export selected entries.
     *
-    * @returns {{ width: number|void, height: number|void, components: object[] }} Width / height max extents &
-    *          serialized entry data.
+    * @returns {TJSPositionControlLayerAPI.Data.Export} Width / height max extents & serialized entry data.
     */
    export({ compact = false, selected = false } = {})
    {
-      const components = [];
+      /** @type {TJSPositionControlLayerAPI.Data.EntryExport[]} */
+      const entries = [];
 
       let maxWidth = Number.MIN_SAFE_INTEGER;
       let maxHeight = Number.MIN_SAFE_INTEGER;
+
+      let minLeft = Number.MAX_SAFE_INTEGER;
+      let minTop = Number.MAX_SAFE_INTEGER;
 
       if (!compact)
       {
@@ -159,48 +166,64 @@ export class ControlsStore
             if (boundingRect.right > maxWidth) { maxWidth = boundingRect.right; }
             if (boundingRect.bottom > maxHeight) { maxHeight = boundingRect.bottom; }
 
-            components.push(Object.assign({}, control.entry, { position }));
+            if (boundingRect.left < minLeft) { minLeft = boundingRect.left; }
+            if (boundingRect.top < minTop) { minTop = boundingRect.top; }
+
+            entries.push(Object.assign({}, control.entry, { position }));
          }
       }
       else
       {
          // TODO: Currently compacting only handles positions greater than 0, 0 origin.
-         let minTop = Number.MAX_SAFE_INTEGER;
-         let minLeft = Number.MAX_SAFE_INTEGER;
+         let localMinTop = Number.MAX_SAFE_INTEGER;
+         let localMinLeft = Number.MAX_SAFE_INTEGER;
 
          // Find minimum left and top;
          for (const control of selected ? this.selected.values() : this.values())
          {
             const boundingRect = control.position.transform.boundingRect;
 
-            if (boundingRect.left < minLeft) { minLeft = boundingRect.left; }
-            if (boundingRect.top < minTop) { minTop = boundingRect.top; }
+            if (boundingRect.left < localMinLeft) { localMinLeft = boundingRect.left; }
+            if (boundingRect.top < localMinTop) { localMinTop = boundingRect.top; }
          }
 
          for (const control of selected ? this.selected.values() : this.values())
          {
             const position = control.position.toJSON();
 
-            // Adjust for minLeft / minTop.
-            position.left -= minLeft;
-            position.top -= minTop;
+            // Adjust for localMinLeft / localMinTop.
+            position.left -= localMinLeft;
+            position.top -= localMinTop;
 
             const boundingRect = control.position.transform.boundingRect;
 
-            const right = boundingRect.right - minLeft;
-            const bottom = boundingRect.bottom - minTop;
+            const right = boundingRect.right - localMinLeft;
+            const bottom = boundingRect.bottom - localMinTop;
 
             if (right > maxWidth) { maxWidth = right; }
             if (bottom > maxHeight) { maxHeight = bottom; }
 
-            components.push(Object.assign({}, control.entry, { position }));
+            entries.push(Object.assign({}, control.entry, { position }));
+         }
+
+         if (entries.length)
+         {
+            minLeft = 0;
+            minTop = 0;
          }
       }
 
+      // Construct bounding rect for
+      const exportBoundingRect = new DOMRect(
+         minLeft === Number.MAX_SAFE_INTEGER ? 0 : minLeft,
+         minTop === Number.MAX_SAFE_INTEGER ? 0 : minTop,
+         maxWidth === Number.MIN_SAFE_INTEGER ? 0 : maxWidth,
+         maxHeight === Number.MIN_SAFE_INTEGER ? 0 : maxHeight
+      );
+
       return {
-         width: maxWidth === Number.MIN_SAFE_INTEGER ? 0 : maxWidth,
-         height: maxHeight === Number.MIN_SAFE_INTEGER ? 0 : maxHeight,
-         components
+         boundingRect: exportBoundingRect,
+         entries
       };
    }
 
@@ -216,7 +239,7 @@ export class ControlsStore
     * Updates the tracked entries data. Each entry must be an object containing a unique `id` property and an
     * instance of TJSPosition as the `position` property.
     *
-    * @param {Iterable<TJSPositionControlLayerAPI.Entry>} entries - Iterable list of entry data objects.
+    * @param {Iterable<TJSPositionControlLayerAPI.Data.EntryInput>} entries - Iterable list of entry data objects.
     */
    updateEntries(entries)
    {
@@ -234,7 +257,7 @@ export class ControlsStore
       }
       else if (isObject(entries))
       {
-         this.#updateEntry(/** @type {TJSPositionControlLayerAPI.Entry} */ entries, removeIDs);
+         this.#updateEntry(/** @type {TJSPositionControlLayerAPI.Data.EntryInput} */ entries, removeIDs);
       }
 
       for (const id of removeIDs)
@@ -254,7 +277,7 @@ export class ControlsStore
    }
 
    /**
-    * @param {TJSPositionControlLayerAPI.Entry} entry -
+    * @param {TJSPositionControlLayerAPI.Data.EntryInput} entry -
     *
     * @param {Set<PropertyKey>} removeIDs -
     */

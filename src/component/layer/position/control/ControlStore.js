@@ -19,7 +19,7 @@ export class ControlStore
    static #tjsPositionSetOptions = Object.freeze({ immediateElementUpdate: true });
 
    /**
-    * @type {TJSPositionControlLayerAPI.Entry}
+    * @type {TJSPositionControlLayerAPI.Data.EntryInput}
     */
    #entry;
 
@@ -40,7 +40,7 @@ export class ControlStore
    #unsubscribe = [];
 
    /**
-    * @param {TJSPositionControlLayerAPI.Entry} entry -
+    * @param {TJSPositionControlLayerAPI.Data.EntryInput} entry -
     */
    constructor(entry)
    {
@@ -84,7 +84,7 @@ export class ControlStore
       Object.freeze(this.#stores);
    }
 
-   /** @returns {TJSPositionControlLayerAPI.Entry } */
+   /** @returns {TJSPositionControlLayerAPI.Data.EntryInput} */
    get entry() { return this.#entry; }
 
    /** @returns {PropertyKey} */

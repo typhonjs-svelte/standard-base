@@ -1,6 +1,10 @@
 import { hitboxCallback } from './constants.js';
 
 /**
+ * 
+ */
+
+/**
  * @param {string}   id - Control index.
  *
  * @param {number}   dX - delta X

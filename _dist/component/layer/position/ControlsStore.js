@@ -4,10 +4,26 @@ import { TJSPosition }     from '#runtime/svelte/store/position';
 import { propertyStore }   from '#runtime/svelte/store/writable-derived';
 import {
    isIterable,
-   isObject }              from '#runtime/util/object';
+   isObject,
+   isPropertyKey }         from '#runtime/util/object';
 
 import { ControlStore }    from './control/ControlStore.js';
 
+import { SelectedAPI }     from './SelectedAPI.js';
+
+/**
+ * @import {
+ *    Subscriber,
+ *    Unsubscriber }                      from 'svelte/store';
+ *
+ * @import { TJSPositionControlLayerAPI } from './types';
+ *
+ * @import { SelectedDragAPI }            from './types-local';
+ */
+
+/**
+ * @implements {TJSPositionControlLayerAPI.Controls}
+ */
 export class ControlsStore
 {
    /**
@@ -16,7 +32,7 @@ export class ControlsStore
    #controls = [];
 
    /**
-    * @type {Map<*, ControlStore>}
+    * @type {Map<PropertyKey, ControlStore>}
     */
    #controlMap = new Map();
 
@@ -29,11 +45,10 @@ export class ControlsStore
       validate: true
    };
 
-   /**
-    * @type {SelectedAPI}
-    */
+   /** @type {SelectedAPI} */
    #selectedAPI;
 
+   /** @type {SelectedDragAPI} */
    #selectedDragAPI;
 
    #stores;
@@ -41,7 +56,7 @@ export class ControlsStore
    /**
     * Stores the subscribers.
     *
-    * @type {import('svelte/store').Subscriber<ControlStore[]>[]}
+    * @type {Subscriber<ControlStore[]>[]}
     */
    #subscriptions = [];
 
@@ -117,83 +132,103 @@ export class ControlsStore
    set validate(validate) { this.#stores.validate.set(validate); }
 
    /**
-    * Exports all or selected component data w/ TJSPosition converted to JSON object. An option to compact the position
-    * data will transform the minimum top / left of all components as the origin.
+    * Exports all or selected entry data w/ TJSPosition converted to a {@link TJSPosition.API.Data.TJSPositionData}
+    * JSON object. An option to compact the position data will transform the minimum top / left of all entries as
+    * the origin.
     *
     * @param {object}   [opts] - Optional parameters.
     *
     * @param {boolean}  [opts.compact=false] - Transform / compact position data.
     *
-    * @param {boolean}  [opts.selected=false] - When true export selected components.
+    * @param {boolean}  [opts.selected=false] - When true export selected entries.
     *
-    * @returns {{width: number|void, height: number|void, components: object[]}} Width / height max extents & serialized
-    *          component data.
+    * @returns {TJSPositionControlLayerAPI.Data.Export} Width / height max extents & serialized entry data.
     */
    export({ compact = false, selected = false } = {})
    {
-      const components = [];
+      /** @type {TJSPositionControlLayerAPI.Data.EntryExport[]} */
+      const entries = [];
 
       let maxWidth = Number.MIN_SAFE_INTEGER;
       let maxHeight = Number.MIN_SAFE_INTEGER;
+
+      let minLeft = Number.MAX_SAFE_INTEGER;
+      let minTop = Number.MAX_SAFE_INTEGER;
 
       if (!compact)
       {
          for (const control of selected ? this.selected.values() : this.values())
          {
-            const position = control.component.position.toJSON();
+            const position = control.entry.position.toJSON();
 
             const boundingRect = control.position.transform.boundingRect;
 
             if (boundingRect.right > maxWidth) { maxWidth = boundingRect.right; }
             if (boundingRect.bottom > maxHeight) { maxHeight = boundingRect.bottom; }
 
-            components.push(Object.assign({}, control.component, { position }));
+            if (boundingRect.left < minLeft) { minLeft = boundingRect.left; }
+            if (boundingRect.top < minTop) { minTop = boundingRect.top; }
+
+            entries.push(Object.assign({}, control.entry, { position }));
          }
       }
       else
       {
          // TODO: Currently compacting only handles positions greater than 0, 0 origin.
-         let minTop = Number.MAX_SAFE_INTEGER;
-         let minLeft = Number.MAX_SAFE_INTEGER;
+         let localMinTop = Number.MAX_SAFE_INTEGER;
+         let localMinLeft = Number.MAX_SAFE_INTEGER;
 
          // Find minimum left and top;
          for (const control of selected ? this.selected.values() : this.values())
          {
             const boundingRect = control.position.transform.boundingRect;
 
-            if (boundingRect.left < minLeft) { minLeft = boundingRect.left; }
-            if (boundingRect.top < minTop) { minTop = boundingRect.top; }
+            if (boundingRect.left < localMinLeft) { localMinLeft = boundingRect.left; }
+            if (boundingRect.top < localMinTop) { localMinTop = boundingRect.top; }
          }
 
          for (const control of selected ? this.selected.values() : this.values())
          {
             const position = control.position.toJSON();
 
-            // Adjust for minLeft / minTop.
-            position.left -= minLeft;
-            position.top -= minTop;
+            // Adjust for localMinLeft / localMinTop.
+            position.left -= localMinLeft;
+            position.top -= localMinTop;
 
             const boundingRect = control.position.transform.boundingRect;
 
-            const right = boundingRect.right - minLeft;
-            const bottom = boundingRect.bottom - minTop;
+            const right = boundingRect.right - localMinLeft;
+            const bottom = boundingRect.bottom - localMinTop;
 
             if (right > maxWidth) { maxWidth = right; }
             if (bottom > maxHeight) { maxHeight = bottom; }
 
-            components.push(Object.assign({}, control.component, { position }));
+            entries.push(Object.assign({}, control.entry, { position }));
+         }
+
+         if (entries.length)
+         {
+            minLeft = 0;
+            minTop = 0;
          }
       }
 
+      // Construct bounding rect for
+      const boundingRect = new DOMRect(
+         minLeft === Number.MAX_SAFE_INTEGER ? 0 : minLeft,
+         minTop === Number.MAX_SAFE_INTEGER ? 0 : minTop,
+         maxWidth === Number.MIN_SAFE_INTEGER ? 0 : maxWidth,
+         maxHeight === Number.MIN_SAFE_INTEGER ? 0 : maxHeight
+      );
+
       return {
-         width: maxWidth === Number.MIN_SAFE_INTEGER ? 0 : maxWidth,
-         height: maxHeight === Number.MIN_SAFE_INTEGER ? 0 : maxHeight,
-         components
+         boundingRect,
+         entries
       };
    }
 
    /**
-    * @returns {IterableIterator<any>} Keys for all controls.
+    * @returns {IterableIterator<PropertyKey>} Keys for all controls.
     */
    keys()
    {
@@ -201,28 +236,28 @@ export class ControlsStore
    }
 
    /**
-    * Updates the tracked component data. Each entry must be an object containing a unique `id` property and an
+    * Updates the tracked entries data. Each entry must be an object containing a unique `id` property and an
     * instance of TJSPosition as the `position` property.
     *
-    * @param {Iterable<object>} components - Iterable list of component data objects.
+    * @param {Iterable<TJSPositionControlLayerAPI.Data.EntryInput>} entries - Iterable list of entry data objects.
     */
-   updateComponents(components)
+   updateEntries(entries)
    {
       const controlMap = this.#controlMap;
       const selected = this.#selectedAPI;
 
       const removeIDs = new Set(controlMap.keys());
 
-      if (isIterable(components))
+      if (isIterable(entries))
       {
-         for (const component of components)
+         for (const entry of entries)
          {
-            this.#updateComponent(component, removeIDs);
+            this.#updateEntry(entry, removeIDs);
          }
       }
-      else if (isObject(components))
+      else if (isObject(entries))
       {
-         this.#updateComponent(components, removeIDs);
+         this.#updateEntry(/** @type {TJSPositionControlLayerAPI.Data.EntryInput} */ entries, removeIDs);
       }
 
       for (const id of removeIDs)
@@ -241,45 +276,50 @@ export class ControlsStore
       this.#updateSubscribers();
    }
 
-   #updateComponent(component, removeIDs)
+   /**
+    * @param {TJSPositionControlLayerAPI.Data.EntryInput} entry -
+    *
+    * @param {Set<PropertyKey>} removeIDs -
+    */
+   #updateEntry(entry, removeIDs)
    {
       const controlMap = this.#controlMap;
       const selected = this.#selectedAPI;
 
-      const componentId = component.id;
+      const entryId = entry.id;
 
-      if (componentId === void 0 || componentId === null)
+      if (!isPropertyKey(entryId))
       {
-         throw new Error(`updateComponents error: component data does not have a defined 'id' property.`);
+         throw new Error(`updateComponents error: entry data does not have a defined 'id' property key.`);
       }
 
-      if (!(component.position instanceof TJSPosition))
+      if (!(entry.position instanceof TJSPosition))
       {
-         throw new Error(`updateComponents error: component data does not have a valid 'position' property.`);
+         throw new Error(`updateComponents error: entry data does not have a valid 'position' property.`);
       }
 
-      if (controlMap.has(componentId))
+      if (controlMap.has(entryId))
       {
-         const control = controlMap.get(componentId);
+         const control = controlMap.get(entryId);
 
-         // Evaluate if the components TJSPosition instance has changed.
-         if (control.component.position !== component.position)
+         // Evaluate if the entry TJSPosition instance has changed.
+         if (control.entry.position !== entry.position)
          {
             // Remove old control
-            selected.removeById(componentId);
-            controlMap.delete(componentId);
+            selected.removeById(entryId);
+            controlMap.delete(entryId);
             control.destroy();
 
-            controlMap.set(component.id, new ControlStore(component));
+            controlMap.set(entry.id, new ControlStore(entry));
          }
          else
          {
-            removeIDs.delete(componentId);
+            removeIDs.delete(entryId);
          }
       }
       else
       {
-         controlMap.set(component.id, new ControlStore(component));
+         controlMap.set(entry.id, new ControlStore(entry));
       }
    }
 
@@ -305,10 +345,10 @@ export class ControlsStore
    }
 
    /**
-    * @param {import('svelte/store').Subscriber<ControlStore[]>} handler - Callback function that is invoked on
+    * @param {Subscriber<ControlStore[]>} handler - Callback function that is invoked on
     * update / changes.
     *
-    * @returns {import('svelte/store').Unsubscriber} Unsubscribe function.
+    * @returns {Unsubscriber} Unsubscribe function.
     */
    subscribe(handler)
    {
@@ -322,331 +362,6 @@ export class ControlsStore
          const index = this.#subscriptions.findIndex((sub) => sub === handler);
          if (index >= 0) { this.#subscriptions.splice(index, 1); }
       };
-   }
-}
-
-class SelectedAPI
-{
-   /**
-    * Stores the main ControlStore data object.
-    *
-    * @type {ControlsData}
-    */
-   #data;
-
-   /**
-    * Initial bounding rect when drag starts.
-    *
-    * @type {DOMRect}
-    */
-   #dragBoundingRect = new DOMRect();
-
-   /**
-    * Data to send selected control position instances.
-    *
-    * @type {{top: number, left: number}}
-    */
-   #dragUpdate = { top: 0, left: 0 };
-
-   /**
-    * @type {ControlStore}
-    */
-   #primaryControl;
-
-   /**
-    * @type {Map<*, ControlStore>}
-    */
-   #selectedMap = new Map();
-
-   /**
-    * @type {Map<*, TJSPosition.API.Transform.TransformData>}
-    */
-   #transformDataMap = new Map();
-
-   /**
-    * @type {Map<*, Function>}
-    */
-   #unsubscribeMap = new Map();
-
-   /**
-    * @type {(Map<
-    *    *,
-    *    TJSPosition.API.Animation.QuickToCallback &
-    *     { initialPosition?: TJSPosition.API.Data.TJSPositionData }
-    * >)}
-    */
-   #quickToMap = new Map();
-
-   /**
-    * @param {ControlsData} data - The main ControlStore data object.
-    *
-    * @returns {[SelectedAPI, object]} New selected and selected drag API.
-    */
-   static create(data)
-   {
-      const selectedAPI = new SelectedAPI(data);
-
-      const selectedDragAPI = {
-         onStart: selectedAPI.#onDragStart.bind(selectedAPI),
-         onMove: selectedAPI.#onDragMove.bind(selectedAPI)
-      };
-
-      Object.freeze(selectedDragAPI);
-
-      return [selectedAPI, selectedDragAPI];
-   }
-
-   /**
-    * @param {ControlsData} data - The main ControlStore data object.
-    */
-   constructor(data)
-   {
-      this.#data = data;
-   }
-
-   /**
-    * @param {ControlStore}   control - A control store.
-    *
-    * @param {boolean}        setPrimary - Make added control the primary control.
-    */
-   add(control, setPrimary = true)
-   {
-      const controlId = control.id;
-
-      if (this.#selectedMap.has(controlId)) { return; }
-
-      this.#selectedMap.set(controlId, control);
-      this.#quickToMap.set(controlId, control.position.animate.quickTo(['top', 'left'], { duration: 0.1 }));
-
-      if (setPrimary && this.#primaryControl)
-      {
-         this.#primaryControl.isPrimary = false;
-         this.#primaryControl = void 0;
-      }
-
-      if (setPrimary)
-      {
-         control.isPrimary = true;
-         this.#primaryControl = control;
-      }
-
-      control.selected = true;
-
-      const unsubscribe = control.position.stores.transform.subscribe(
-       (data) => this.#transformDataMap.set(controlId, data));
-
-      this.#unsubscribeMap.set(controlId, unsubscribe);
-   }
-
-   clear()
-   {
-      if (this.#primaryControl)
-      {
-         this.#primaryControl.isPrimary = false;
-         this.#primaryControl = void 0;
-      }
-
-      for (const control of this.#selectedMap.values())
-      {
-         const unsubscribe = this.#unsubscribeMap.get(control.id);
-         if (typeof unsubscribe === 'function') { unsubscribe(); }
-
-         control.selected = false;
-      }
-
-      this.#transformDataMap.clear();
-      this.#unsubscribeMap.clear();
-      this.#quickToMap.clear();
-      this.#selectedMap.clear();
-   }
-
-   /**
-    * @returns {IterableIterator<[*, ControlStore]>} Selected control entries iterator.
-    */
-   entries()
-   {
-      return this.#selectedMap.entries();
-   }
-
-   /**
-    * @returns {ControlStore} The primary control store.
-    */
-   getPrimary()
-   {
-      return this.#primaryControl;
-   }
-
-   /**
-    * @returns {IterableIterator<*>} Selected control keys iterator.
-    */
-   keys()
-   {
-      return this.#selectedMap.keys();
-   }
-
-   /**
-    * @param {DragEvent}   event - DragEvent.
-    */
-   #onDragMove(event)
-   {
-      let { tX, tY } = event.detail;
-
-      const dragUpdate = this.#dragUpdate;
-
-      const validationRect = this.#data.boundingRect;
-      const validate = this.#data.validate;
-
-      if (validate && validationRect)
-      {
-         const boundingRect = this.#dragBoundingRect;
-
-         let x = boundingRect.x + tX;
-         let y = boundingRect.y + tY;
-         const left = boundingRect.left + tX;
-         const right = boundingRect.right + tX;
-         const bottom = boundingRect.bottom + tY;
-         const top = boundingRect.top + tY;
-
-         const initialX = x;
-         const initialY = y;
-
-         if (bottom > validationRect.bottom) { y += validationRect.bottom - bottom; }
-         if (right > validationRect.right) { x += validationRect.right - right; }
-         if (top < 0) { y += Math.abs(top); }
-         if (left < 0) { x += Math.abs(left); }
-
-         tX -= initialX - x;
-         tY -= initialY - y;
-      }
-
-      // Add adjusted total X / Y added to initial positions for each control position.
-      for (const quickTo of this.#quickToMap.values())
-      {
-         dragUpdate.left = quickTo.initialPosition.left + tX;
-         dragUpdate.top = quickTo.initialPosition.top + tY;
-         dragUpdate.bogus = false;
-
-         quickTo(dragUpdate);
-      }
-   }
-
-   #onDragStart()
-   {
-      for (const controlId of this.keys())
-      {
-         const control = this.#selectedMap.get(controlId);
-         const quickTo = this.#quickToMap.get(controlId);
-         quickTo.initialPosition = control.position.get();
-      }
-
-      this.getBoundingRect(this.#dragBoundingRect);
-   }
-
-   /**
-    * @param {ControlStore}   control - A control store.
-    */
-   remove(control)
-   {
-      if (this.#primaryControl === control)
-      {
-         this.#primaryControl.isPrimary = false;
-         this.#primaryControl = void 0;
-      }
-
-      const controlId = control.id;
-
-      if (this.#selectedMap.delete(controlId))
-      {
-         const unsubscribe = this.#unsubscribeMap.get(controlId);
-         this.#unsubscribeMap.delete(controlId);
-
-         if (typeof unsubscribe === 'function') { unsubscribe(); }
-
-         this.#transformDataMap.delete(controlId);
-         this.#quickToMap.delete(controlId);
-
-         control.selected = false;
-      }
-   }
-
-   /**
-    * @param {*}   controlId - An ID for a control store to remove.
-    */
-   removeById(controlId)
-   {
-      if (this.#primaryControl?.id === controlId)
-      {
-         this.#primaryControl.isPrimary = false;
-         this.#primaryControl = void 0;
-      }
-
-      const control = this.#selectedMap.get(controlId);
-
-      if (control)
-      {
-         const unsubscribe = this.#unsubscribeMap.get(controlId);
-         this.#unsubscribeMap.delete(controlId);
-
-         if (typeof unsubscribe === 'function') { unsubscribe(); }
-
-         this.#transformDataMap.delete(controlId);
-         this.#quickToMap.delete(controlId);
-         this.#selectedMap.delete(controlId);
-
-         control.selected = false;
-      }
-   }
-
-   setPrimary(control)
-   {
-      if (this.#primaryControl && this.#primaryControl !== control)
-      {
-         this.#primaryControl.isPrimary = false;
-         this.#primaryControl = void 0;
-      }
-
-      this.#primaryControl = control;
-      control.isPrimary = true;
-   }
-
-   /**
-    * Processes all selected controls transformed bounds to create a single combined bounding rect.
-    *
-    * @param {DOMRect} [boundingRect] - A DOMRect to store calculations or one will be created.
-    *
-    * @returns {DOMRect} Bounding rect.
-    */
-   getBoundingRect(boundingRect = new DOMRect())
-   {
-      let maxX = Number.MIN_SAFE_INTEGER;
-      let maxY = Number.MIN_SAFE_INTEGER;
-      let minX = Number.MAX_SAFE_INTEGER;
-      let minY = Number.MAX_SAFE_INTEGER;
-
-      for (const transformData of this.#transformDataMap.values())
-      {
-         const controlRect = transformData.boundingRect;
-
-         if (controlRect.right > maxX) { maxX = controlRect.right; }
-         if (controlRect.left < minX) { minX = controlRect.left; }
-         if (controlRect.bottom > maxY) { maxY = controlRect.bottom; }
-         if (controlRect.top < minY) { minY = controlRect.top; }
-      }
-
-      boundingRect.x = minX;
-      boundingRect.y = minY;
-      boundingRect.width = maxX - minX;
-      boundingRect.height = maxY - minY;
-
-      return boundingRect;
-   }
-
-   /**
-    * @returns {IterableIterator<object>} Selected controls iterator.
-    */
-   values()
-   {
-      return this.#selectedMap.values();
    }
 }
 

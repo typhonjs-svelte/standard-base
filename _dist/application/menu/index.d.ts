@@ -91,28 +91,28 @@ declare class TJSContextMenu {
     easing,
     activeWindow,
   }: {
-    event?: PointerEvent | MouseEvent | KeyboardEvent;
-    items?:
-      | Iterable<_standard_component_menu.TJSMenuData.Items>
-      | (() => Iterable<_standard_component_menu.TJSMenuData.Items>);
-    x?: number;
-    y?: number;
-    offsetX?: number;
-    offsetY?: number;
-    anchorToEventTarget?: boolean;
-    classes?: Iterable<string>;
-    focusDebug?: boolean;
-    focusEl?: HTMLElement | string;
-    keyCode?: string;
-    id?: string;
-    onClose?: Function;
-    onPressApplyFocus?: boolean;
-    styles?: {
-      [key: string]: string | null;
-    };
-    duration?: number;
-    easing?: _runtime_svelte_easing.EasingReference;
-    activeWindow?: Window;
+    event?: PointerEvent | MouseEvent | KeyboardEvent | undefined;
+    items?: Iterable<any> | (() => Iterable<_standard_component_menu.TJSMenuData.Items>) | undefined;
+    x?: number | undefined;
+    y?: number | undefined;
+    offsetX?: number | undefined;
+    offsetY?: number | undefined;
+    anchorToEventTarget?: boolean | undefined;
+    classes?: Iterable<string> | undefined;
+    focusDebug?: boolean | undefined;
+    focusEl?: string | HTMLElement | undefined;
+    keyCode?: string | undefined;
+    id?: string | undefined;
+    onClose?: Function | undefined;
+    onPressApplyFocus?: boolean | undefined;
+    styles?:
+      | {
+          [key: string]: string | null;
+        }
+      | undefined;
+    duration?: number | undefined;
+    easing?: _runtime_svelte_easing.EasingReference | undefined;
+    activeWindow?: Window | undefined;
   }): void;
 }
 

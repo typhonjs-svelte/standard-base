@@ -1,4 +1,8 @@
 /**
+ * @import { ActionReturn } from 'svelte/action';
+ */
+
+/**
  * Provides an action to enable pointer dragging that tracks relative changes. Sends data to
  * {@link ControlsStore.dragging}.
  *
@@ -12,7 +16,7 @@
  *
  * @param {boolean}           [params.active=true] - A boolean value; attached to a readable store.
  *
- * @returns {import('svelte/action').ActionReturn<{ [key: string]: any }>} Lifecycle functions.
+ * @returns {ActionReturn<{ [key: string]: any }>} Lifecycle functions.
  */
 export function resize(node, { id, resizeCallback, active = true })
 {

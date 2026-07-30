@@ -10,11 +10,20 @@
    import ResizeControl       from './resize/ResizeControl.svelte';
    import SelectedBorder      from './SelectedBorder.svelte';
 
+   /**
+    * @import { ControlsStore }     from '../ControlsStore';
+    * 
+    * @import { SelectedDragAPI }   from '../types-local';
+    */
+
    export let control = void 0;
 
    setContext('#pcControl', control)
 
+   /** @type {ControlsStore} */
    const controls = getContext('#pclControls');
+   
+   /** @type {SelectedDragAPI} */
    const selectedDragAPI = getContext('#pclSelectedDragAPI');
 
    const { enabled } = controls.stores;
@@ -26,6 +35,9 @@
    // Must store position as control is a store and will trigger updates to applyPosition action.
    const position = control.position;
 
+   /**
+    * @param {MouseEvent} event - 
+    */   
    function onClick(event)
    {
       // Only handle click events when <ctrl> key pressed.
@@ -42,6 +54,9 @@
       }
    }
 
+   /**
+    * @param {PointerEvent} event - 
+    */
    function onPointerDown(event)
    {
       // If already selected set as primary control.

@@ -1,7 +1,13 @@
-import { writable }        from 'svelte/store';
+import { writable }           from 'svelte/store';
 
-import { TJSPosition }     from '#runtime/svelte/store/position';
-import { propertyStore }   from '#runtime/svelte/store/writable-derived';
+import { TJSPosition }        from '#runtime/svelte/store/position';
+import { propertyStore }      from '#runtime/svelte/store/writable-derived';
+
+/**
+ * @import { Unsubscriber }               from 'svelte/store';
+ *
+ * @import { TJSPositionControlLayerAPI } from '../types';
+ */
 
 export class ControlStore
 {
@@ -12,7 +18,10 @@ export class ControlStore
     */
    static #tjsPositionSetOptions = Object.freeze({ immediateElementUpdate: true });
 
-   #component;
+   /**
+    * @type {TJSPositionControlLayerAPI.Data.EntryInput}
+    */
+   #entry;
 
    #data = {
       isPrimary: false,
@@ -26,35 +35,38 @@ export class ControlStore
    #stores;
 
    /**
-    * @type {import('svelte/store').Unsubscriber[]}
+    * @type {Unsubscriber[]}
     */
    #unsubscribe = [];
 
-   constructor(component)
+   /**
+    * @param {TJSPositionControlLayerAPI.Data.EntryInput} entry -
+    */
+   constructor(entry)
    {
-      this.#component = component;
+      this.#entry = entry;
 
       // To accomplish bidirectional updates Must ignore updates from the control position when set from the
-      // target component position.
+      // target entry position.
       let ignoreRoundRobin = false;
 
-      this.#position = TJSPosition.duplicate(component.position, { calculateTransform: true });
+      this.#position = TJSPosition.duplicate(entry.position, { calculateTransform: true });
 
       /**
-       * Update component position, but only when ignoring round-robin callback.
+       * Update entry position, but only when ignoring round-robin callback.
        */
       this.#unsubscribe.push(this.#position.subscribe((data) =>
       {
          if (!ignoreRoundRobin)
          {
-            component.position.set(data, ControlStore.#tjsPositionSetOptions);
+            entry.position.set(data, ControlStore.#tjsPositionSetOptions);
          }
       }));
 
       /**
        * Sets the local control position store, but temporarily sets ignoreRoundRobin callback;
        */
-      this.#unsubscribe.push(component.position.subscribe((data) =>
+      this.#unsubscribe.push(entry.position.subscribe((data) =>
       {
          ignoreRoundRobin = true;
          this.#position.set(data, ControlStore.#tjsPositionSetOptions);
@@ -72,47 +84,62 @@ export class ControlStore
       Object.freeze(this.#stores);
    }
 
-   get component() { return this.#component; }
+   /** @returns {TJSPositionControlLayerAPI.Data.EntryInput} */
+   get entry() { return this.#entry; }
 
-   get id() { return this.#component.id; }
+   /** @returns {PropertyKey} */
+   get id() { return this.#entry.id; }
 
+   /** @returns {boolean} */
    get isPrimary() { return this.#data.isPrimary; }
 
-   /**
-    * @returns {TJSPosition} Control position.
-    */
+   /** @returns {TJSPosition} Control position. */
    get position() { return this.#position; }
 
+   /** @returns {boolean} */
    get resizing() { return this.#data.resizing; }
 
+   /** @returns {boolean} */
    get selected() { return this.#data.selected; }
 
    get stores() { return this.#stores; }
 
+   /**
+    * @param {boolean} isPrimary -
+    */
    set isPrimary(isPrimary)
    {
       this.#stores.isPrimary.set(isPrimary);
    }
 
+   /**
+    * @param {boolean} resizing -
+    */
    set resizing(resizing)
    {
       this.#stores.resizing.set(resizing);
    }
 
+   /**
+    * @param {boolean} selected -
+    */
    set selected(selected)
    {
       this.#stores.selected.set(selected);
    }
 
    /**
-    * Cleans up all subscriptions and removes references to tracked component data.
+    * Cleans up all subscriptions and removes references to tracked entry data.
     */
    destroy()
    {
-      for (const unsubscribe of this.#unsubscribe) { unsubscribe(); }
+      if (this.#unsubscribe)
+      {
+         for (const unsubscribe of this.#unsubscribe) { unsubscribe(); }
+      }
 
       this.#unsubscribe = void 0;
-      this.#component = void 0;
+      this.#entry = void 0;
       this.#position = void 0;
    }
 }

@@ -157,13 +157,13 @@ declare function ripple({
   events,
   keyCode,
 }?: {
-  background?: string;
-  duration?: number;
-  enabled?: boolean;
-  events?: Iterable<string>;
-  keyCode?: string;
-  contextmenu?: boolean;
-  debounce?: number;
+  background?: string | undefined;
+  duration?: number | undefined;
+  enabled?: boolean | undefined;
+  events?: Iterable<string> | undefined;
+  keyCode?: string | undefined;
+  contextmenu?: boolean | undefined;
+  debounce?: number | undefined;
 }): svelte_action.Action<HTMLElement, svelte_action.ActionReturn<ComposableActionOptions.Ripple>>;
 
 /**
@@ -203,10 +203,10 @@ declare function rippleFocus({
   enabled,
   selector,
 }?: {
-  duration?: number;
-  enabled?: boolean;
-  background?: string;
-  selector?: string;
+  duration?: number | undefined;
+  enabled?: boolean | undefined;
+  background?: string | undefined;
+  selector?: string | undefined;
 }): svelte_action.Action<HTMLElement, svelte_action.ActionReturn<ComposableActionOptions.RippleFocus>>;
 
 export { ComposableActionOptions, animateWAAPI, composable, ripple, rippleFocus };

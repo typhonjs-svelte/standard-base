@@ -1,181 +1,5 @@
-import * as svelte_store from 'svelte/store';
-import { TJSPosition } from '#runtime/svelte/store/position';
 import { SvelteComponent } from 'svelte';
-
-declare class ControlStore {
-  constructor(component: any);
-  get component(): any;
-  get id(): any;
-  set isPrimary(isPrimary: boolean);
-  get isPrimary(): boolean;
-  /**
-   * @returns {TJSPosition} Control position.
-   */
-  get position(): TJSPosition;
-  set resizing(resizing: boolean);
-  get resizing(): boolean;
-  set selected(selected: boolean);
-  get selected(): boolean;
-  get stores(): {
-    isPrimary: svelte_store.Writable<boolean>;
-    resizing: svelte_store.Writable<boolean>;
-    selected: svelte_store.Writable<boolean>;
-  };
-  /**
-   * Cleans up all subscriptions and removes references to tracked component data.
-   */
-  destroy(): void;
-  #private;
-}
-
-declare class ControlsStore {
-  /**
-   * Creates a new instance of ControlsStore and the selected drag API.
-   *
-   * @returns {[ControlsStore, object]} New instance of ControlsStore.
-   */
-  static create(): [ControlsStore, object];
-  /**
-   * @param {DOMRect|void}  boundingRect - Assigns the validation bounding rect.
-   */
-  set boundingRect(boundingRect: DOMRect | void);
-  /**
-   * @returns {DOMRect} Returns any validation bounding rect.
-   */
-  get boundingRect(): DOMRect;
-  /**
-   * @param {boolean}  enabled - New enabled state.
-   */
-  set enabled(enabled: boolean);
-  /**
-   * @returns {boolean} Returns enabled state.
-   */
-  get enabled(): boolean;
-  /**
-   * @returns {SelectedAPI} Selected API
-   */
-  get selected(): SelectedAPI;
-  /**
-   * @returns {*} Stores.
-   */
-  get stores(): any;
-  /**
-   * @param {boolean}  validate - New on-drag validation state.
-   */
-  set validate(validate: boolean);
-  /**
-   * @returns {boolean} Returns if on-drag validation is enabled.
-   */
-  get validate(): boolean;
-  /**
-   * Exports all or selected component data w/ TJSPosition converted to JSON object. An option to compact the position
-   * data will transform the minimum top / left of all components as the origin.
-   *
-   * @param {object}   [opts] - Optional parameters.
-   *
-   * @param {boolean}  [opts.compact=false] - Transform / compact position data.
-   *
-   * @param {boolean}  [opts.selected=false] - When true export selected components.
-   *
-   * @returns {{width: number|void, height: number|void, components: object[]}} Width / height max extents & serialized
-   *          component data.
-   */
-  export({ compact, selected }?: { compact?: boolean; selected?: boolean }): {
-    width: number | void;
-    height: number | void;
-    components: object[];
-  };
-  /**
-   * @returns {IterableIterator<any>} Keys for all controls.
-   */
-  keys(): IterableIterator<any>;
-  /**
-   * Updates the tracked component data. Each entry must be an object containing a unique `id` property and an
-   * instance of TJSPosition as the `position` property.
-   *
-   * @param {Iterable<object>} components - Iterable list of component data objects.
-   */
-  updateComponents(components: Iterable<object>): void;
-  /**
-   * @returns {IterableIterator<ControlStore>} All controls.
-   */
-  values(): IterableIterator<ControlStore>;
-  /**
-   * @param {import('svelte/store').Subscriber<ControlStore[]>} handler - Callback function that is invoked on
-   * update / changes.
-   *
-   * @returns {import('svelte/store').Unsubscriber} Unsubscribe function.
-   */
-  subscribe(handler: svelte_store.Subscriber<ControlStore[]>): svelte_store.Unsubscriber;
-  #private;
-}
-type ControlsData = {
-  /**
-   * -
-   */
-  boundingRect: DOMRect;
-  /**
-   * -
-   */
-  enabled: boolean;
-  /**
-   * -
-   */
-  validate: boolean;
-};
-declare class SelectedAPI {
-  /**
-   * @param {ControlsData} data - The main ControlStore data object.
-   *
-   * @returns {[SelectedAPI, object]} New selected and selected drag API.
-   */
-  static create(data: ControlsData): [SelectedAPI, object];
-  /**
-   * @param {ControlsData} data - The main ControlStore data object.
-   */
-  constructor(data: ControlsData);
-  /**
-   * @param {ControlStore}   control - A control store.
-   *
-   * @param {boolean}        setPrimary - Make added control the primary control.
-   */
-  add(control: ControlStore, setPrimary?: boolean): void;
-  clear(): void;
-  /**
-   * @returns {IterableIterator<[*, ControlStore]>} Selected control entries iterator.
-   */
-  entries(): IterableIterator<[any, ControlStore]>;
-  /**
-   * @returns {ControlStore} The primary control store.
-   */
-  getPrimary(): ControlStore;
-  /**
-   * @returns {IterableIterator<*>} Selected control keys iterator.
-   */
-  keys(): IterableIterator<any>;
-  /**
-   * @param {ControlStore}   control - A control store.
-   */
-  remove(control: ControlStore): void;
-  /**
-   * @param {*}   controlId - An ID for a control store to remove.
-   */
-  removeById(controlId: any): void;
-  setPrimary(control: any): void;
-  /**
-   * Processes all selected controls transformed bounds to create a single combined bounding rect.
-   *
-   * @param {DOMRect} [boundingRect] - A DOMRect to store calculations or one will be created.
-   *
-   * @returns {DOMRect} Bounding rect.
-   */
-  getBoundingRect(boundingRect?: DOMRect): DOMRect;
-  /**
-   * @returns {IterableIterator<object>} Selected controls iterator.
-   */
-  values(): IterableIterator<object>;
-  #private;
-}
+import { TJSPosition } from '#runtime/svelte/store/position';
 
 /**
  * @privateRemarks
@@ -183,30 +7,42 @@ declare class SelectedAPI {
  *
  */
 declare class TJSPositionControlLayer extends SvelteComponent<
-  {
-    enabled?: boolean;
-    boundingRect?: any;
-    validate?: boolean;
-    controls?: ControlsStore;
-    components?: any;
-  },
-  {
-    [evt: string]: CustomEvent<any>;
-  },
-  {
-    default: {};
-  }
+  TJSPositionControlLayer.Props,
+  TJSPositionControlLayer.Events,
+  TJSPositionControlLayer.Slots
 > {}
 
 /** Event / Prop / Slot type aliases for {@link TJSPositionControlLayer | associated component}. */
 declare namespace TJSPositionControlLayer {
   /** Props type alias for {@link TJSPositionControlLayer | associated component}. */
   export type Props = {
+    /**
+     * @type {TJSPositionControlLayerAPI.Data.EntryInput | Iterable<TJSPositionControlLayerAPI.Data.EntryInput> | undefined}
+     */
+    entries?:
+      TJSPositionControlLayerAPI.Data.EntryInput | Iterable<TJSPositionControlLayerAPI.Data.EntryInput> | undefined;
+    /**
+     * Is the Position Control Layer enabled.
+     *
+     * @type {boolean}
+     */
     enabled?: boolean;
-    boundingRect?: any;
+    /**
+     * The DOMRect that defines the bounds of
+     *
+     * @type {DOMRect}
+     */
+    boundingRect?: DOMRect;
+    /**
+     * Perform validation inside bounding rect of all entries.
+     *
+     * @type {boolean}
+     */
     validate?: boolean;
-    controls?: ControlsStore;
-    components?: any;
+    /**
+     * @type {TJSPositionControlLayerAPI.Controls}
+     */
+    controls?: TJSPositionControlLayerAPI.Controls;
   };
   /** Events type alias for {@link TJSPositionControlLayer | associated component}. */
   export type Events = { [evt: string]: CustomEvent<any> };
@@ -214,4 +50,64 @@ declare namespace TJSPositionControlLayer {
   export type Slots = { default: {} };
 }
 
-export { TJSPositionControlLayer };
+declare namespace TJSPositionControlLayerAPI$1 {
+  interface Controls {
+    /**
+     * Exports all or selected entry data w/ TJSPosition converted to a {@link TJSPosition.API.Data.TJSPositionData}
+     * JSON object. An option to compact the position data will transform the minimum top / left of all entries as
+     * the origin.
+     *
+     * @param [opts] - Optional parameters.
+     *
+     * @param [opts.compact=false] - When true, transform / compact position data.
+     *
+     * @param [opts.selected=false] - When true, export selected entries.
+     *
+     * @returns Width / height max extents & serialized entry data.
+     */
+    export<T extends Data.EntryExport = Data.EntryExport>({
+      compact,
+      selected,
+    }?: {
+      compact: boolean;
+      selected: boolean;
+    }): Data.Export<T>;
+  }
+  namespace Data {
+    /**
+     * Defines an exported entry managed by the position control layer via {@link Controls.export}.
+     *
+     *
+     */
+    interface EntryExport {
+      id: PropertyKey;
+      position: TJSPosition.API.Data.TJSPositionData;
+    }
+    /**
+     * Identifies an entry managed by the position control layer.
+     *
+     * This interface acts as a minimal structural contract. Any object containing a
+     * unique {@link id} and an associated {@link TJSPosition} instance may be used,
+     * including an existing external or domain object that exposes these properties.
+     */
+    interface EntryInput {
+      id: PropertyKey;
+      position: TJSPosition;
+    }
+    /**
+     * Defines the export data requested by the position control layer via {@link Controls.export}.
+     */
+    interface Export<T extends EntryExport = EntryExport> {
+      /**
+       * The bounding rect of max extents for the exported entry data.
+       */
+      boundingRect: DOMRect;
+      /**
+       * All requested entry export data.
+       */
+      entries: T[];
+    }
+  }
+}
+
+export { TJSPositionControlLayer, TJSPositionControlLayerAPI$1 as TJSPositionControlLayerAPI };

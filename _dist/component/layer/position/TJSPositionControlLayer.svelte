@@ -17,17 +17,41 @@
 
    import { selection }       from './selection.js';
 
+   /**
+    * @import { TJSPositionControlLayerAPI } from './types';
+    */
+
    const [controlsStore, selectedDragAPI] = ControlsStore.create();
 
    /**
-    * @type {ControlsStore}
+    * @type {TJSPositionControlLayerAPI.Controls}
     */
    export let controls = controlsStore;
 
-   export let components = void 0;
+   /**
+    * @type {TJSPositionControlLayerAPI.Data.EntryInput | Iterable<TJSPositionControlLayerAPI.Data.EntryInput> | undefined}
+    */
+   export let entries = void 0;
 
+   /**
+    * Is the Position Control Layer enabled.
+    *
+    * @type {boolean}
+    */
    export let enabled = true;
+
+   /**
+    * The DOMRect that defines the bounds of
+    *
+    * @type {DOMRect}
+    */
    export let boundingRect = void 0;
+
+   /**
+    * Perform validation inside bounding rect of all entries.
+    *
+    * @type {boolean}
+    */
    export let validate = true;
 
    setContext('#pclControls', controls);
@@ -38,7 +62,7 @@
    // The PCL needs to listen to key events on the active window and change listeners if the window changes.
    // This requires reactive active window store access. When embedded in `SvelteApplication` retrieve the active window
    // store otherwise fallback to `globalThis`.
-   const applicationActiveWindow = application?.reactive?.storeUIState?.activeWindow ?? writable(globalThis);
+   const applicationActiveWindow = application?.reactive?.storeUIState?.activeWindow ?? writable(window);
 
    /** @type {Window} */
    let activeWindow = $applicationActiveWindow;
@@ -47,7 +71,7 @@
 
    $: controls.boundingRect = boundingRect;
    $: controls.validate = validate
-   $: controls.updateComponents(components);
+   $: controls.updateEntries(entries);
 
    /**
     * When the active window changes register key event listeners to new window.

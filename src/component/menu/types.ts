@@ -113,11 +113,7 @@ namespace TJSMenuData
           *
           * To defer immediate application of the {@link A11yFocusSource} return `true` indicating a focus continuation.
           */
-         onPress?: (data?: {
-            event?: KeyboardEvent | PointerEvent;
-            item?: Item;
-            focusSource?: A11yFocusSource;
-         }) => OnPressResult | Promise<OnPressResult>;
+         onPress?: OnPressHandler<Item>;
       }
 
       /**
@@ -151,6 +147,18 @@ namespace TJSMenuData
           * @internal
           */
          separator?: never;
+      }
+
+      /**
+       * {@link onPress} callback handler.
+       */
+      export interface OnPressHandler<Item = Items>
+      {
+         (data: {
+            event: KeyboardEvent | PointerEvent;
+            item: Item;
+            focusSource: A11yFocusSource;
+         }): OnPressResult | Promise<OnPressResult>;
       }
 
       /**

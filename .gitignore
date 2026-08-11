@@ -7,6 +7,7 @@ empty.js
 npm-debug.log
 #_dist/
 .dts/
+_dist/component/layer/position
 coverage/
 debug/
 docs/

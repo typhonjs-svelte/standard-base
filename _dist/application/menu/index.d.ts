@@ -92,7 +92,10 @@ declare class TJSContextMenu {
     activeWindow,
   }: {
     event?: PointerEvent | MouseEvent | KeyboardEvent | undefined;
-    items?: Iterable<any> | (() => Iterable<_standard_component_menu.TJSMenuData.Items>) | undefined;
+    items?:
+      | Iterable<_standard_component_menu.TJSMenuData.Items>
+      | (() => Iterable<_standard_component_menu.TJSMenuData.Items>)
+      | undefined;
     x?: number | undefined;
     y?: number | undefined;
     offsetX?: number | undefined;
